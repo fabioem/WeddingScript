@@ -3,10 +3,12 @@ package hu.mandisco.weddingScript.model;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +18,7 @@ import hu.mandisco.weddingScript.model.bean.Program;
 import hu.mandisco.weddingScript.model.bean.Script;
 import hu.mandisco.weddingScript.model.bean.Service;
 
-public class WeddingScriptDAOSQLite {
+public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 	private static final String JDBC_CONNECTION_PREFIX = "jdbc:sqlite:";
 	private static final String DATABASE_FILE = "src\\main\\resources\\database.db";
@@ -161,17 +163,20 @@ public class WeddingScriptDAOSQLite {
 			conn.setAutoCommit(false);
 			st = conn.createStatement();
 			ResultSet rs = st.executeQuery(SQL_SELECT_ALL_SCRIPTS);
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
 			while (rs.next()) {
 				int scriptId = rs.getInt("scriptId");
 				String name = rs.getString("name");
+				Date date = rs.getDate("date");
 
 				Script script = new Script();
 				script.setName(name);
 				script.setScriptId(scriptId);
+				script.setDate(date);
 
 				scripts.add(script);
-				System.out.println(script + "\t" + name + "\t" + scriptId);
+				System.out.println(script + "\t" + name + "\t" + scriptId + "\t" + date);
 			}
 
 			conn.commit();

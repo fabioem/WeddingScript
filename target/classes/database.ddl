@@ -1,13 +1,18 @@
 -- SCRIPT
 
 CREATE TABLE scripts(
-	scriptId int PRIMARY KEY,
-	name varchar(255)
+	scriptId INTEGER PRIMARY KEY AUTOINCREMENT,
+	name varchar(255) NOT NULL,
+	date date,
+	comment varchar(255) NOT NULL,
+	lastEdited datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	created datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+	
 );
 
 CREATE TABLE scriptProg(
-	scriptId int,
-	progId int,
+	scriptId int NOT NULL,
+	progId int NOT NULL,
 	FOREIGN KEY (scriptId) REFERENCES scripts(scriptId),
 	FOREIGN KEY (progId) REFERENCES programs(progId)
 );
@@ -15,13 +20,13 @@ CREATE TABLE scriptProg(
 -- PROGRAM
 
 CREATE TABLE programs(
-	progId int PRIMARY KEY,
-	name varchar(255)
+	progId INTEGER PRIMARY KEY AUTOINCREMENT,
+	name varchar(255) NOT NULL
 );
 
 CREATE TABLE progAttr(
-	progId int,
-	attrId int,
+	progId int NOT NULL,
+	attrId int NOT NULL,
 	FOREIGN KEY (progId) REFERENCES programs(progId),
 	FOREIGN KEY (attrId) REFERENCES attributes(attrId)
 );
@@ -29,37 +34,40 @@ CREATE TABLE progAttr(
 -- ATTRIBUTE
 
 CREATE TABLE attributes(
-	attributeId int PRIMARY KEY,
-	name varchar(255),
-	value varchar(255),
-	attrTypeId int,
+	attributeId INTEGER PRIMARY KEY AUTOINCREMENT,
+	name varchar(255) NOT NULL,
+	value varchar(255) NOT NULL,
+	attrTypeId int NOT NULL,
 	serviceId int,
 	mandatory boolean,
-	always boolean,
 	FOREIGN KEY (attrTypeId) REFERENCES attributeTypes(attrTypeId),
 	FOREIGN KEY (serviceId) REFERENCES services(serviceId)
 );
 
 CREATE TABLE attributeTypes(
-	attrTypeId int PRIMARY KEY,
-	name varchar(10)
+	attrTypeId INTEGER PRIMARY KEY AUTOINCREMENT,
+	name varchar(10) NOT NULL
 );
 
 CREATE TABLE scriptAttr(
-	scriptId int,
-	attrId int,
+	scriptId int NOT NULL,
+	attrId int NOT NULL,
 	FOREIGN KEY (scriptId) REFERENCES scripts(scriptId),
 	FOREIGN KEY (attrId) REFERENCES attributes(attrId)
 );
 
 CREATE TABLE services(
-	serviceId int PRIMARY KEY,
-	name varchar(10)
+	serviceId INTEGER PRIMARY KEY AUTOINCREMENT,
+	name varchar(10) NOT NULL
 );
 
 -- INSERT
 
 INSERT INTO programs VALUES(0, "Vacsora");
-INSERT INTO scripts VALUES(0, "Teszt");
+INSERT INTO programs VALUES(1, "Nyitótánc");
+INSERT INTO scripts VALUES(0, "Judit és Dani", '2019-01-01', "Komment1", (DATETIME('now')), (DATETIME('now')));
+INSERT INTO scripts VALUES(1, "Juci és Béla", '2019-01-02', "Komi 2", (DATETIME('now')), (DATETIME('now')));
 INSERT INTO services VALUES(0, "Műsorvezetés");
+INSERT INTO services VALUES(1, "Oldalfal fényezés");
 INSERT INTO attributeTypes VALUES(0, "Program");
+INSERT INTO attributeTypes VALUES(1, "Script");
