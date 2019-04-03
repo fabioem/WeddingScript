@@ -1,16 +1,13 @@
 package hu.mandisco.weddingScript.controller;
 
 import hu.mandisco.weddingScript.model.bean.AttributeType;
-import hu.mandisco.weddingScript.view.AttributeTypeView;
 
 public class AttributeTypeController {
 	AttributeType model;
-	AttributeTypeView view;
 
-	public AttributeTypeController(AttributeType model, AttributeTypeView view) {
+	public AttributeTypeController(AttributeType model) {
 		super();
 		this.model = model;
-		this.view = view;
 	}
 
 	// Name

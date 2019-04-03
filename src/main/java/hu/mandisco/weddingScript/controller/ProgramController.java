@@ -1,16 +1,13 @@
 package hu.mandisco.weddingScript.controller;
 
 import hu.mandisco.weddingScript.model.bean.Program;
-import hu.mandisco.weddingScript.view.ProgramView;
 
 public class ProgramController {
 	Program model;
-	ProgramView view;
 
-	public ProgramController(Program model, ProgramView view) {
+	public ProgramController(Program model) {
 		super();
 		this.model = model;
-		this.view = view;
 	}
 
 	// Name

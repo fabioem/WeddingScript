@@ -1,17 +1,14 @@
 package hu.mandisco.weddingScript.controller;
 
 import hu.mandisco.weddingScript.model.bean.Attribute;
-import hu.mandisco.weddingScript.view.AttributeView;
 
 public class AttributeController {
 
 	Attribute model;
-	AttributeView view;
 
-	public AttributeController(Attribute model, AttributeView view) {
+	public AttributeController(Attribute model) {
 		super();
 		this.model = model;
-		this.view = view;
 	}
 
 	// AttrId
