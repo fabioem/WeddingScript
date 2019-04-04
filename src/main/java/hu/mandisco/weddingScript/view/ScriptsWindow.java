@@ -5,8 +5,6 @@ import java.util.Date;
 import java.util.List;
 
 import hu.mandisco.weddingScript.controller.WeddingScriptController;
-import hu.mandisco.weddingScript.model.WeddingScriptDAO;
-import hu.mandisco.weddingScript.model.WeddingScriptDAOSQLite;
 import hu.mandisco.weddingScript.model.bean.Script;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -18,7 +16,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 public class ScriptsWindow extends Application {
-	private static WeddingScriptController weddingScriptController = new WeddingScriptController();
+	private WeddingScriptController weddingScriptController = new WeddingScriptController();
 	private static TopMenu topMenu = new TopMenu();
 
 	public static void main(String[] args) {
@@ -52,46 +50,42 @@ public class ScriptsWindow extends Application {
 		TableColumn<Script, Date> lastEditedCol = new TableColumn<Script, Date>("Utolsó módosítás");
 		lastEditedCol.setCellValueFactory(new PropertyValueFactory<Script, Date>("lastEdited"));
 		lastEditedCol.setCellFactory(column -> {
-		    TableCell<Script, Date> cell = new TableCell<Script, Date>() {
-		        @Override
-		        protected void updateItem(Date item, boolean empty) {
-		        	super.updateItem(item, empty);
-		            if(item == null || empty) {
-		                setText(null);
-		            }
-		            else {
-		                setText(dateTimeFormat.format(item));
-		            }
-		        }
-		    };
+			TableCell<Script, Date> cell = new TableCell<Script, Date>() {
+				@Override
+				protected void updateItem(Date item, boolean empty) {
+					super.updateItem(item, empty);
+					if (item == null || empty) {
+						setText(null);
+					} else {
+						setText(dateTimeFormat.format(item));
+					}
+				}
+			};
 
-		    return cell;
+			return cell;
 		});
 
 		TableColumn<Script, Date> createdCol = new TableColumn<Script, Date>("Létrehozva");
 		createdCol.setCellValueFactory(new PropertyValueFactory<Script, Date>("created"));
 		createdCol.setCellFactory(column -> {
-		    TableCell<Script, Date> cell = new TableCell<Script, Date>() {
+			TableCell<Script, Date> cell = new TableCell<Script, Date>() {
 
-		        @Override
-		        protected void updateItem(Date item, boolean empty) {
-		        	super.updateItem(item, empty);
-		            if(item == null || empty) {
-		                setText(null);
-		            }
-		            else {
-		                setText(dateTimeFormat.format(item));
-		            }
-		        }
-		    };
+				@Override
+				protected void updateItem(Date item, boolean empty) {
+					super.updateItem(item, empty);
+					if (item == null || empty) {
+						setText(null);
+					} else {
+						setText(dateTimeFormat.format(item));
+					}
+				}
+			};
 
-		    return cell;
+			return cell;
 		});
-
 
 		table.getColumns().addAll(nameCol, dateCol, commentCol, lastEditedCol, createdCol);
 
-//		WeddingScriptDAO dao = new WeddingScriptDAOSQLite();
 		List<Script> scripts = weddingScriptController.getScripts();
 		table.getItems().addAll(scripts);
 
