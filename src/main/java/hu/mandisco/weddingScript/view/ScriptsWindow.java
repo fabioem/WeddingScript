@@ -1,6 +1,7 @@
 package hu.mandisco.weddingScript.view;
 
-import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import hu.mandisco.weddingScript.controller.ScriptController;
@@ -11,6 +12,7 @@ import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -52,12 +54,56 @@ public class ScriptsWindow extends Application {
 
 		TableColumn<Script, Date> dateCol = new TableColumn<Script, Date>("Dátum");
 		dateCol.setCellValueFactory(new PropertyValueFactory<Script, Date>("date"));
-		table.getColumns().addAll(nameCol, dateCol);
+
+		TableColumn<Script, String> commentCol = new TableColumn<Script, String>("Komment");
+		commentCol.setCellValueFactory(new PropertyValueFactory<Script, String>("comment"));
+
+		SimpleDateFormat dateTimeFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
+		TableColumn<Script, Date> lastEditedCol = new TableColumn<Script, Date>("Utolsó módosítás");
+		lastEditedCol.setCellValueFactory(new PropertyValueFactory<Script, Date>("lastEdited"));
+		lastEditedCol.setCellFactory(column -> {
+		    TableCell<Script, Date> cell = new TableCell<Script, Date>() {
+		        @Override
+		        protected void updateItem(Date item, boolean empty) {
+		        	super.updateItem(item, empty);
+		            if(item == null || empty) {
+		                setText(null);
+		            }
+		            else {
+		                setText(dateTimeFormat.format(item));
+		            }
+		        }
+		    };
+
+		    return cell;
+		});
+
+		TableColumn<Script, Date> createdCol = new TableColumn<Script, Date>("Létrehozva");
+		createdCol.setCellValueFactory(new PropertyValueFactory<Script, Date>("created"));
+		createdCol.setCellFactory(column -> {
+		    TableCell<Script, Date> cell = new TableCell<Script, Date>() {
+
+		        @Override
+		        protected void updateItem(Date item, boolean empty) {
+		        	super.updateItem(item, empty);
+		            if(item == null || empty) {
+		                setText(null);
+		            }
+		            else {
+		                setText(dateTimeFormat.format(item));
+		            }
+		        }
+		    };
+
+		    return cell;
+		});
+
+
+		table.getColumns().addAll(nameCol, dateCol, commentCol, lastEditedCol, createdCol);
 
 		WeddingScriptDAO dao = new WeddingScriptDAOSQLite();
 		List<Script> scripts = dao.getScripts();
 		table.getItems().addAll(scripts);
-		// table.getItems().add(new Script(5, "uj script", new Date(0)));
 
 		layout.setCenter(table);
 

@@ -65,8 +65,8 @@ CREATE TABLE services(
 
 INSERT INTO programs VALUES(0, "Vacsora");
 INSERT INTO programs VALUES(1, "Nyitótánc");
-INSERT INTO scripts VALUES(0, "Judit és Dani", '2019-01-01', "Komment1", (DATETIME('now')), (DATETIME('now')));
-INSERT INTO scripts VALUES(1, "Juci és Béla", '2019-01-02', "Komi 2", (DATETIME('now')), (DATETIME('now')));
+INSERT INTO scripts VALUES(0, "Judit és Dani", '2019-01-01 00:00:00.000', "Komment1", (DATETIME('now')), (DATETIME('now')));
+INSERT INTO scripts VALUES(1, "Juci és Béla", '2019-01-02 00:00:00.000', "Komi 2", (DATETIME('now')), (DATETIME('now')));
 INSERT INTO services VALUES(0, "Műsorvezetés");
 INSERT INTO services VALUES(1, "Oldalfal fényezés");
 INSERT INTO attributeTypes VALUES(0, "Program");

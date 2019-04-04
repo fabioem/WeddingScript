@@ -1,6 +1,6 @@
 package hu.mandisco.weddingScript.controller;
 
-import java.sql.Date;
+import java.util.Date;
 
 import hu.mandisco.weddingScript.model.bean.Script;
 

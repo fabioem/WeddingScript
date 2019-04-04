@@ -3,7 +3,7 @@ package hu.mandisco.weddingScript.model.bean;
 public class Attribute {
 	private int attrId;
 	private String name;
-	private int typeId;
+	private int attrTypeId;
 	private int serviceId;
 	private boolean mandatory;
 
@@ -23,13 +23,20 @@ public class Attribute {
 		this.name = name;
 	}
 
-
 	public int getTypeId() {
-		return typeId;
+		return attrTypeId;
 	}
 
 	public void setTypeId(int typeId) {
-		this.typeId = typeId;
+		this.attrTypeId = typeId;
+	}
+
+	public int getAttrTypeId() {
+		return attrTypeId;
+	}
+
+	public void setAttrTypeId(int attrTypeId) {
+		this.attrTypeId = attrTypeId;
 	}
 
 	public int getServiceId() {
