@@ -4,24 +4,22 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import hu.mandisco.weddingScript.controller.ScriptController;
+import hu.mandisco.weddingScript.controller.WeddingScriptController;
 import hu.mandisco.weddingScript.model.WeddingScriptDAO;
 import hu.mandisco.weddingScript.model.WeddingScriptDAOSQLite;
 import hu.mandisco.weddingScript.model.bean.Script;
 import javafx.application.Application;
-import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 public class ScriptsWindow extends Application {
-	ScriptController scriptController = new ScriptController();
+	private static WeddingScriptController weddingScriptController = new WeddingScriptController();
+	private static TopMenu topMenu = new TopMenu();
 
 	public static void main(String[] args) {
 		launch(args);
@@ -35,15 +33,7 @@ public class ScriptsWindow extends Application {
 		BorderPane layout = new BorderPane();
 
 		// TOP
-		HBox horizontal = new HBox();
-		horizontal.setPadding(new Insets(15, 12, 15, 12));
-		horizontal.setSpacing(10);
-
-		Button newButton = new Button("Új");
-		Button deleteButton = new Button("Törlés");
-		horizontal.getChildren().addAll(newButton, deleteButton);
-
-		layout.setTop(horizontal);
+		layout.setTop(topMenu);
 
 		// CENTER
 		TableView<Script> table = new TableView<Script>();
@@ -101,8 +91,8 @@ public class ScriptsWindow extends Application {
 
 		table.getColumns().addAll(nameCol, dateCol, commentCol, lastEditedCol, createdCol);
 
-		WeddingScriptDAO dao = new WeddingScriptDAOSQLite();
-		List<Script> scripts = dao.getScripts();
+//		WeddingScriptDAO dao = new WeddingScriptDAOSQLite();
+		List<Script> scripts = weddingScriptController.getScripts();
 		table.getItems().addAll(scripts);
 
 		layout.setCenter(table);

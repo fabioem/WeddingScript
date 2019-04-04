@@ -229,8 +229,6 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				Date lastEdited = format.parse(rs.getString("lastEdited"));
 				Date created = format.parse(rs.getString("created"));
 
-				System.out.println("created: " + rs.getString("created"));
-
 				Script script = new Script();
 				script.setName(name);
 				script.setScriptId(scriptId);
