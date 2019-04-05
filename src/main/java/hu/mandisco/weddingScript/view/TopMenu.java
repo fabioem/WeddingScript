@@ -1,5 +1,6 @@
 package hu.mandisco.weddingScript.view;
 
+import hu.mandisco.weddingScript.view.create.ScriptCreateWindow;
 import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -38,7 +39,10 @@ public class TopMenu extends VBox {
 
 		// TOOLBAR
 		Button newButton = new Button("Új");
-		// TODO: newButton.setText(Elusive.FILE_NEW.getCode() + "");
+		newButton.setOnAction(e->{
+			ScriptCreateWindow.display();
+		});
+		// newButton.setText(Elusive.FILE_NEW.getCode() + "");
 		Button copyButton = new Button("Másolat készítése");
 		Button deleteButton = new Button("Törlés");
 
