@@ -1,17 +1,20 @@
 package hu.mandisco.weddingScript.view.create;
 
+import hu.mandisco.weddingScript.controller.WeddingScriptController;
+import hu.mandisco.weddingScript.model.bean.Script;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class ScriptCreateWindow {
+
+	private WeddingScriptController weddingScriptController = new WeddingScriptController();
 
 	public static void display() {
 		Stage window = new Stage();
@@ -36,25 +39,37 @@ public class ScriptCreateWindow {
 		GridPane.setConstraints(nameInput, 1, 0);
 		nameInput.setPromptText("Név");
 
-		// Password Label
+		// Date Label
 		Label dateLabel = new Label("Dátum:");
 		GridPane.setConstraints(dateLabel, 0, 1);
 
-		// Password Input
-		TextField dateInput = new TextField();
-		dateInput.setPromptText("Dátum");
+		// Date Input
+		DatePicker dateInput = new DatePicker();
 		GridPane.setConstraints(dateInput, 1, 1);
 
-		// Login
-		Button saveButton = new Button("Mentés");
-		GridPane.setConstraints(saveButton, 0, 2);
+		// Comment Label
+		Label commentLabel = new Label("Komment:");
+		GridPane.setConstraints(commentLabel, 0, 2);
 
-		Button closeButton = new Button("Close this window");
+		// Comment Input
+		TextField commentInput = new TextField();
+		commentInput.setPromptText("Komment");
+		GridPane.setConstraints(commentInput, 1, 2);
+
+		// Save
+		Button saveButton = new Button("Mentés");
+		GridPane.setConstraints(saveButton, 0, 3);
+		saveButton.setOnAction(e -> {
+//			Script script = new Script(nameInput.getText(), dateInput.getValue(), commentInput.getText());
+//			WeddingScriptController
+		});
+
+		Button closeButton = new Button("Mégsem");
 		closeButton.setOnAction(e -> window.close());
-		GridPane.setConstraints(closeButton, 1, 2);
+		GridPane.setConstraints(closeButton, 1, 3);
 
 		// Add everything to grid
-		grid.getChildren().addAll(nameLabel, nameInput, dateLabel, dateInput, saveButton, closeButton);
+		grid.getChildren().addAll(nameLabel, nameInput, commentLabel, commentInput, dateLabel, dateInput, saveButton, closeButton);
 
 		Scene scene = new Scene(grid, 300, 200);
 		window.setScene(scene);

@@ -10,6 +10,17 @@ public class Script {
 	private Date lastEdited;
 	private Date created;
 
+	public Script() {
+		super();
+	}
+
+	public Script(String name, Date date, String comment) {
+		super();
+		this.name = name;
+		this.date = date;
+		this.comment = comment;
+	}
+
 	public int getScriptId() {
 		return scriptId;
 	}

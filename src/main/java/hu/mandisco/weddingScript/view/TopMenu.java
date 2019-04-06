@@ -12,6 +12,7 @@ public class TopMenu extends VBox {
 	private MenuBar mainMenu = new MenuBar();
 	private ToolBar toolBar = new ToolBar();
 
+
 	public TopMenu() {
 		super();
 		this.getChildren().add(mainMenu);

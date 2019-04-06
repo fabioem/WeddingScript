@@ -13,5 +13,6 @@ public interface WeddingScriptDAO {
 	public List<Script> getScripts();
 	public List<Service> getServices();
 	public List<AttributeType> getAttributeTypes();
+	boolean addScript(Script script);
 
 }

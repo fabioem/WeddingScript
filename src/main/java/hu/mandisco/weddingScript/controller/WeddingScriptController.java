@@ -28,4 +28,8 @@ public class WeddingScriptController {
 		return dao.getAttributeTypes();
 	}
 
+	public boolean addScript(Script script) {
+		return dao.addScript(script);
+	}
+
 }

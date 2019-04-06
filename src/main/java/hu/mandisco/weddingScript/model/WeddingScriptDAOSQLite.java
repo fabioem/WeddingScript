@@ -4,6 +4,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -24,11 +25,12 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 	private static final String JDBC_CONNECTION_PREFIX = "jdbc:sqlite:";
 	private static final String DATABASE_FILE = "src\\main\\resources\\database.db";
 
-	private static final String SQL_SELECT_ALL_ATTRIBUTES = "SELECT * FROM attributes";
-	private static final String SQL_SELECT_ALL_PROGRAMS = "SELECT * FROM programs";
-	private static final String SQL_SELECT_ALL_SERVICES = "SELECT * FROM services";
-	private static final String SQL_SELECT_ALL_SCRIPTS = "SELECT * FROM scripts";
-	private static final String SQL_SELECT_ALL_ATTRIBUTETYPES = "SELECT * FROM attributeTypes";
+	private static final String SQL_SELECT_ALL_ATTRIBUTES = "SELECT * FROM attributes WHERE 1 = 1";
+	private static final String SQL_SELECT_ALL_PROGRAMS = "SELECT * FROM programs WHERE 1 = 1";
+	private static final String SQL_SELECT_ALL_SERVICES = "SELECT * FROM services WHERE 1 = 1";
+	private static final String SQL_SELECT_ALL_SCRIPTS = "SELECT * FROM scripts WHERE 1 = 1";
+	private static final String SQL_SELECT_ALL_ATTRIBUTETYPES = "SELECT * FROM attributeTypes WHERE 1 = 1";
+	private static final String SQL_INSERT_SCRIPT = "INSERT INTO scripts(name, date, comment) VALUES (?, ?, ?)";
 
 	Path currentWorkingFolder = Paths.get("").toAbsolutePath();
 	Path pathToTheDatabaseFile = currentWorkingFolder.resolve(DATABASE_FILE);
@@ -322,6 +324,72 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 		return services;
 
+	}
+
+	@Override
+	public boolean addScript(Script script) {
+		boolean rvSucceeded = false;
+        Connection conn = null;
+        PreparedStatement pst = null;
+
+        try {
+
+            conn = DriverManager.getConnection(databaseConnectionURL);
+            pst = conn.prepareStatement(SQL_INSERT_SCRIPT);
+/*
+ * 	scriptId INTEGER PRIMARY KEY AUTOINCREMENT,
+	name varchar(255) NOT NULL,
+	date date,
+	comment varchar(255) NOT NULL,
+	lastEdited datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	created datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+ */
+            int index = 1;
+            pst.setString(index++, script.getName());
+            pst.setString(index++, script.getDate().toString());
+            pst.setString(index++, script.getComment());
+
+            // Az ExecuteUpdate paranccsal végrehajtjuk az utasítást
+            // Az executeUpdate visszaadja, hogy hány sort érintett az SQL ha
+            // DML-t hajtunk végre (DDL esetén 0-t ad vissza)
+            int rowsAffected = pst.executeUpdate();
+
+            // csak akkor sikeres, ha valóban volt érintett sor
+            if (rowsAffected == 1) {
+                rvSucceeded = true;
+            }
+        } catch (SQLException e) {
+            System.out.println("Failed to execute adding book.");
+            e.printStackTrace();
+        } finally {
+            // NAGYON FONTOS!
+            // Minden adatbázis objektumot le kell zárni, mivel ha ezt nem
+            // tesszük meg, akkor előfordulhat, hogy nyitott kapcsolatok
+            // maradnak az adatbázis felé. Az adatbázis pedig korlátozott
+            // számban tart fenn kapcsolatokat, ezért egy idő után akar ez be is
+            // telhet!
+            // Minden egyes objektumot külön try-catch ágban kell megpróbálni
+            // bezárni!
+            try {
+                if (pst != null) {
+                    pst.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Failed to close statement when adding book.");
+                e.printStackTrace();
+            }
+
+            try {
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Failed to close connection when adding book.");
+                e.printStackTrace();
+            }
+        }
+
+        return rvSucceeded;
 	}
 
 }
