@@ -1,20 +1,20 @@
 package hu.mandisco.weddingScript.model.bean;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class Script {
 	private int scriptId;
 	private String name;
-	private Date date;
+	private LocalDateTime date;
 	private String comment;
-	private Date lastEdited;
-	private Date created;
+	private LocalDateTime lastEdited;
+	private LocalDateTime created;
 
 	public Script() {
 		super();
 	}
 
-	public Script(String name, Date date, String comment) {
+	public Script(String name, LocalDateTime date, String comment) {
 		super();
 		this.name = name;
 		this.date = date;
@@ -37,11 +37,11 @@ public class Script {
 		this.name = name;
 	}
 
-	public Date getDate() {
+	public LocalDateTime getDate() {
 		return date;
 	}
 
-	public void setDate(Date date) {
+	public void setDate(LocalDateTime date) {
 		this.date = date;
 	}
 
@@ -53,19 +53,19 @@ public class Script {
 		this.comment = comment;
 	}
 
-	public Date getLastEdited() {
+	public LocalDateTime getLastEdited() {
 		return lastEdited;
 	}
 
-	public void setLastEdited(Date lastEdited) {
+	public void setLastEdited(LocalDateTime lastEdited) {
 		this.lastEdited = lastEdited;
 	}
 
-	public Date getCreated() {
+	public LocalDateTime getCreated() {
 		return created;
 	}
 
-	public void setCreated(Date created) {
+	public void setCreated(LocalDateTime created) {
 		this.created = created;
 	}
 

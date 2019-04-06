@@ -1,5 +1,7 @@
 package hu.mandisco.weddingScript.view.create;
 
+import java.time.LocalDateTime;
+
 import hu.mandisco.weddingScript.controller.WeddingScriptController;
 import hu.mandisco.weddingScript.model.bean.Script;
 import javafx.geometry.Insets;
@@ -60,8 +62,9 @@ public class ScriptCreateWindow {
 		Button saveButton = new Button("Mentés");
 		GridPane.setConstraints(saveButton, 0, 3);
 		saveButton.setOnAction(e -> {
-//			Script script = new Script(nameInput.getText(), dateInput.getValue(), commentInput.getText());
-//			WeddingScriptController
+			// TODO: handle date
+			Script script = new Script(nameInput.getText(), LocalDateTime.of(dateInput.getValue(), null),
+					commentInput.getText());
 		});
 
 		Button closeButton = new Button("Mégsem");
@@ -69,7 +72,8 @@ public class ScriptCreateWindow {
 		GridPane.setConstraints(closeButton, 1, 3);
 
 		// Add everything to grid
-		grid.getChildren().addAll(nameLabel, nameInput, commentLabel, commentInput, dateLabel, dateInput, saveButton, closeButton);
+		grid.getChildren().addAll(nameLabel, nameInput, commentLabel, commentInput, dateLabel, dateInput, saveButton,
+				closeButton);
 
 		Scene scene = new Scene(grid, 300, 200);
 		window.setScene(scene);

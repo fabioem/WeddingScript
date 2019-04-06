@@ -10,6 +10,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -24,6 +26,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 	private static final String JDBC_CONNECTION_PREFIX = "jdbc:sqlite:";
 	private static final String DATABASE_FILE = "src\\main\\resources\\database.db";
+	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 	private static final String SQL_SELECT_ALL_ATTRIBUTES = "SELECT * FROM attributes WHERE 1 = 1";
 	private static final String SQL_SELECT_ALL_PROGRAMS = "SELECT * FROM programs WHERE 1 = 1";
@@ -50,6 +53,11 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 			System.out.println("Failed to load SQLite JDBC driver.");
 			e.printStackTrace();
 		}
+	}
+
+	public LocalDateTime dateToLocalDateTime(Date date) {
+		return LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
+
 	}
 
 	public List<Program> getPrograms() {
@@ -223,13 +231,11 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 			while (rs.next()) {
 				int scriptId = rs.getInt("scriptId");
 				String name = rs.getString("name");
-				Date date = rs.getDate("date");
+				LocalDateTime date = dateToLocalDateTime(dateFormat.parse(rs.getString("date")));
 				String comment = rs.getString("comment");
 
-				SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-				Date lastEdited = format.parse(rs.getString("lastEdited"));
-				Date created = format.parse(rs.getString("created"));
+				LocalDateTime lastEdited = dateToLocalDateTime(dateFormat.parse(rs.getString("lastEdited")));
+				LocalDateTime created = dateToLocalDateTime(dateFormat.parse(rs.getString("created")));
 
 				Script script = new Script();
 				script.setName(name);
@@ -329,67 +335,68 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 	@Override
 	public boolean addScript(Script script) {
 		boolean rvSucceeded = false;
-        Connection conn = null;
-        PreparedStatement pst = null;
+		Connection conn = null;
+		PreparedStatement pst = null;
 
-        try {
+		try {
 
-            conn = DriverManager.getConnection(databaseConnectionURL);
-            pst = conn.prepareStatement(SQL_INSERT_SCRIPT);
-/*
- * 	scriptId INTEGER PRIMARY KEY AUTOINCREMENT,
-	name varchar(255) NOT NULL,
-	date date,
-	comment varchar(255) NOT NULL,
-	lastEdited datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	created datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
- */
-            int index = 1;
-            pst.setString(index++, script.getName());
-            pst.setString(index++, script.getDate().toString());
-            pst.setString(index++, script.getComment());
+			conn = DriverManager.getConnection(databaseConnectionURL);
+			pst = conn.prepareStatement(SQL_INSERT_SCRIPT);
+			/*
+			 * scriptId INTEGER PRIMARY KEY AUTOINCREMENT, name varchar(255) NOT
+			 * NULL, date date, comment varchar(255) NOT NULL, lastEdited
+			 * datetime NOT NULL DEFAULT CURRENT_TIMESTAMP, created datetime NOT
+			 * NULL DEFAULT CURRENT_TIMESTAMP
+			 */
+			int index = 1;
+			pst.setString(index++, script.getName());
+			// format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
 
-            // Az ExecuteUpdate paranccsal végrehajtjuk az utasítást
-            // Az executeUpdate visszaadja, hogy hány sort érintett az SQL ha
-            // DML-t hajtunk végre (DDL esetén 0-t ad vissza)
-            int rowsAffected = pst.executeUpdate();
+			// TODO: handle date
+			pst.setString(index++, script.getDate().toString());
+			pst.setString(index++, script.getComment());
 
-            // csak akkor sikeres, ha valóban volt érintett sor
-            if (rowsAffected == 1) {
-                rvSucceeded = true;
-            }
-        } catch (SQLException e) {
-            System.out.println("Failed to execute adding book.");
-            e.printStackTrace();
-        } finally {
-            // NAGYON FONTOS!
-            // Minden adatbázis objektumot le kell zárni, mivel ha ezt nem
-            // tesszük meg, akkor előfordulhat, hogy nyitott kapcsolatok
-            // maradnak az adatbázis felé. Az adatbázis pedig korlátozott
-            // számban tart fenn kapcsolatokat, ezért egy idő után akar ez be is
-            // telhet!
-            // Minden egyes objektumot külön try-catch ágban kell megpróbálni
-            // bezárni!
-            try {
-                if (pst != null) {
-                    pst.close();
-                }
-            } catch (SQLException e) {
-                System.out.println("Failed to close statement when adding book.");
-                e.printStackTrace();
-            }
+			// Az ExecuteUpdate paranccsal végrehajtjuk az utasítást
+			// Az executeUpdate visszaadja, hogy hány sort érintett az SQL ha
+			// DML-t hajtunk végre (DDL esetén 0-t ad vissza)
+			int rowsAffected = pst.executeUpdate();
 
-            try {
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (SQLException e) {
-                System.out.println("Failed to close connection when adding book.");
-                e.printStackTrace();
-            }
-        }
+			// csak akkor sikeres, ha valóban volt érintett sor
+			if (rowsAffected == 1) {
+				rvSucceeded = true;
+			}
+		} catch (SQLException e) {
+			System.out.println("Failed to execute adding book.");
+			e.printStackTrace();
+		} finally {
+			// NAGYON FONTOS!
+			// Minden adatbázis objektumot le kell zárni, mivel ha ezt nem
+			// tesszük meg, akkor előfordulhat, hogy nyitott kapcsolatok
+			// maradnak az adatbázis felé. Az adatbázis pedig korlátozott
+			// számban tart fenn kapcsolatokat, ezért egy idő után akar ez be is
+			// telhet!
+			// Minden egyes objektumot külön try-catch ágban kell megpróbálni
+			// bezárni!
+			try {
+				if (pst != null) {
+					pst.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Failed to close statement when adding book.");
+				e.printStackTrace();
+			}
 
-        return rvSucceeded;
+			try {
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Failed to close connection when adding book.");
+				e.printStackTrace();
+			}
+		}
+
+		return rvSucceeded;
 	}
 
 }

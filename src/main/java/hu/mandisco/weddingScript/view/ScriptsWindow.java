@@ -1,7 +1,7 @@
 package hu.mandisco.weddingScript.view;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import hu.mandisco.weddingScript.controller.WeddingScriptController;
@@ -16,8 +16,10 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 public class ScriptsWindow extends Application {
+	private static final String DATEFORMAT_DATETIME = "yyyy.MM.dd HH:mm:ss";
+	private static final String DATEFORMAT_DATE = "yyyy.MM.dd";
 	private WeddingScriptController weddingScriptController = new WeddingScriptController();
-	private static TopMenu topMenu = new TopMenu();
+	private TopMenu topMenu = new TopMenu();
 
 	public static void main(String[] args) {
 		launch(args);
@@ -40,24 +42,17 @@ public class ScriptsWindow extends Application {
 		TableColumn<Script, String> nameCol = new TableColumn<Script, String>("Név");
 		nameCol.setCellValueFactory(new PropertyValueFactory<Script, String>("name"));
 
-		TableColumn<Script, Date> dateCol = new TableColumn<Script, Date>("Dátum");
-		dateCol.setCellValueFactory(new PropertyValueFactory<Script, Date>("date"));
-
-		TableColumn<Script, String> commentCol = new TableColumn<Script, String>("Komment");
-		commentCol.setCellValueFactory(new PropertyValueFactory<Script, String>("comment"));
-
-		SimpleDateFormat dateTimeFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
-		TableColumn<Script, Date> lastEditedCol = new TableColumn<Script, Date>("Utolsó módosítás");
-		lastEditedCol.setCellValueFactory(new PropertyValueFactory<Script, Date>("lastEdited"));
-		lastEditedCol.setCellFactory(column -> {
-			TableCell<Script, Date> cell = new TableCell<Script, Date>() {
+		TableColumn<Script, LocalDateTime> dateCol = new TableColumn<Script, LocalDateTime>("Dátum");
+		dateCol.setCellValueFactory(new PropertyValueFactory<Script, LocalDateTime>("date"));
+		dateCol.setCellFactory(column -> {
+			TableCell<Script, LocalDateTime> cell = new TableCell<Script, LocalDateTime>() {
 				@Override
-				protected void updateItem(Date item, boolean empty) {
+				protected void updateItem(LocalDateTime item, boolean empty) {
 					super.updateItem(item, empty);
 					if (item == null || empty) {
 						setText(null);
 					} else {
-						setText(dateTimeFormat.format(item));
+						setText(item.format(DateTimeFormatter.ofPattern(DATEFORMAT_DATE)));
 					}
 				}
 			};
@@ -65,18 +60,39 @@ public class ScriptsWindow extends Application {
 			return cell;
 		});
 
-		TableColumn<Script, Date> createdCol = new TableColumn<Script, Date>("Létrehozva");
-		createdCol.setCellValueFactory(new PropertyValueFactory<Script, Date>("created"));
-		createdCol.setCellFactory(column -> {
-			TableCell<Script, Date> cell = new TableCell<Script, Date>() {
+		TableColumn<Script, String> commentCol = new TableColumn<Script, String>("Komment");
+		commentCol.setCellValueFactory(new PropertyValueFactory<Script, String>("comment"));
 
+		TableColumn<Script, LocalDateTime> lastEditedCol = new TableColumn<Script, LocalDateTime>("Utolsó módosítás");
+		lastEditedCol.setCellValueFactory(new PropertyValueFactory<Script, LocalDateTime>("lastEdited"));
+		lastEditedCol.setCellFactory(column -> {
+			TableCell<Script, LocalDateTime> cell = new TableCell<Script, LocalDateTime>() {
 				@Override
-				protected void updateItem(Date item, boolean empty) {
+				protected void updateItem(LocalDateTime item, boolean empty) {
 					super.updateItem(item, empty);
 					if (item == null || empty) {
 						setText(null);
 					} else {
-						setText(dateTimeFormat.format(item));
+						setText(item.format(DateTimeFormatter.ofPattern(DATEFORMAT_DATETIME)));
+					}
+				}
+			};
+
+			return cell;
+		});
+
+		TableColumn<Script, LocalDateTime> createdCol = new TableColumn<Script, LocalDateTime>("Létrehozva");
+		createdCol.setCellValueFactory(new PropertyValueFactory<Script, LocalDateTime>("created"));
+		createdCol.setCellFactory(column -> {
+			TableCell<Script, LocalDateTime> cell = new TableCell<Script, LocalDateTime>() {
+
+				@Override
+				protected void updateItem(LocalDateTime item, boolean empty) {
+					super.updateItem(item, empty);
+					if (item == null || empty) {
+						setText(null);
+					} else {
+						setText(item.format(DateTimeFormatter.ofPattern(DATEFORMAT_DATETIME)));
 					}
 				}
 			};
