@@ -12,6 +12,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -27,6 +28,9 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 	private static final String JDBC_CONNECTION_PREFIX = "jdbc:sqlite:";
 	private static final String DATABASE_FILE = "src\\main\\resources\\database.db";
 	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+	private static final String DATEFORMAT_DATETIME_FOR_INSERT = "yyyy-MM-dd HH:mm:ss";
+	private static final String DATEFORMAT_DATE_FOR_INSERT = "yyyy-MM-dd";
 
 	private static final String SQL_SELECT_ALL_ATTRIBUTES = "SELECT * FROM attributes WHERE 1 = 1";
 	private static final String SQL_SELECT_ALL_PROGRAMS = "SELECT * FROM programs WHERE 1 = 1";
@@ -342,47 +346,28 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 			conn = DriverManager.getConnection(databaseConnectionURL);
 			pst = conn.prepareStatement(SQL_INSERT_SCRIPT);
-			/*
-			 * scriptId INTEGER PRIMARY KEY AUTOINCREMENT, name varchar(255) NOT
-			 * NULL, date date, comment varchar(255) NOT NULL, lastEdited
-			 * datetime NOT NULL DEFAULT CURRENT_TIMESTAMP, created datetime NOT
-			 * NULL DEFAULT CURRENT_TIMESTAMP
-			 */
+
 			int index = 1;
 			pst.setString(index++, script.getName());
-			// format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-
-			// TODO: handle date
-			pst.setString(index++, script.getDate().toString());
+			// TODO: java.text.ParseException: Unparseable date: "2019-05-04T00:00"
+			pst.setString(index++, script.getDate().format(DateTimeFormatter.ofPattern(DATEFORMAT_DATETIME_FOR_INSERT)));
 			pst.setString(index++, script.getComment());
 
-			// Az ExecuteUpdate paranccsal végrehajtjuk az utasítást
-			// Az executeUpdate visszaadja, hogy hány sort érintett az SQL ha
-			// DML-t hajtunk végre (DDL esetén 0-t ad vissza)
 			int rowsAffected = pst.executeUpdate();
-
-			// csak akkor sikeres, ha valóban volt érintett sor
 			if (rowsAffected == 1) {
 				rvSucceeded = true;
 			}
 		} catch (SQLException e) {
-			System.out.println("Failed to execute adding book.");
+			System.out.println("Failed to execute adding script.");
 			e.printStackTrace();
 		} finally {
-			// NAGYON FONTOS!
-			// Minden adatbázis objektumot le kell zárni, mivel ha ezt nem
-			// tesszük meg, akkor előfordulhat, hogy nyitott kapcsolatok
-			// maradnak az adatbázis felé. Az adatbázis pedig korlátozott
-			// számban tart fenn kapcsolatokat, ezért egy idő után akar ez be is
-			// telhet!
-			// Minden egyes objektumot külön try-catch ágban kell megpróbálni
-			// bezárni!
+
 			try {
 				if (pst != null) {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close statement when adding book.");
+				System.out.println("Failed to close statement when adding script.");
 				e.printStackTrace();
 			}
 
@@ -391,7 +376,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close connection when adding book.");
+				System.out.println("Failed to close connection when adding script.");
 				e.printStackTrace();
 			}
 		}

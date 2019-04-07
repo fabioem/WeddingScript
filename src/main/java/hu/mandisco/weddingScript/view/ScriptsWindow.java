@@ -18,7 +18,7 @@ import javafx.stage.Stage;
 public class ScriptsWindow extends Application {
 	private static final String DATEFORMAT_DATETIME = "yyyy.MM.dd HH:mm:ss";
 	private static final String DATEFORMAT_DATE = "yyyy.MM.dd";
-	private WeddingScriptController weddingScriptController = new WeddingScriptController();
+	private static WeddingScriptController weddingScriptController = new WeddingScriptController();
 	private TopMenu topMenu = new TopMenu();
 
 	public static void main(String[] args) {
