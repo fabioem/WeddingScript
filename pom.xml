@@ -44,6 +44,13 @@
 			<version>11.2.0</version>
 		</dependency>
 
+		<!-- For tooltip -->
+		<dependency>
+			<groupId>org.controlsfx</groupId>
+			<artifactId>controlsfx</artifactId>
+			<version>11.0.0-RC2</version>
+		</dependency>
+
 	</dependencies>
 
 	<repositories>

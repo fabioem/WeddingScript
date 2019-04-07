@@ -10,6 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
+import javafx.stage.PopupWindow;
 import javafx.stage.Stage;
 
 public class ScriptCreateWindow {
@@ -60,12 +61,15 @@ public class ScriptCreateWindow {
 		Button saveButton = new Button("Mentés");
 		GridPane.setConstraints(saveButton, 0, 3);
 		saveButton.setOnAction(e -> {
-			// TODO: handle date
 			Script script = new Script(nameInput.getText(), dateInput.getValue().atStartOfDay(),
 					commentInput.getText());
-			weddingScriptController.addScript(script);
-			//TODO: check fields
-			window.close();
+			if (nameInput.getText().isEmpty()) {
+				// TODO: hiba PopupWindow használni
+
+			} else {
+				weddingScriptController.addScript(script);
+				window.close();
+			}
 
 		});
 

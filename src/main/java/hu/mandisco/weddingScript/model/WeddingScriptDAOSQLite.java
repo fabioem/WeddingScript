@@ -349,7 +349,6 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 			int index = 1;
 			pst.setString(index++, script.getName());
-			// TODO: java.text.ParseException: Unparseable date: "2019-05-04T00:00"
 			pst.setString(index++, script.getDate().format(DateTimeFormatter.ofPattern(DATEFORMAT_DATETIME_FOR_INSERT)));
 			pst.setString(index++, script.getComment());
 
