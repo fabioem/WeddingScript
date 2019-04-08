@@ -85,7 +85,6 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				program.setProgId(progId);
 
 				programs.add(program);
-				System.out.println(program + "\t" + name + "\t" + progId);
 			}
 
 			conn.commit();
@@ -137,7 +136,6 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				attribute.setAttrId(attrId);
 
 				attributes.add(attribute);
-				System.out.println(attribute + "\t" + name + "\t" + attrId);
 			}
 
 			conn.commit();
@@ -189,7 +187,6 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				attrType.setAttrTypeId(attrTypeId);
 
 				attributeTypes.add(attrType);
-				System.out.println(attrType + "\t" + name + "\t" + attrTypeId);
 			}
 
 			conn.commit();
@@ -251,7 +248,6 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				script.setCreated(created);
 
 				scripts.add(script);
-				System.out.println(script + "\t" + name + "\t" + scriptId + "\t" + date + "\t" + created);
 			}
 
 			conn.commit();
@@ -306,7 +302,6 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				service.setServiceId(serviceId);
 
 				services.add(service);
-				System.out.println(service + "\t" + name + "\t" + serviceId);
 			}
 
 			conn.commit();
