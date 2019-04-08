@@ -30,7 +30,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 	private static final String DATEFORMAT_DATETIME_FOR_INSERT = "yyyy-MM-dd HH:mm:ss";
-	private static final String DATEFORMAT_DATE_FOR_INSERT = "yyyy-MM-dd";
+	// private static final String DATEFORMAT_DATE_FOR_INSERT = "yyyy-MM-dd";
 
 	private static final String SQL_SELECT_ALL_ATTRIBUTES = "SELECT * FROM attributes WHERE 1 = 1";
 	private static final String SQL_SELECT_ALL_PROGRAMS = "SELECT * FROM programs WHERE 1 = 1";
@@ -235,7 +235,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 			while (rs.next()) {
 				int scriptId = rs.getInt("scriptId");
 				String name = rs.getString("name");
-				LocalDateTime date = dateToLocalDateTime(dateFormat.parse(rs.getString("date")));
+				LocalDateTime date = rs.getString("date").isEmpty() ? null
+						: dateToLocalDateTime(dateFormat.parse(rs.getString("date")));
 				String comment = rs.getString("comment");
 
 				LocalDateTime lastEdited = dateToLocalDateTime(dateFormat.parse(rs.getString("lastEdited")));
@@ -349,7 +350,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 			int index = 1;
 			pst.setString(index++, script.getName());
-			pst.setString(index++, script.getDate().format(DateTimeFormatter.ofPattern(DATEFORMAT_DATETIME_FOR_INSERT)));
+			pst.setString(index++, script.getDate() == null ? ""
+					: script.getDate().format(DateTimeFormatter.ofPattern(DATEFORMAT_DATETIME_FOR_INSERT)));
 			pst.setString(index++, script.getComment());
 
 			int rowsAffected = pst.executeUpdate();

@@ -16,27 +16,24 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 public class ScriptsWindow extends Application {
+	private WeddingScriptController weddingScriptController = new WeddingScriptController();
+
 	private static final String DATEFORMAT_DATETIME = "yyyy.MM.dd HH:mm:ss";
 	private static final String DATEFORMAT_DATE = "yyyy.MM.dd";
-	private static WeddingScriptController weddingScriptController = new WeddingScriptController();
-	private TopMenu topMenu = new TopMenu();
 
-	public static void main(String[] args) {
-		launch(args);
-	}
+	private BorderPane layout = new BorderPane();
+	private TopMenu topMenu = new TopMenu();
+	private TableView<Script> table = new TableView<Script>();
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		primaryStage.setTitle("Forgatókönyvek");
 
-		BorderPane layout = new BorderPane();
-
 		// TOP
 		layout.setTop(topMenu);
 
 		// CENTER
-		TableView<Script> table = new TableView<Script>();
 		table.setEditable(true);
 
 		TableColumn<Script, String> nameCol = new TableColumn<Script, String>("Név");

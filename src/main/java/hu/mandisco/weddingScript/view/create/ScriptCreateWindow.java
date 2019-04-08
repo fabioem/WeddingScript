@@ -4,13 +4,15 @@ import hu.mandisco.weddingScript.controller.WeddingScriptController;
 import hu.mandisco.weddingScript.model.bean.Script;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
-import javafx.stage.PopupWindow;
 import javafx.stage.Stage;
 
 public class ScriptCreateWindow {
@@ -61,13 +63,16 @@ public class ScriptCreateWindow {
 		Button saveButton = new Button("Mentés");
 		GridPane.setConstraints(saveButton, 0, 3);
 		saveButton.setOnAction(e -> {
-			Script script = new Script(nameInput.getText(), dateInput.getValue().atStartOfDay(),
-					commentInput.getText());
+			Script script = new Script(nameInput.getText(),
+					dateInput.getValue() == null ? null : dateInput.getValue().atStartOfDay(), commentInput.getText());
 			if (nameInput.getText().isEmpty()) {
-				// TODO: hiba PopupWindow használni
+				Alert alert = new Alert(AlertType.ERROR, "A név nem lehet üres!", ButtonType.OK);
+				alert.setHeaderText("Üres név");
+				alert.showAndWait();
 
 			} else {
 				weddingScriptController.addScript(script);
+				// TODO: ScriptsWindow.updateScriptsTable();
 				window.close();
 			}
 

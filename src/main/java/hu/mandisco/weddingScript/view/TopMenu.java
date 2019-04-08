@@ -12,7 +12,6 @@ public class TopMenu extends VBox {
 	private MenuBar mainMenu = new MenuBar();
 	private ToolBar toolBar = new ToolBar();
 
-
 	public TopMenu() {
 		super();
 		this.getChildren().add(mainMenu);
@@ -40,7 +39,7 @@ public class TopMenu extends VBox {
 
 		// TOOLBAR
 		Button newButton = new Button("Új");
-		newButton.setOnAction(e->{
+		newButton.setOnAction(e -> {
 			ScriptCreateWindow.display();
 		});
 		// newButton.setText(Elusive.FILE_NEW.getCode() + "");
