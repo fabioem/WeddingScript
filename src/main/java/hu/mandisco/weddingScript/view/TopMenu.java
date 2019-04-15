@@ -43,6 +43,7 @@ public class TopMenu extends VBox {
 			ScriptCreateWindow.display();
 		});
 		// newButton.setText(Elusive.FILE_NEW.getCode() + "");
+		//TODO: gombok eseménykezelése
 		Button copyButton = new Button("Másolat készítése");
 		Button deleteButton = new Button("Törlés");
 

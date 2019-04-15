@@ -6,34 +6,22 @@ import java.util.List;
 
 import hu.mandisco.weddingScript.controller.WeddingScriptController;
 import hu.mandisco.weddingScript.model.bean.Script;
-import javafx.application.Application;
-import javafx.scene.Scene;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.BorderPane;
-import javafx.stage.Stage;
 
-public class ScriptsWindow extends Application {
+public class ScriptList {
+
 	private WeddingScriptController weddingScriptController = new WeddingScriptController();
 
 	private static final String DATEFORMAT_DATETIME = "yyyy.MM.dd HH:mm:ss";
 	private static final String DATEFORMAT_DATE = "yyyy.MM.dd";
 
-	private BorderPane layout = new BorderPane();
-	private TopMenu topMenu = new TopMenu();
-	private TableView<Script> table = new TableView<Script>();
+	public TableView<Script> getScriptList() {
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public void start(Stage primaryStage) throws Exception {
-		primaryStage.setTitle("Forgatókönyvek");
+		TableView<Script> table = new TableView<Script>();
 
-		// TOP
-		layout.setTop(topMenu);
-
-		// CENTER
 		table.setEditable(true);
 
 		TableColumn<Script, String> nameCol = new TableColumn<Script, String>("Név");
@@ -102,13 +90,7 @@ public class ScriptsWindow extends Application {
 		List<Script> scripts = weddingScriptController.getScripts();
 		table.getItems().addAll(scripts);
 
-		layout.setCenter(table);
-
-		// END
-		Scene scene = new Scene(layout, 800, 600);
-		primaryStage.setScene(scene);
-		primaryStage.show();
-
+		return table;
 	}
 
 }
