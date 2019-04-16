@@ -8,7 +8,7 @@ import javafx.stage.Stage;
 public class MainWindow extends Application {
 
 	private BorderPane layout = new BorderPane();
-	private TopMenu topMenu = new TopMenu();
+	private TopMenu topMenu = new TopMenu(layout);
 	private ScriptList scriptList = new ScriptList();
 
 	@Override

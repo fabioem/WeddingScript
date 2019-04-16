@@ -2,6 +2,7 @@ package hu.mandisco.weddingScript.view.create;
 
 import hu.mandisco.weddingScript.controller.WeddingScriptController;
 import hu.mandisco.weddingScript.model.bean.Script;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -19,7 +20,7 @@ public class ScriptCreateWindow {
 
 	private static WeddingScriptController weddingScriptController = new WeddingScriptController();
 
-	public static void display() {
+	public static void display(ObservableList<Script> scriptItems) {
 		Stage window = new Stage();
 
 		// Block events to other windows
@@ -73,6 +74,7 @@ public class ScriptCreateWindow {
 			} else {
 				weddingScriptController.addScript(script);
 				// TODO: frissítse a listát az előző (visszajövő) képernyőn
+				scriptItems.add(script);
 				window.close();
 			}
 
