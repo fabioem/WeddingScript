@@ -21,7 +21,8 @@ CREATE TABLE scriptProg(
 
 CREATE TABLE programs(
 	progId INTEGER PRIMARY KEY AUTOINCREMENT,
-	name varchar(255) NOT NULL
+	name varchar(255) NOT NULL,
+	defaultTime INTEGER
 );
 
 CREATE TABLE progAttr(
@@ -63,8 +64,9 @@ CREATE TABLE services(
 
 -- INSERT
 
-INSERT INTO programs VALUES(0, "Vacsora");
-INSERT INTO programs VALUES(1, "Nyitótánc");
+INSERT INTO programs VALUES(0, "Vacsora", 360000);
+INSERT INTO programs VALUES(1, "Nyitótánc", 2160000);
+INSERT INTO programs VALUES(2, "Újasszony tánc", 0);
 INSERT INTO scripts VALUES(0, "Judit és Dani", '2019-01-01 00:00:00.000', "Komment1", (DATETIME('now')), (DATETIME('now')));
 INSERT INTO scripts VALUES(1, "Juci és Béla", '2019-01-02 00:00:00.000', "Komi 2", (DATETIME('now')), (DATETIME('now')));
 INSERT INTO services VALUES(0, "Műsorvezetés");

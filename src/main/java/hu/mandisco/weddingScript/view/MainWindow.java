@@ -9,7 +9,7 @@ public class MainWindow extends Application {
 
 	private BorderPane layout = new BorderPane();
 	private TopMenu topMenu = new TopMenu(layout);
-	private ScriptList scriptList = new ScriptList();
+	private TableList tableList = new TableList();
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -19,7 +19,10 @@ public class MainWindow extends Application {
 		layout.setTop(topMenu);
 
 		// CENTER
-		layout.setCenter(scriptList.getScriptList());
+		layout.setCenter(tableList.getScriptList());
+
+		// RIGHT
+		layout.setRight(tableList.getProgramList());
 
 		// END
 		Scene scene = new Scene(layout, 800, 600);

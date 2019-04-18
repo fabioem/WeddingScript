@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -79,10 +80,12 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 			while (rs.next()) {
 				int progId = rs.getInt("progId");
 				String name = rs.getString("name");
+				int defaultTime = rs.getInt("defaultTime");
 
 				Program program = new Program();
 				program.setName(name);
 				program.setProgId(progId);
+				program.setDefaultTime(LocalDateTime.ofInstant(Instant.ofEpochMilli(defaultTime), ZoneId.of("+0")));
 
 				programs.add(program);
 			}

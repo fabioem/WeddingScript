@@ -5,18 +5,54 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import hu.mandisco.weddingScript.controller.WeddingScriptController;
+import hu.mandisco.weddingScript.model.bean.Program;
 import hu.mandisco.weddingScript.model.bean.Script;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
-public class ScriptList {
+public class TableList {
 
 	private WeddingScriptController weddingScriptController = new WeddingScriptController();
 
 	private static final String DATEFORMAT_DATETIME = "yyyy.MM.dd HH:mm:ss";
+	private static final String DATEFORMAT_TIME = "HH:mm:ss";
 	private static final String DATEFORMAT_DATE = "yyyy.MM.dd";
+
+	public TableView<Program> getProgramList() {
+		TableView<Program> table = new TableView<Program>();
+
+		table.setEditable(true);
+
+		TableColumn<Program, String> nameCol = new TableColumn<Program, String>("Név");
+		nameCol.setCellValueFactory(new PropertyValueFactory<Program, String>("name"));
+
+		TableColumn<Program, LocalDateTime> defaultTimeCol = new TableColumn<Program, LocalDateTime>("Idő");
+		defaultTimeCol.setCellValueFactory(new PropertyValueFactory<Program, LocalDateTime>("defaultTime"));
+		defaultTimeCol.setCellFactory(column -> {
+			TableCell<Program, LocalDateTime> cell = new TableCell<Program, LocalDateTime>() {
+				@Override
+				protected void updateItem(LocalDateTime item, boolean empty) {
+					super.updateItem(item, empty);
+					if (item == null || empty) {
+						setText(null);
+					} else {
+						setText(item.format(DateTimeFormatter.ofPattern(DATEFORMAT_TIME)));
+					}
+				}
+			};
+
+			return cell;
+		});
+
+		table.getColumns().addAll(nameCol, defaultTimeCol);
+
+		List<Program> programs = weddingScriptController.getPrograms();
+		table.getItems().addAll(programs);
+
+		return table;
+	}
 
 	public TableView<Script> getScriptList() {
 
