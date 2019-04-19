@@ -73,7 +73,6 @@ public class ScriptCreateWindow {
 
 			} else {
 				weddingScriptController.addScript(script);
-				// TODO: frissítse a listát az előző (visszajövő) képernyőn
 				scriptItems.add(script);
 				window.close();
 			}

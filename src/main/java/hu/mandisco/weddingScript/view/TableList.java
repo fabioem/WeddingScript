@@ -7,8 +7,10 @@ import java.util.List;
 import hu.mandisco.weddingScript.controller.WeddingScriptController;
 import hu.mandisco.weddingScript.model.bean.Program;
 import hu.mandisco.weddingScript.model.bean.Script;
+import hu.mandisco.weddingScript.view.create.ScriptEditWindow;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
@@ -17,7 +19,7 @@ public class TableList {
 	private WeddingScriptController weddingScriptController = new WeddingScriptController();
 
 	private static final String DATEFORMAT_DATETIME = "yyyy.MM.dd HH:mm:ss";
-	private static final String DATEFORMAT_TIME = "HH:mm:ss";
+	private static final String DATEFORMAT_TIME = "HH:mm";
 	private static final String DATEFORMAT_DATE = "yyyy.MM.dd";
 
 	public TableView<Program> getProgramList() {
@@ -59,6 +61,20 @@ public class TableList {
 		TableView<Script> table = new TableView<Script>();
 
 		table.setEditable(true);
+
+		table.setRowFactory( tv -> {
+		    TableRow<Script> row = new TableRow<>();
+		    row.setOnMouseClicked(event -> {
+		        if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
+		        	Script selectedScript = row.getItem();
+		            //TODO: forgatókönyv megnyitása
+					ScriptEditWindow.display();
+		        	System.out.println(selectedScript);
+		        }
+		    });
+		    return row ;
+		});
+
 
 		TableColumn<Script, String> nameCol = new TableColumn<Script, String>("Név");
 		nameCol.setCellValueFactory(new PropertyValueFactory<Script, String>("name"));

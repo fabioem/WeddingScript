@@ -386,6 +386,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 	@Override
 	public boolean removeScript(Script script) {
+		//TODO: törölni a hozzá tartozó programokat, attribútumokat is
 		boolean rvSucceeded = false;
 		Connection conn = null;
 		PreparedStatement pst = null;
