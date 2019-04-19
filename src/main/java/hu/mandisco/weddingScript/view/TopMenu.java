@@ -1,5 +1,6 @@
 package hu.mandisco.weddingScript.view;
 
+import hu.mandisco.weddingScript.controller.WeddingScriptController;
 import hu.mandisco.weddingScript.model.bean.Script;
 import hu.mandisco.weddingScript.view.create.ScriptCreateWindow;
 import javafx.collections.ObservableList;
@@ -15,6 +16,7 @@ import javafx.scene.layout.VBox;
 public class TopMenu extends VBox {
 	private MenuBar mainMenu = new MenuBar();
 	private ToolBar toolBar = new ToolBar();
+	private WeddingScriptController weddingScriptController = new WeddingScriptController();
 
 	public TopMenu(BorderPane layout) {
 		super();
@@ -44,13 +46,19 @@ public class TopMenu extends VBox {
 		// TOOLBAR
 		Button newButton = new Button("Új");
 		newButton.setOnAction(e -> {
-			ObservableList<Script> scriptItems = ((TableView<Script>)layout.getCenter()).getItems();
+			ObservableList<Script> scriptItems = ((TableView<Script>) layout.getCenter()).getItems();
 			ScriptCreateWindow.display(scriptItems);
 		});
 		// newButton.setText(Elusive.FILE_NEW.getCode() + "");
-		//TODO: gombok eseménykezelése
+		// TODO: gombok eseménykezelése
 		Button copyButton = new Button("Másolat készítése");
 		Button deleteButton = new Button("Törlés");
+		deleteButton.setOnAction(e -> {
+			TableView<Script> table = (TableView<Script>) layout.getCenter();
+			Script selectedItem = table.getSelectionModel().getSelectedItem();
+			table.getItems().remove(selectedItem);
+			weddingScriptController.removeScript(selectedItem);
+		});
 
 		toolBar.getItems().addAll(newButton, copyButton, deleteButton);
 

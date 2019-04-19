@@ -39,6 +39,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 	private static final String SQL_SELECT_ALL_SCRIPTS = "SELECT * FROM scripts WHERE 1 = 1";
 	private static final String SQL_SELECT_ALL_ATTRIBUTETYPES = "SELECT * FROM attributeTypes WHERE 1 = 1";
 	private static final String SQL_INSERT_SCRIPT = "INSERT INTO scripts(name, date, comment) VALUES (?, ?, ?)";
+	private static final String SQL_DELETE_SCRIPT = "DELETE FROM scripts where scriptId = ?";
 
 	Path currentWorkingFolder = Paths.get("").toAbsolutePath();
 	Path pathToTheDatabaseFile = currentWorkingFolder.resolve(DATABASE_FILE);
@@ -376,6 +377,50 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				}
 			} catch (SQLException e) {
 				System.out.println("Failed to close connection when adding script.");
+				e.printStackTrace();
+			}
+		}
+
+		return rvSucceeded;
+	}
+
+	@Override
+	public boolean removeScript(Script script) {
+		boolean rvSucceeded = false;
+		Connection conn = null;
+		PreparedStatement pst = null;
+
+		try {
+
+			conn = DriverManager.getConnection(databaseConnectionURL);
+			pst = conn.prepareStatement(SQL_DELETE_SCRIPT);
+
+			pst.setInt(1, script.getScriptId());
+
+			int rowsAffected = pst.executeUpdate();
+			if (rowsAffected == 1) {
+				rvSucceeded = true;
+			}
+		} catch (SQLException e) {
+			System.out.println("Failed to execute removing script.");
+			e.printStackTrace();
+		} finally {
+
+			try {
+				if (pst != null) {
+					pst.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Failed to close statement when removing script.");
+				e.printStackTrace();
+			}
+
+			try {
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Failed to close connection when removing script.");
 				e.printStackTrace();
 			}
 		}

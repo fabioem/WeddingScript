@@ -10,9 +10,15 @@ import hu.mandisco.weddingScript.model.bean.Service;
 public interface WeddingScriptDAO {
 
 	public List<Program> getPrograms();
+
 	public List<Script> getScripts();
+
 	public List<Service> getServices();
+
 	public List<AttributeType> getAttributeTypes();
-	boolean addScript(Script script);
+
+	public boolean addScript(Script script);
+
+	public boolean removeScript(Script script);
 
 }

@@ -32,4 +32,8 @@ public class WeddingScriptController {
 		return dao.addScript(script);
 	}
 
+	public boolean removeScript(Script script) {
+		return dao.removeScript(script);
+	}
+
 }
