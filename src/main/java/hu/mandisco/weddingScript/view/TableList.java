@@ -67,8 +67,7 @@ public class TableList {
 		    row.setOnMouseClicked(event -> {
 		        if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
 		        	Script selectedScript = row.getItem();
-		            //TODO: forgatókönyv megnyitása
-					ScriptEditWindow.display();
+					ScriptEditWindow.display(selectedScript);
 		        	System.out.println(selectedScript);
 		        }
 		    });
