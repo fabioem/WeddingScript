@@ -20,7 +20,13 @@ public class ScriptCreateWindow {
 
 	private static WeddingScriptController weddingScriptController = new WeddingScriptController();
 
-	public static void display(ObservableList<Script> scriptItems) {
+	private ObservableList<Script> scriptItems;
+
+	public ScriptCreateWindow(ObservableList<Script> scriptItems) {
+		this.scriptItems = scriptItems;
+	}
+
+	public void display() {
 		Stage window = new Stage();
 
 		// Block events to other windows
@@ -73,7 +79,9 @@ public class ScriptCreateWindow {
 
 			} else {
 				weddingScriptController.addScript(script);
-				scriptItems.add(script);
+				//scriptItems.add(script);
+				scriptItems.clear();
+				scriptItems.addAll(weddingScriptController.getScripts());
 				window.close();
 			}
 

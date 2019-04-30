@@ -19,7 +19,7 @@ import javafx.stage.Stage;
 public class MainWindow extends Application {
 
 	private BorderPane layout = new BorderPane();
-	private TableList tableList = new TableList();
+	private TableView<Script> scriptTable;
 	private MenuBar mainMenu = new MenuBar();
 	private ToolBar toolBar = new ToolBar();
 	private VBox topMenu = new VBox();
@@ -28,6 +28,9 @@ public class MainWindow extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		primaryStage.setTitle("Forgatókönyv készítő");
+
+		TableList tableList = new TableList();
+		scriptTable = tableList.getScriptList();
 
 		// TOP MENU
 		// Create and add the "File" sub-menu options.
@@ -52,17 +55,17 @@ public class MainWindow extends Application {
 		// TOOLBAR
 		Button newButton = new Button("Új");
 		newButton.setOnAction(e -> {
-			ObservableList<Script> scriptItems = ((TableView<Script>) layout.getCenter()).getItems();
-			ScriptCreateWindow.display(scriptItems);
+			ObservableList<Script> scriptItems = scriptTable.getItems();
+			ScriptCreateWindow window = new ScriptCreateWindow(scriptItems);
+			window.display();
 		});
 		// newButton.setText(Elusive.FILE_NEW.getCode() + "");
 		// TODO: gombok eseménykezelése
 		Button copyButton = new Button("Másolat készítése");
 		Button deleteButton = new Button("Törlés");
 		deleteButton.setOnAction(e -> {
-			TableView<Script> table = (TableView<Script>) layout.getCenter();
-			Script selectedItem = table.getSelectionModel().getSelectedItem();
-			table.getItems().remove(selectedItem);
+			Script selectedItem = scriptTable.getSelectionModel().getSelectedItem();
+			scriptTable.getItems().remove(selectedItem);
 			weddingScriptController.removeScript(selectedItem);
 		});
 
@@ -73,7 +76,7 @@ public class MainWindow extends Application {
 		layout.setTop(topMenu);
 
 		// CENTER
-		layout.setCenter(tableList.getScriptList());
+		layout.setCenter(scriptTable);
 
 		// RIGHT
 		// layout.setRight(tableList.getProgramList());
