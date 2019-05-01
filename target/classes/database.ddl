@@ -28,6 +28,7 @@ CREATE TABLE programs(
 CREATE TABLE progAttr(
 	progId int NOT NULL,
 	attrId int NOT NULL,
+	value varchar(255) NOT NULL,
 	FOREIGN KEY (progId) REFERENCES programs(progId),
 	FOREIGN KEY (attrId) REFERENCES attributes(attrId)
 );
@@ -37,7 +38,7 @@ CREATE TABLE progAttr(
 CREATE TABLE attributes(
 	attributeId INTEGER PRIMARY KEY AUTOINCREMENT,
 	name varchar(255) NOT NULL,
-	value varchar(255) NOT NULL,
+	DEFAULTvalue varchar(255) NOT NULL,
 	attrTypeId int NOT NULL,
 	serviceId int,
 	mandatory boolean,
@@ -53,6 +54,7 @@ CREATE TABLE attributeTypes(
 CREATE TABLE scriptAttr(
 	scriptId int NOT NULL,
 	attrId int NOT NULL,
+	defaultValue varchar(255) NOT NULL,
 	FOREIGN KEY (scriptId) REFERENCES scripts(scriptId),
 	FOREIGN KEY (attrId) REFERENCES attributes(attrId)
 );
@@ -60,6 +62,21 @@ CREATE TABLE scriptAttr(
 CREATE TABLE services(
 	serviceId INTEGER PRIMARY KEY AUTOINCREMENT,
 	name varchar(10) NOT NULL
+);
+
+CREATE TABLE serviceProg(
+	serviceId int NOT NULL,
+	progId int NOT NULL,
+	FOREIGN KEY (serviceId) REFERENCES services(serviceId),
+	FOREIGN KEY (progId) REFERENCES programs(progId)
+);
+
+CREATE TABLE serviceAttr(
+	serviceId int NOT NULL,
+	attrId int NOT NULL,
+	defaultValue varchar(255) NOT NULL,
+	FOREIGN KEY (serviceId) REFERENCES services(serviceId),
+	FOREIGN KEY (attrId) REFERENCES attributes(attrId)
 );
 
 -- INSERT

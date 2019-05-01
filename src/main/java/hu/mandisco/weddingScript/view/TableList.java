@@ -7,7 +7,7 @@ import java.util.List;
 import hu.mandisco.weddingScript.controller.WeddingScriptController;
 import hu.mandisco.weddingScript.model.bean.Program;
 import hu.mandisco.weddingScript.model.bean.Script;
-import hu.mandisco.weddingScript.view.create.ScriptEditWindow;
+import hu.mandisco.weddingScript.view.edit.ScriptEditWindow;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
@@ -62,18 +62,17 @@ public class TableList {
 
 		table.setEditable(true);
 
-		table.setRowFactory( tv -> {
-		    TableRow<Script> row = new TableRow<>();
-		    row.setOnMouseClicked(event -> {
-		        if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
-		        	Script selectedScript = row.getItem();
-					ScriptEditWindow.display(selectedScript);
-		        	System.out.println(selectedScript);
-		        }
-		    });
-		    return row ;
+		table.setRowFactory(tv -> {
+			TableRow<Script> row = new TableRow<>();
+			row.setOnMouseClicked(event -> {
+				if (event.getClickCount() == 2 && (!row.isEmpty())) {
+					Script selectedScript = row.getItem();
+					ScriptEditWindow window = new ScriptEditWindow();
+					window.display(selectedScript);
+				}
+			});
+			return row;
 		});
-
 
 		TableColumn<Script, String> nameCol = new TableColumn<Script, String>("Név");
 		nameCol.setCellValueFactory(new PropertyValueFactory<Script, String>("name"));

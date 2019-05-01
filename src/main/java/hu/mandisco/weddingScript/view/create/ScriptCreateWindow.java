@@ -76,10 +76,8 @@ public class ScriptCreateWindow {
 				Alert alert = new Alert(AlertType.ERROR, "A név nem lehet üres!", ButtonType.OK);
 				alert.setHeaderText("Üres név");
 				alert.showAndWait();
-
 			} else {
 				weddingScriptController.addScript(script);
-				//scriptItems.add(script);
 				scriptItems.clear();
 				scriptItems.addAll(weddingScriptController.getScripts());
 				window.close();
