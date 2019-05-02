@@ -38,7 +38,7 @@ CREATE TABLE progAttr(
 CREATE TABLE attributes(
 	attributeId INTEGER PRIMARY KEY AUTOINCREMENT,
 	name varchar(255) NOT NULL,
-	DEFAULTvalue varchar(255) NOT NULL,
+	defaultValue varchar(255) NOT NULL,
 	attrTypeId int NOT NULL,
 	serviceId int,
 	mandatory boolean,
@@ -54,7 +54,7 @@ CREATE TABLE attributeTypes(
 CREATE TABLE scriptAttr(
 	scriptId int NOT NULL,
 	attrId int NOT NULL,
-	defaultValue varchar(255) NOT NULL,
+	value varchar(255) NOT NULL,
 	FOREIGN KEY (scriptId) REFERENCES scripts(scriptId),
 	FOREIGN KEY (attrId) REFERENCES attributes(attrId)
 );
@@ -90,3 +90,5 @@ INSERT INTO services VALUES(0, "Műsorvezetés");
 INSERT INTO services VALUES(1, "Oldalfal fényezés");
 INSERT INTO attributeTypes VALUES(0, "Program");
 INSERT INTO attributeTypes VALUES(1, "Script");
+INSERT INTO scriptProg VALUES(0, 1);
+INSERT INTO scriptProg VALUES(0, 2);

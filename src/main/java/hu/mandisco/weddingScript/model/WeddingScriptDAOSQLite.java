@@ -33,11 +33,19 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 	private static final String DATEFORMAT_DATETIME_FOR_INSERT = "yyyy-MM-dd HH:mm:ss";
 	// private static final String DATEFORMAT_DATE_FOR_INSERT = "yyyy-MM-dd";
 
-	private static final String SQL_SELECT_ALL_ATTRIBUTES = "SELECT * FROM attributes WHERE 1 = 1";
-	private static final String SQL_SELECT_ALL_PROGRAMS = "SELECT * FROM programs WHERE 1 = 1";
-	private static final String SQL_SELECT_ALL_SERVICES = "SELECT * FROM services WHERE 1 = 1";
-	private static final String SQL_SELECT_ALL_SCRIPTS = "SELECT * FROM scripts WHERE 1 = 1";
-	private static final String SQL_SELECT_ALL_ATTRIBUTETYPES = "SELECT * FROM attributeTypes WHERE 1 = 1";
+	private static final String SQL_SELECT_ATTRIBUTES = "SELECT * FROM attributes WHERE 1 = 1 ";
+	private static final String SQL_SELECT_PROGRAMS = "SELECT * FROM programs WHERE 1 = 1 ";
+	private static final String SQL_SELECT_SERVICES = "SELECT * FROM services WHERE 1 = 1 ";
+	private static final String SQL_SELECT_SCRIPTS = "SELECT * FROM scripts WHERE 1 = 1 ";
+	private static final String SQL_SELECT_ATTRIBUTETYPES = "SELECT * FROM attributeTypes WHERE 1 = 1 ";
+
+	// private static final String SQL_SELECT_SCRIPTPROG = "SELECT * FROM
+	// scriptProg WHERE 1 = 1 ";
+	// private static final String SQL_SELECT_PROGATTR = "SELECT * FROM progAttr
+	// WHERE 1 = 1 ";
+	// private static final String SQL_SELECT_SCRIPTATTR = "SELECT * FROM
+	// scriptAttr WHERE 1 = 1 ";
+
 	private static final String SQL_INSERT_SCRIPT = "INSERT INTO scripts(name, date, comment) VALUES (?, ?, ?)";
 	private static final String SQL_DELETE_SCRIPT = "DELETE FROM scripts where scriptId = ?";
 
@@ -76,7 +84,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 			conn = DriverManager.getConnection(databaseConnectionURL);
 			conn.setAutoCommit(false);
 			st = conn.createStatement();
-			ResultSet rs = st.executeQuery(SQL_SELECT_ALL_PROGRAMS);
+			ResultSet rs = st.executeQuery(SQL_SELECT_PROGRAMS);
 
 			while (rs.next()) {
 				int progId = rs.getInt("progId");
@@ -129,7 +137,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 			conn = DriverManager.getConnection(databaseConnectionURL);
 			conn.setAutoCommit(false);
 			st = conn.createStatement();
-			ResultSet rs = st.executeQuery(SQL_SELECT_ALL_ATTRIBUTES);
+			ResultSet rs = st.executeQuery(SQL_SELECT_ATTRIBUTES);
 
 			while (rs.next()) {
 				int attrId = rs.getInt("attrId");
@@ -180,7 +188,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 			conn = DriverManager.getConnection(databaseConnectionURL);
 			conn.setAutoCommit(false);
 			st = conn.createStatement();
-			ResultSet rs = st.executeQuery(SQL_SELECT_ALL_ATTRIBUTETYPES);
+			ResultSet rs = st.executeQuery(SQL_SELECT_ATTRIBUTETYPES);
 
 			while (rs.next()) {
 				int attrTypeId = rs.getInt("attrTypeId");
@@ -231,7 +239,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 			conn = DriverManager.getConnection(databaseConnectionURL);
 			conn.setAutoCommit(false);
 			st = conn.createStatement();
-			ResultSet rs = st.executeQuery(SQL_SELECT_ALL_SCRIPTS);
+			ResultSet rs = st.executeQuery(SQL_SELECT_SCRIPTS);
 
 			while (rs.next()) {
 				int scriptId = rs.getInt("scriptId");
@@ -295,7 +303,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 			conn = DriverManager.getConnection(databaseConnectionURL);
 			conn.setAutoCommit(false);
 			st = conn.createStatement();
-			ResultSet rs = st.executeQuery(SQL_SELECT_ALL_SERVICES);
+			ResultSet rs = st.executeQuery(SQL_SELECT_SERVICES);
 
 			while (rs.next()) {
 				int serviceId = rs.getInt("serviceId");
@@ -386,7 +394,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 	@Override
 	public boolean removeScript(Script script) {
-		//TODO: törölni a hozzá tartozó programokat, attribútumokat is
+		// TODO: törölni a hozzá tartozó programokat, attribútumokat is
 		boolean rvSucceeded = false;
 		Connection conn = null;
 		PreparedStatement pst = null;
@@ -427,6 +435,134 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 		}
 
 		return rvSucceeded;
+	}
+
+	@Override
+	public List<Attribute> getScriptAttributes(Script script) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Program> getScriptPrograms(Script script) {
+		Connection conn = null;
+		PreparedStatement pst = null;
+
+		programs.clear();
+
+		try {
+			conn = DriverManager.getConnection(databaseConnectionURL);
+
+			String sqlScript = SQL_SELECT_PROGRAMS
+					+ "and progId in (SELECT progId FROM scriptProg WHERE scriptId = ?);";
+			pst = conn.prepareStatement(sqlScript);
+			pst.setInt(1, script.getScriptId());
+
+			conn.setAutoCommit(false);
+			ResultSet rs = pst.executeQuery();
+
+			while (rs.next()) {
+				int progId = rs.getInt("progId");
+				String name = rs.getString("name");
+				int defaultTime = rs.getInt("defaultTime");
+
+				Program program = new Program();
+				program.setName(name);
+				program.setProgId(progId);
+				program.setDefaultTime(LocalDateTime.ofInstant(Instant.ofEpochMilli(defaultTime), ZoneId.of("+0")));
+
+				programs.add(program);
+			}
+
+			conn.commit();
+		} catch (SQLException e) {
+			System.out.println("Failed to execute listing programs.");
+			e.printStackTrace();
+		} finally {
+			try {
+				if (pst != null) {
+					pst.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Failed to close statement when listing programs.");
+				e.printStackTrace();
+			}
+
+			try {
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Failed to close connection when listing programs.");
+				e.printStackTrace();
+			}
+		}
+
+		return programs;
+	}
+
+	@Override
+	public List<Program> getScriptProgramsInverse(Script script) {
+		Connection conn = null;
+		PreparedStatement pst = null;
+
+		programs.clear();
+
+		try {
+			conn = DriverManager.getConnection(databaseConnectionURL);
+
+			String sqlScript = SQL_SELECT_PROGRAMS
+					+ "and progId not in (SELECT progId FROM scriptProg WHERE scriptId = ?);";
+			pst = conn.prepareStatement(sqlScript);
+			pst.setInt(1, script.getScriptId());
+
+			conn.setAutoCommit(false);
+			ResultSet rs = pst.executeQuery();
+
+			while (rs.next()) {
+				int progId = rs.getInt("progId");
+				String name = rs.getString("name");
+				int defaultTime = rs.getInt("defaultTime");
+
+				Program program = new Program();
+				program.setName(name);
+				program.setProgId(progId);
+				program.setDefaultTime(LocalDateTime.ofInstant(Instant.ofEpochMilli(defaultTime), ZoneId.of("+0")));
+
+				programs.add(program);
+			}
+
+			conn.commit();
+		} catch (SQLException e) {
+			System.out.println("Failed to execute listing programs.");
+			e.printStackTrace();
+		} finally {
+			try {
+				if (pst != null) {
+					pst.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Failed to close statement when listing programs.");
+				e.printStackTrace();
+			}
+
+			try {
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Failed to close connection when listing programs.");
+				e.printStackTrace();
+			}
+		}
+
+		return programs;
+	}
+
+	@Override
+	public List<Attribute> getProgramAttributes(Program program) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

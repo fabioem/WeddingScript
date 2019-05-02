@@ -48,13 +48,85 @@ public class TableList {
 			return cell;
 		});
 
-		table.getColumns().addAll(nameCol, defaultTimeCol);
+		table.getColumns().add(nameCol);
+		table.getColumns().add(defaultTimeCol);
 
 		List<Program> programs = weddingScriptController.getPrograms();
 		table.getItems().addAll(programs);
 
 		return table;
 	}
+
+	public TableView<Program> getProgramListOfScript(Script script) {
+		TableView<Program> table = new TableView<Program>();
+
+		table.setEditable(true);
+
+		TableColumn<Program, String> nameCol = new TableColumn<Program, String>("Név");
+		nameCol.setCellValueFactory(new PropertyValueFactory<Program, String>("name"));
+
+		TableColumn<Program, LocalDateTime> defaultTimeCol = new TableColumn<Program, LocalDateTime>("Idő");
+		defaultTimeCol.setCellValueFactory(new PropertyValueFactory<Program, LocalDateTime>("defaultTime"));
+		defaultTimeCol.setCellFactory(column -> {
+			TableCell<Program, LocalDateTime> cell = new TableCell<Program, LocalDateTime>() {
+				@Override
+				protected void updateItem(LocalDateTime item, boolean empty) {
+					super.updateItem(item, empty);
+					if (item == null || empty) {
+						setText(null);
+					} else {
+						setText(item.format(DateTimeFormatter.ofPattern(DATEFORMAT_TIME)));
+					}
+				}
+			};
+
+			return cell;
+		});
+
+		table.getColumns().add(nameCol);
+		table.getColumns().add(defaultTimeCol);
+
+		List<Program> programs = weddingScriptController.getScriptPrograms(script);
+		table.getItems().addAll(programs);
+
+		return table;
+	}
+
+	public TableView<Program> getProgramListNotInScript(Script script) {
+		TableView<Program> table = new TableView<Program>();
+
+		table.setEditable(true);
+
+		TableColumn<Program, String> nameCol = new TableColumn<Program, String>("Név");
+		nameCol.setCellValueFactory(new PropertyValueFactory<Program, String>("name"));
+
+		TableColumn<Program, LocalDateTime> defaultTimeCol = new TableColumn<Program, LocalDateTime>("Idő");
+		defaultTimeCol.setCellValueFactory(new PropertyValueFactory<Program, LocalDateTime>("defaultTime"));
+		defaultTimeCol.setCellFactory(column -> {
+			TableCell<Program, LocalDateTime> cell = new TableCell<Program, LocalDateTime>() {
+				@Override
+				protected void updateItem(LocalDateTime item, boolean empty) {
+					super.updateItem(item, empty);
+					if (item == null || empty) {
+						setText(null);
+					} else {
+						setText(item.format(DateTimeFormatter.ofPattern(DATEFORMAT_TIME)));
+					}
+				}
+			};
+
+			return cell;
+		});
+
+		table.getColumns().add(nameCol);
+		table.getColumns().add(defaultTimeCol);
+
+		List<Program> programs = weddingScriptController.getScriptProgramsInverse(script);
+		table.getItems().addAll(programs);
+
+		return table;
+	}
+
 
 	public TableView<Script> getScriptList() {
 

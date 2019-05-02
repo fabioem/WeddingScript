@@ -3,7 +3,25 @@ package hu.mandisco.weddingScript.model.bean;
 public class Attribute {
 	private int attrId;
 	private String name;
+	private String value;
+	private String defaultValue;
 	private int attrTypeId;
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
+	}
+
+	public String getDefaultValue() {
+		return defaultValue;
+	}
+
+	public void setDefaultValue(String defaultValue) {
+		this.defaultValue = defaultValue;
+	}
+
 	private int serviceId;
 	private boolean mandatory;
 
