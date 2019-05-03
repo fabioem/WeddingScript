@@ -1,11 +1,32 @@
 package hu.mandisco.weddingScript.model.bean;
 
+import javafx.collections.ObservableList;
+
 public class Attribute {
 	private int attrId;
 	private String name;
 	private String value;
 	private String defaultValue;
-	private int attrTypeId;
+	private AttributeType attrType;
+	// private int attrTypeId;
+	ObservableList<Attribute> attributes;
+
+	public ObservableList<Attribute> getAttributes() {
+		return attributes;
+	}
+
+	public void setAttributes(ObservableList<Attribute> attributes) {
+		this.attributes = attributes;
+	}
+
+	public AttributeType getAttrType() {
+		return attrType;
+	}
+
+	public void setAttrType(AttributeType attrType) {
+		this.attrType = attrType;
+	}
+
 	public String getValue() {
 		return value;
 	}
@@ -39,22 +60,6 @@ public class Attribute {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public int getTypeId() {
-		return attrTypeId;
-	}
-
-	public void setTypeId(int typeId) {
-		this.attrTypeId = typeId;
-	}
-
-	public int getAttrTypeId() {
-		return attrTypeId;
-	}
-
-	public void setAttrTypeId(int attrTypeId) {
-		this.attrTypeId = attrTypeId;
 	}
 
 	public int getServiceId() {

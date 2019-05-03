@@ -1,8 +1,28 @@
 package hu.mandisco.weddingScript.model.bean;
 
+import javafx.collections.ObservableList;
+
 public class Service {
 	private String name;
 	private int serviceId;
+	ObservableList<Program> programList;
+	ObservableList<Attribute> attributeList;
+
+	public ObservableList<Attribute> getAttributeList() {
+		return attributeList;
+	}
+
+	public void setAttributeList(ObservableList<Attribute> attributeList) {
+		this.attributeList = attributeList;
+	}
+
+	public ObservableList<Program> getProgramList() {
+		return programList;
+	}
+
+	public void setProgramList(ObservableList<Program> programList) {
+		this.programList = programList;
+	}
 
 	public String getName() {
 		return name;

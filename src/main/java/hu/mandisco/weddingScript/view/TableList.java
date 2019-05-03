@@ -18,10 +18,6 @@ public class TableList {
 
 	private WeddingScriptController weddingScriptController = new WeddingScriptController();
 
-	private static final String DATEFORMAT_DATETIME = "yyyy.MM.dd HH:mm:ss";
-	private static final String DATEFORMAT_TIME = "HH:mm";
-	private static final String DATEFORMAT_DATE = "yyyy.MM.dd";
-
 	public TableView<Program> getProgramList() {
 		TableView<Program> table = new TableView<Program>();
 
@@ -40,7 +36,7 @@ public class TableList {
 					if (item == null || empty) {
 						setText(null);
 					} else {
-						setText(item.format(DateTimeFormatter.ofPattern(DATEFORMAT_TIME)));
+						setText(item.format(DateTimeFormatter.ofPattern(weddingScriptController.DATEFORMAT_TIME)));
 					}
 				}
 			};
@@ -66,7 +62,7 @@ public class TableList {
 		nameCol.setCellValueFactory(new PropertyValueFactory<Program, String>("name"));
 
 		TableColumn<Program, LocalDateTime> defaultTimeCol = new TableColumn<Program, LocalDateTime>("Idő");
-		defaultTimeCol.setCellValueFactory(new PropertyValueFactory<Program, LocalDateTime>("defaultTime"));
+		defaultTimeCol.setCellValueFactory(new PropertyValueFactory<Program, LocalDateTime>("time"));
 		defaultTimeCol.setCellFactory(column -> {
 			TableCell<Program, LocalDateTime> cell = new TableCell<Program, LocalDateTime>() {
 				@Override
@@ -75,7 +71,7 @@ public class TableList {
 					if (item == null || empty) {
 						setText(null);
 					} else {
-						setText(item.format(DateTimeFormatter.ofPattern(DATEFORMAT_TIME)));
+						setText(item.format(DateTimeFormatter.ofPattern(weddingScriptController.DATEFORMAT_TIME)));
 					}
 				}
 			};
@@ -110,7 +106,7 @@ public class TableList {
 					if (item == null || empty) {
 						setText(null);
 					} else {
-						setText(item.format(DateTimeFormatter.ofPattern(DATEFORMAT_TIME)));
+						setText(item.format(DateTimeFormatter.ofPattern(weddingScriptController.DATEFORMAT_TIME)));
 					}
 				}
 			};
@@ -159,7 +155,7 @@ public class TableList {
 					if (item == null || empty) {
 						setText(null);
 					} else {
-						setText(item.format(DateTimeFormatter.ofPattern(DATEFORMAT_DATE)));
+						setText(item.format(DateTimeFormatter.ofPattern(weddingScriptController.DATEFORMAT_DATE)));
 					}
 				}
 			};
@@ -180,7 +176,7 @@ public class TableList {
 					if (item == null || empty) {
 						setText(null);
 					} else {
-						setText(item.format(DateTimeFormatter.ofPattern(DATEFORMAT_DATETIME)));
+						setText(item.format(DateTimeFormatter.ofPattern(weddingScriptController.DATEFORMAT_DATETIME)));
 					}
 				}
 			};
@@ -199,7 +195,7 @@ public class TableList {
 					if (item == null || empty) {
 						setText(null);
 					} else {
-						setText(item.format(DateTimeFormatter.ofPattern(DATEFORMAT_DATETIME)));
+						setText(item.format(DateTimeFormatter.ofPattern(weddingScriptController.DATEFORMAT_DATETIME)));
 					}
 				}
 			};

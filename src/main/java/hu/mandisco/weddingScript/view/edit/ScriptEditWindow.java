@@ -1,5 +1,7 @@
 package hu.mandisco.weddingScript.view.edit;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import hu.mandisco.weddingScript.controller.WeddingScriptController;
@@ -11,6 +13,7 @@ import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -46,20 +49,17 @@ public class ScriptEditWindow {
 		topGrid.setHgap(10);
 
 		// Name - constrains use (child, column, row)
-		Label nameLabel = new Label(script.getName() + " - " + script.getDate());
+		Label nameLabel = new Label(script.getName() + " - "
+				+ script.getDate().format(DateTimeFormatter.ofPattern(weddingScriptController.DATEFORMAT_DATE)));
 		GridPane.setConstraints(nameLabel, 0, 0);
 		GridPane.setHalignment(nameLabel, HPos.CENTER);
 		GridPane.setHgrow(nameLabel, Priority.ALWAYS);
-		// GridPane.setFillWidth(nameLabel, true);
-		// GridPane.setFillHeight(nameLabel, true);
 
 		// Comment
 		Label commentLabel = new Label(script.getComment());
 		GridPane.setConstraints(commentLabel, 0, 1);
 		GridPane.setHalignment(commentLabel, HPos.CENTER);
 		GridPane.setHgrow(nameLabel, Priority.ALWAYS);
-		// GridPane.setFillWidth(commentLabel, true);
-		// GridPane.setFillHeight(commentLabel, true);
 
 		topGrid.getChildren().addAll(nameLabel, commentLabel);
 		centerLayout.setTop(topGrid);
@@ -70,18 +70,38 @@ public class ScriptEditWindow {
 
 		// 2. Program
 		TableView<Program> programTable = new TableView<Program>();
+
+		TableColumn<Program, LocalDateTime> timeCol = new TableColumn<Program, LocalDateTime>("Idő");
+		timeCol.setCellValueFactory(new PropertyValueFactory<Program, LocalDateTime>("defaultTime"));
+		timeCol.setCellFactory(column -> {
+			TableCell<Program, LocalDateTime> cell = new TableCell<Program, LocalDateTime>() {
+				@Override
+				protected void updateItem(LocalDateTime item, boolean empty) {
+					super.updateItem(item, empty);
+					if (item == null || empty) {
+						setText(null);
+					} else {
+						setText(item.format(DateTimeFormatter.ofPattern(weddingScriptController.DATEFORMAT_TIME)));
+					}
+				}
+			};
+
+			return cell;
+		});
+
 		TableColumn<Program, String> nameCol = new TableColumn<Program, String>("Program");
 		nameCol.setCellValueFactory(new PropertyValueFactory<Program, String>("name"));
+
+		programTable.getColumns().add(timeCol);
 		programTable.getColumns().add(nameCol);
+
 		List<Program> programs = weddingScriptController.getScriptPrograms(script);
 		programTable.getItems().addAll(programs);
-
 
 		// 2.1 Program attributes
 		TableView<Attribute> attributeTable = new TableView<Attribute>();
 
 		// 2.1.1 Program attributes' attributes
-
 
 		VBox tablesBox = new VBox();
 		tablesBox.getChildren().addAll(scriptTable, programTable, attributeTable);

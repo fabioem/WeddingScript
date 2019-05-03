@@ -13,6 +13,7 @@ CREATE TABLE scripts(
 CREATE TABLE scriptProg(
 	scriptId int NOT NULL,
 	progId int NOT NULL,
+	time int,
 	FOREIGN KEY (scriptId) REFERENCES scripts(scriptId),
 	FOREIGN KEY (progId) REFERENCES programs(progId)
 );
@@ -22,13 +23,13 @@ CREATE TABLE scriptProg(
 CREATE TABLE programs(
 	progId INTEGER PRIMARY KEY AUTOINCREMENT,
 	name varchar(255) NOT NULL,
-	defaultTime INTEGER
+	defaultTime int
 );
 
 CREATE TABLE progAttr(
 	progId int NOT NULL,
 	attrId int NOT NULL,
-	value varchar(255) NOT NULL,
+	defaultValue varchar(255) NOT NULL,
 	FOREIGN KEY (progId) REFERENCES programs(progId),
 	FOREIGN KEY (attrId) REFERENCES attributes(attrId)
 );
@@ -38,7 +39,7 @@ CREATE TABLE progAttr(
 CREATE TABLE attributes(
 	attributeId INTEGER PRIMARY KEY AUTOINCREMENT,
 	name varchar(255) NOT NULL,
-	defaultValue varchar(255) NOT NULL,
+	defaultValue varchar(255),
 	attrTypeId int NOT NULL,
 	serviceId int,
 	mandatory boolean,
@@ -59,6 +60,8 @@ CREATE TABLE scriptAttr(
 	FOREIGN KEY (attrId) REFERENCES attributes(attrId)
 );
 
+-- SERVICE
+
 CREATE TABLE services(
 	serviceId INTEGER PRIMARY KEY AUTOINCREMENT,
 	name varchar(10) NOT NULL
@@ -71,15 +74,22 @@ CREATE TABLE serviceProg(
 	FOREIGN KEY (progId) REFERENCES programs(progId)
 );
 
+CREATE TABLE scriptService(
+	scriptId int NOT NULL,
+	serviceId int NOT NULL,
+	FOREIGN KEY (serviceId) REFERENCES services(serviceId),
+	FOREIGN KEY (scriptId) REFERENCES scripts(scriptId)
+);
+
 CREATE TABLE serviceAttr(
 	serviceId int NOT NULL,
 	attrId int NOT NULL,
-	defaultValue varchar(255) NOT NULL,
+	defaultValue varchar(255),
 	FOREIGN KEY (serviceId) REFERENCES services(serviceId),
 	FOREIGN KEY (attrId) REFERENCES attributes(attrId)
 );
 
--- INSERT
+-- Insert demo values
 
 INSERT INTO programs VALUES(0, "Vacsora", 68400000);
 INSERT INTO programs VALUES(1, "Nyitótánc", 75600000);
@@ -87,8 +97,18 @@ INSERT INTO programs VALUES(2, "Újasszony tánc", 86400000);
 INSERT INTO scripts VALUES(0, "Judit és Dani", '2019-01-01 00:00:00.000', "Komment1", (DATETIME('now')), (DATETIME('now')));
 INSERT INTO scripts VALUES(1, "Juci és Béla", '2019-01-02 00:00:00.000', "Komi 2", (DATETIME('now')), (DATETIME('now')));
 INSERT INTO services VALUES(0, "Műsorvezetés");
-INSERT INTO services VALUES(1, "Oldalfal fényezés");
-INSERT INTO attributeTypes VALUES(0, "Program");
+INSERT INTO services VALUES(1, "LED-es oldalfal világítás");
+INSERT INTO services VALUES(2, "Ceremónia hangosítás kis cs.");
+INSERT INTO services VALUES(3, "Ceremónia hangosítás nagy cs.");
+INSERT INTO attributeTypes VALUES(0, "Basic");
 INSERT INTO attributeTypes VALUES(1, "Script");
-INSERT INTO scriptProg VALUES(0, 1);
-INSERT INTO scriptProg VALUES(0, 2);
+INSERT INTO attributeTypes VALUES(2, "Program");
+INSERT INTO scriptProg VALUES(0, 1, 75800000);
+INSERT INTO scriptProg VALUES(0, 2, 86400000);
+INSERT INTO attributes VALUES(0, "Zene", "", 2, null, 1);
+INSERT INTO attributes VALUES(1, "Beszéd", "vőlegény", 2, null, 1);
+INSERT INTO attributes VALUES(2, "Himnusz", "nem", 2, null, 1);
+INSERT INTO progAttr VALUES(1, 0, ""); /* nyitótánchoz zene */
+INSERT INTO progAttr VALUES(0, 0, "Váradi Roma Café + Jazz-Lounge világsláger feldolgozások"); /* vacsorához zene */
+INSERT INTO progAttr VALUES(0, 1, "Vőlegény"); /* vacsorához beszéd */
+INSERT INTO progAttr VALUES(0, 2, "Nem"); /* vacsorához himnusz */

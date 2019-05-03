@@ -10,6 +10,10 @@ import hu.mandisco.weddingScript.model.bean.Service;
 
 public interface WeddingScriptDAO {
 
+	public final String DATEFORMAT_DATETIME = "yyyy.MM.dd HH:mm:ss";
+	public final String DATEFORMAT_TIME = "HH:mm";
+	public final String DATEFORMAT_DATE = "yyyy.MM.dd";
+
 	public List<Program> getPrograms();
 
 	public List<Script> getScripts();

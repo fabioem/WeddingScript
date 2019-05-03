@@ -453,8 +453,9 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 		try {
 			conn = DriverManager.getConnection(databaseConnectionURL);
 
-			String sqlScript = SQL_SELECT_PROGRAMS
-					+ "and progId in (SELECT progId FROM scriptProg WHERE scriptId = ?);";
+			String sqlScript = "SELECT * FROM programs, scriptProg WHERE 1 = 1 "
+					+ "and programs.progId = scriptProg.progId "
+					+ "and scriptProg.scriptId = ?";
 			pst = conn.prepareStatement(sqlScript);
 			pst.setInt(1, script.getScriptId());
 
@@ -465,11 +466,13 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				int progId = rs.getInt("progId");
 				String name = rs.getString("name");
 				int defaultTime = rs.getInt("defaultTime");
+				int time = rs.getInt("time");
 
 				Program program = new Program();
 				program.setName(name);
 				program.setProgId(progId);
 				program.setDefaultTime(LocalDateTime.ofInstant(Instant.ofEpochMilli(defaultTime), ZoneId.of("+0")));
+				program.setTime(LocalDateTime.ofInstant(Instant.ofEpochMilli(time), ZoneId.of("+0")));
 
 				programs.add(program);
 			}
