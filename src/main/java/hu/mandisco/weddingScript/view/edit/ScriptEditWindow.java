@@ -67,10 +67,11 @@ public class ScriptEditWindow {
 		// 1. Script attributes
 		TableView<Attribute> scriptTable = new TableView<Attribute>();
 		scriptTable.setEditable(true);
+		//TODO Script attributes
 
 		// 2. Program
 		TableView<Program> programTable = new TableView<Program>();
-
+		programTable.setEditable(true);
 		TableColumn<Program, LocalDateTime> timeCol = new TableColumn<Program, LocalDateTime>("Idő");
 		timeCol.setCellValueFactory(new PropertyValueFactory<Program, LocalDateTime>("defaultTime"));
 		timeCol.setCellFactory(column -> {
@@ -110,7 +111,7 @@ public class ScriptEditWindow {
 		layout.setCenter(centerLayout);
 
 		// RIGHT
-		layout.setRight(tableList.getProgramListNotInScript(script));
+		layout.setRight(tableList.getProgramListNotInScript(script, programTable));
 
 		Scene scene = new Scene(layout, 700, 500);
 		window.setScene(scene);

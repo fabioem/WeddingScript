@@ -34,4 +34,6 @@ public interface WeddingScriptDAO {
 
 	public boolean removeScript(Script script);
 
+	public boolean addProgramToScript(Script script, Program program);
+
 }

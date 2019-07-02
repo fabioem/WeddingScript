@@ -61,9 +61,9 @@ public class TableList {
 		TableColumn<Program, String> nameCol = new TableColumn<Program, String>("Név");
 		nameCol.setCellValueFactory(new PropertyValueFactory<Program, String>("name"));
 
-		TableColumn<Program, LocalDateTime> defaultTimeCol = new TableColumn<Program, LocalDateTime>("Idő");
-		defaultTimeCol.setCellValueFactory(new PropertyValueFactory<Program, LocalDateTime>("time"));
-		defaultTimeCol.setCellFactory(column -> {
+		TableColumn<Program, LocalDateTime> timeCol = new TableColumn<Program, LocalDateTime>("Idő");
+		timeCol.setCellValueFactory(new PropertyValueFactory<Program, LocalDateTime>("time"));
+		timeCol.setCellFactory(column -> {
 			TableCell<Program, LocalDateTime> cell = new TableCell<Program, LocalDateTime>() {
 				@Override
 				protected void updateItem(LocalDateTime item, boolean empty) {
@@ -78,9 +78,8 @@ public class TableList {
 
 			return cell;
 		});
-
 		table.getColumns().add(nameCol);
-		table.getColumns().add(defaultTimeCol);
+		table.getColumns().add(timeCol);
 
 		List<Program> programs = weddingScriptController.getScriptPrograms(script);
 		table.getItems().addAll(programs);
@@ -88,7 +87,7 @@ public class TableList {
 		return table;
 	}
 
-	public TableView<Program> getProgramListNotInScript(Script script) {
+	public TableView<Program> getProgramListNotInScript(Script script, TableView<Program> programTable) {
 		TableView<Program> table = new TableView<Program>();
 
 		table.setEditable(true);
@@ -118,19 +117,36 @@ public class TableList {
 		table.getColumns().add(defaultTimeCol);
 
 		List<Program> programs = weddingScriptController.getScriptProgramsInverse(script);
+
+		table.setRowFactory(tv -> {
+			TableRow<Program> row = new TableRow<>();
+			row.setOnMouseClicked(event -> {
+				if (event.getClickCount() == 2 && (!row.isEmpty())) {
+					Program rowData = row.getItem();
+					programs.remove(rowData);
+					table.getItems().clear();
+					table.getItems().addAll(programs);
+					weddingScriptController.addProgramToScript(script, rowData);
+					programTable.getItems().clear();
+					programTable.getItems().addAll(weddingScriptController.getScriptPrograms(script));
+
+				}
+			});
+			return row;
+		});
+
 		table.getItems().addAll(programs);
 
 		return table;
 	}
 
-
 	public TableView<Script> getScriptList() {
 
-		TableView<Script> table = new TableView<Script>();
+		TableView<Script> scriptListTable = new TableView<Script>();
 
-		table.setEditable(true);
+		scriptListTable.setEditable(true);
 
-		table.setRowFactory(tv -> {
+		scriptListTable.setRowFactory(tv -> {
 			TableRow<Script> row = new TableRow<>();
 			row.setOnMouseClicked(event -> {
 				if (event.getClickCount() == 2 && (!row.isEmpty())) {
@@ -203,12 +219,16 @@ public class TableList {
 			return cell;
 		});
 
-		table.getColumns().addAll(nameCol, dateCol, commentCol, lastEditedCol, createdCol);
+		scriptListTable.getColumns().add(nameCol);
+		scriptListTable.getColumns().add(dateCol);
+		scriptListTable.getColumns().add(commentCol);
+		scriptListTable.getColumns().add(lastEditedCol);
+		scriptListTable.getColumns().add(createdCol);
 
 		List<Script> scripts = weddingScriptController.getScripts();
-		table.getItems().addAll(scripts);
+		scriptListTable.getItems().addAll(scripts);
 
-		return table;
+		return scriptListTable;
 	}
 
 }

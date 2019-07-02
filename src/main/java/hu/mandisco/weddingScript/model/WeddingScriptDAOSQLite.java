@@ -34,7 +34,6 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 	// private static final String DATEFORMAT_DATE_FOR_INSERT = "yyyy-MM-dd";
 
 	private static final String SQL_SELECT_ATTRIBUTES = "SELECT * FROM attributes WHERE 1 = 1 ";
-	private static final String SQL_SELECT_PROGRAMS = "SELECT * FROM programs WHERE 1 = 1 ";
 	private static final String SQL_SELECT_SERVICES = "SELECT * FROM services WHERE 1 = 1 ";
 	private static final String SQL_SELECT_SCRIPTS = "SELECT * FROM scripts WHERE 1 = 1 ";
 	private static final String SQL_SELECT_ATTRIBUTETYPES = "SELECT * FROM attributeTypes WHERE 1 = 1 ";
@@ -84,7 +83,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 			conn = DriverManager.getConnection(databaseConnectionURL);
 			conn.setAutoCommit(false);
 			st = conn.createStatement();
-			ResultSet rs = st.executeQuery(SQL_SELECT_PROGRAMS);
+			ResultSet rs = st.executeQuery("SELECT * FROM programs");
 
 			while (rs.next()) {
 				int progId = rs.getInt("progId");
@@ -453,9 +452,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 		try {
 			conn = DriverManager.getConnection(databaseConnectionURL);
 
-			String sqlScript = "SELECT * FROM programs, scriptProg WHERE 1 = 1 "
-					+ "and programs.progId = scriptProg.progId "
-					+ "and scriptProg.scriptId = ?";
+			String sqlScript = "SELECT * FROM programs, scriptProg WHERE "
+					+ " programs.progId = scriptProg.progId AND scriptProg.scriptId = ? ORDER BY time";
 			pst = conn.prepareStatement(sqlScript);
 			pst.setInt(1, script.getScriptId());
 
@@ -514,8 +512,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 		try {
 			conn = DriverManager.getConnection(databaseConnectionURL);
 
-			String sqlScript = SQL_SELECT_PROGRAMS
-					+ "and progId not in (SELECT progId FROM scriptProg WHERE scriptId = ?);";
+			String sqlScript = "SELECT * FROM programs "
+					+ "WHERE progId not in (SELECT progId FROM scriptProg WHERE scriptId = ?);";
 			pst = conn.prepareStatement(sqlScript);
 			pst.setInt(1, script.getScriptId());
 
@@ -560,6 +558,52 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 		}
 
 		return programs;
+	}
+
+	@Override
+	public boolean addProgramToScript(Script script, Program program) {
+		boolean rvSucceeded = false;
+		Connection conn = null;
+		PreparedStatement pst = null;
+
+		try {
+
+			conn = DriverManager.getConnection(databaseConnectionURL);
+			pst = conn.prepareStatement("INSERT INTO scriptProg(scriptId, progId) VALUES (?, ?)");
+
+			int index = 1;
+			pst.setInt(index++, script.getScriptId());
+			pst.setInt(index++, program.getProgId());
+
+			int rowsAffected = pst.executeUpdate();
+			if (rowsAffected == 1) {
+				rvSucceeded = true;
+			}
+		} catch (SQLException e) {
+			System.out.println("Failed to execute adding a program to a script.");
+			e.printStackTrace();
+		} finally {
+
+			try {
+				if (pst != null) {
+					pst.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Failed to close statement when adding a program to a script.");
+				e.printStackTrace();
+			}
+
+			try {
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Failed to close connection when adding script.");
+				e.printStackTrace();
+			}
+		}
+
+		return rvSucceeded;
 	}
 
 	@Override
