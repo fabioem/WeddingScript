@@ -46,7 +46,9 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 	// scriptAttr WHERE 1 = 1 ";
 
 	private static final String SQL_INSERT_SCRIPT = "INSERT INTO scripts(name, date, comment) VALUES (?, ?, ?)";
+	private static final String SQL_INSERT_PROGRAM = "INSERT INTO programs(name, defaultTime) VALUES (?, ?)";
 	private static final String SQL_DELETE_SCRIPT = "DELETE FROM scripts where scriptId = ?";
+	private static final String SQL_DELETE_PROGRAM = "DELETE FROM programs where progId = ?";
 
 	Path currentWorkingFolder = Paths.get("").toAbsolutePath();
 	Path pathToTheDatabaseFile = currentWorkingFolder.resolve(DATABASE_FILE);
@@ -345,6 +347,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 	@Override
 	public boolean addScript(Script script) {
+		String errorName = "script";
 		boolean rvSucceeded = false;
 		Connection conn = null;
 		PreparedStatement pst = null;
@@ -365,7 +368,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				rvSucceeded = true;
 			}
 		} catch (SQLException e) {
-			System.out.println("Failed to execute adding script.");
+			System.out.println("Failed to execute adding " + errorName + ".");
 			e.printStackTrace();
 		} finally {
 
@@ -374,7 +377,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close statement when adding script.");
+				System.out.println("Failed to close statement when adding " + errorName + ".");
 				e.printStackTrace();
 			}
 
@@ -383,7 +386,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close connection when adding script.");
+				System.out.println("Failed to close connection when adding " + errorName + ".");
 				e.printStackTrace();
 			}
 		}
@@ -393,7 +396,6 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 	@Override
 	public boolean removeScript(Script script) {
-		// TODO: törölni a hozzá tartozó programokat, attribútumokat is
 		boolean rvSucceeded = false;
 		Connection conn = null;
 		PreparedStatement pst = null;
@@ -562,6 +564,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 	@Override
 	public boolean addProgramToScript(Script script, Program program) {
+		String errorName = "adding program to a script";
 		boolean rvSucceeded = false;
 		Connection conn = null;
 		PreparedStatement pst = null;
@@ -580,7 +583,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				rvSucceeded = true;
 			}
 		} catch (SQLException e) {
-			System.out.println("Failed to execute adding a program to a script.");
+			System.out.println("Failed to execute " + errorName + ".");
 			e.printStackTrace();
 		} finally {
 
@@ -589,7 +592,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close statement when adding a program to a script.");
+				System.out.println("Failed to close statement when " + errorName + ".");
 				e.printStackTrace();
 			}
 
@@ -598,7 +601,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close connection when adding script.");
+				System.out.println("Failed to close connection when " + errorName + ".");
 				e.printStackTrace();
 			}
 		}
@@ -610,6 +613,98 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 	public List<Attribute> getProgramAttributes(Program program) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public boolean removeProgram(Program program) {
+		boolean rvSucceeded = false;
+		Connection conn = null;
+		PreparedStatement pst = null;
+
+		try {
+
+			conn = DriverManager.getConnection(databaseConnectionURL);
+			pst = conn.prepareStatement(SQL_DELETE_PROGRAM);
+
+			pst.setInt(1, program.getProgId());
+
+			int rowsAffected = pst.executeUpdate();
+			if (rowsAffected == 1) {
+				rvSucceeded = true;
+			}
+		} catch (SQLException e) {
+			System.out.println("Failed to execute removing program.");
+			e.printStackTrace();
+		} finally {
+
+			try {
+				if (pst != null) {
+					pst.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Failed to close statement when removing program.");
+				e.printStackTrace();
+			}
+
+			try {
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Failed to close connection when removing program.");
+				e.printStackTrace();
+			}
+		}
+
+		return rvSucceeded;
+	}
+
+	@Override
+	public boolean addProgram(Program program) {
+		String errorName = "program";
+		boolean rvSucceeded = false;
+		Connection conn = null;
+		PreparedStatement pst = null;
+
+		try {
+
+			conn = DriverManager.getConnection(databaseConnectionURL);
+			pst = conn.prepareStatement(SQL_INSERT_PROGRAM);
+
+			int index = 1;
+			pst.setString(index++, program.getName());
+			pst.setString(index++, program.getDefaultTime() == null ? ""
+					: program.getDefaultTime().format(DateTimeFormatter.ofPattern(DATEFORMAT_DATETIME_FOR_INSERT)));
+
+			int rowsAffected = pst.executeUpdate();
+			if (rowsAffected == 1) {
+				rvSucceeded = true;
+			}
+		} catch (SQLException e) {
+			System.out.println("Failed to execute adding " + errorName + ".");
+			e.printStackTrace();
+		} finally {
+
+			try {
+				if (pst != null) {
+					pst.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Failed to close statement when adding " + errorName + ".");
+				e.printStackTrace();
+			}
+
+			try {
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Failed to close connection when adding " + errorName + ".");
+				e.printStackTrace();
+			}
+		}
+
+		return rvSucceeded;
 	}
 
 }

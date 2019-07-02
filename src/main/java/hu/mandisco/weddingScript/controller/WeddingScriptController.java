@@ -45,20 +45,28 @@ public class WeddingScriptController {
 		return dao.removeScript(script);
 	}
 
-	public List<Attribute> getScriptAttributes(Script script){
+	public List<Attribute> getScriptAttributes(Script script) {
 		return dao.getScriptAttributes(script);
 	};
 
-	public List<Program> getScriptPrograms(Script script){
+	public List<Program> getScriptPrograms(Script script) {
 		return dao.getScriptPrograms(script);
 	};
 
-	public List<Program> getScriptProgramsInverse(Script script){
+	public List<Program> getScriptProgramsInverse(Script script) {
 		return dao.getScriptProgramsInverse(script);
 	};
 
-	public List<Attribute> getProgramAttributes(Program program){
+	public List<Attribute> getProgramAttributes(Program program) {
 		return dao.getProgramAttributes(program);
+	}
+
+	public boolean removeProgram(Program program) {
+		return dao.removeProgram(program);
+	}
+
+	public boolean addProgram(Program program) {
+		return dao.addProgram(program);
 	};
 
 }

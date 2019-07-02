@@ -1,60 +1,40 @@
 package hu.mandisco.weddingScript.view;
 
-import hu.mandisco.weddingScript.controller.WeddingScriptController;
-import hu.mandisco.weddingScript.model.bean.Script;
-import hu.mandisco.weddingScript.view.create.ScriptCreateWindow;
 import javafx.application.Application;
-import javafx.collections.ObservableList;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableView;
-import javafx.scene.control.ToolBar;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class MainWindow extends Application {
 
-	private BorderPane layout = new BorderPane();
-	private TableView<Script> scriptTable;
-	private ToolBar toolBar = new ToolBar();
-	private VBox topMenu = new VBox();
-	private WeddingScriptController weddingScriptController = new WeddingScriptController();
+	private BorderPane scriptLayout = new ScriptsView();
+	private BorderPane programLayout = new ProgramsView();
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		primaryStage.setTitle("Forgatókönyv készítő");
+		primaryStage.setTitle("Forgatókönyv kezelő");
 
-		TableList tableList = new TableList();
-		scriptTable = tableList.getScriptList();
+		TabPane tabPane = new TabPane();
 
+		Tab scriptsTab = new Tab("Forgatókönyvek");
+		scriptsTab.setClosable(false);
+		tabPane.getTabs().add(scriptsTab);
 
-		// TOOLBAR
-		Button newButton = new Button("Új");
-		newButton.setOnAction(e -> {
-			ObservableList<Script> scriptItems = scriptTable.getItems();
-			ScriptCreateWindow window = new ScriptCreateWindow(scriptItems);
-			window.display();
-		});
-		// TODO: gombok eseménykezelése
-		Button copyButton = new Button("Másolat készítése");
-		Button deleteButton = new Button("Törlés");
-		deleteButton.setOnAction(e -> {
-			Script selectedItem = scriptTable.getSelectionModel().getSelectedItem();
-			scriptTable.getItems().remove(selectedItem);
-			weddingScriptController.removeScript(selectedItem);
-		});
+		Tab programsTab = new Tab("Programok");
+		programsTab.setClosable(false);
+		tabPane.getTabs().add(programsTab);
 
-		toolBar.getItems().addAll(newButton, copyButton, deleteButton);
-		topMenu.getChildren().add(toolBar);
+		Tab attributesTab = new Tab("Attribútumok");
+		attributesTab.setClosable(false);
+		tabPane.getTabs().add(attributesTab);
 
-		layout.setTop(topMenu);
-
-		// CENTER
-		layout.setCenter(scriptTable);
+		scriptsTab.setContent(scriptLayout);
+		programsTab.setContent(programLayout);
 
 		// END
-		Scene scene = new Scene(layout, 800, 600);
+		Scene scene = new Scene(tabPane, 800, 600);
 		primaryStage.setScene(scene);
 		primaryStage.show();
 

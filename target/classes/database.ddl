@@ -14,8 +14,8 @@ CREATE TABLE scriptProg(
 	scriptId int NOT NULL,
 	progId int NOT NULL,
 	time int,
-	FOREIGN KEY (scriptId) REFERENCES scripts(scriptId),
-	FOREIGN KEY (progId) REFERENCES programs(progId)
+	FOREIGN KEY (scriptId) REFERENCES scripts(scriptId) ON DELETE CASCADE,
+	FOREIGN KEY (progId) REFERENCES programs(progId) ON DELETE CASCADE
 );
 
 -- PROGRAM
@@ -30,8 +30,8 @@ CREATE TABLE progAttr(
 	progId int NOT NULL,
 	attrId int NOT NULL,
 	defaultValue varchar(255) NOT NULL,
-	FOREIGN KEY (progId) REFERENCES programs(progId),
-	FOREIGN KEY (attrId) REFERENCES attributes(attrId)
+	FOREIGN KEY (progId) REFERENCES programs(progId) ON DELETE CASCADE,
+	FOREIGN KEY (attrId) REFERENCES attributes(attrId) ON DELETE CASCADE
 );
 
 -- ATTRIBUTE
@@ -43,8 +43,8 @@ CREATE TABLE attributes(
 	attrTypeId int NOT NULL,
 	serviceId int,
 	mandatory boolean,
-	FOREIGN KEY (attrTypeId) REFERENCES attributeTypes(attrTypeId),
-	FOREIGN KEY (serviceId) REFERENCES services(serviceId)
+	FOREIGN KEY (attrTypeId) REFERENCES attributeTypes(attrTypeId) ON DELETE CASCADE,
+	FOREIGN KEY (serviceId) REFERENCES services(serviceId) ON DELETE CASCADE
 );
 
 CREATE TABLE attributeTypes(
@@ -56,8 +56,8 @@ CREATE TABLE scriptAttr(
 	scriptId int NOT NULL,
 	attrId int NOT NULL,
 	value varchar(255) NOT NULL,
-	FOREIGN KEY (scriptId) REFERENCES scripts(scriptId),
-	FOREIGN KEY (attrId) REFERENCES attributes(attrId)
+	FOREIGN KEY (scriptId) REFERENCES scripts(scriptId) ON DELETE CASCADE,
+	FOREIGN KEY (attrId) REFERENCES attributes(attrId) ON DELETE CASCADE
 );
 
 -- SERVICE
@@ -70,23 +70,23 @@ CREATE TABLE services(
 CREATE TABLE serviceProg(
 	serviceId int NOT NULL,
 	progId int NOT NULL,
-	FOREIGN KEY (serviceId) REFERENCES services(serviceId),
-	FOREIGN KEY (progId) REFERENCES programs(progId)
+	FOREIGN KEY (serviceId) REFERENCES services(serviceId) ON DELETE CASCADE,
+	FOREIGN KEY (progId) REFERENCES programs(progId) ON DELETE CASCADE
 );
 
 CREATE TABLE scriptService(
 	scriptId int NOT NULL,
 	serviceId int NOT NULL,
-	FOREIGN KEY (serviceId) REFERENCES services(serviceId),
-	FOREIGN KEY (scriptId) REFERENCES scripts(scriptId)
+	FOREIGN KEY (serviceId) REFERENCES services(serviceId) ON DELETE CASCADE,
+	FOREIGN KEY (scriptId) REFERENCES scripts(scriptId) ON DELETE CASCADE
 );
 
 CREATE TABLE serviceAttr(
 	serviceId int NOT NULL,
 	attrId int NOT NULL,
 	defaultValue varchar(255),
-	FOREIGN KEY (serviceId) REFERENCES services(serviceId),
-	FOREIGN KEY (attrId) REFERENCES attributes(attrId)
+	FOREIGN KEY (serviceId) REFERENCES services(serviceId) ON DELETE CASCADE,
+	FOREIGN KEY (attrId) REFERENCES attributes(attrId) ON DELETE CASCADE
 );
 
 -- Insert demo values
