@@ -13,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
@@ -37,13 +38,6 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 	private static final String SQL_SELECT_SERVICES = "SELECT * FROM services WHERE 1 = 1 ";
 	private static final String SQL_SELECT_SCRIPTS = "SELECT * FROM scripts WHERE 1 = 1 ";
 	private static final String SQL_SELECT_ATTRIBUTETYPES = "SELECT * FROM attributeTypes WHERE 1 = 1 ";
-
-	// private static final String SQL_SELECT_SCRIPTPROG = "SELECT * FROM
-	// scriptProg WHERE 1 = 1 ";
-	// private static final String SQL_SELECT_PROGATTR = "SELECT * FROM progAttr
-	// WHERE 1 = 1 ";
-	// private static final String SQL_SELECT_SCRIPTATTR = "SELECT * FROM
-	// scriptAttr WHERE 1 = 1 ";
 
 	private static final String SQL_INSERT_SCRIPT = "INSERT INTO scripts(name, date, comment) VALUES (?, ?, ?)";
 	private static final String SQL_INSERT_PROGRAM = "INSERT INTO programs(name, defaultTime) VALUES (?, ?)";
@@ -673,8 +667,15 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 			int index = 1;
 			pst.setString(index++, program.getName());
-			pst.setString(index++, program.getDefaultTime() == null ? ""
-					: program.getDefaultTime().format(DateTimeFormatter.ofPattern(DATEFORMAT_DATETIME_FOR_INSERT)));
+			// System.out.println(program.getDefaultTime());
+			Long defaultSeconds = new Long(program.getDefaultTime().getDayOfMonth() * 3600 * 24
+					+ program.getDefaultTime().getHour() * 3600 + program.getDefaultTime().getMinute() * 60);
+			pst.setLong(index++,
+					// program.getDefaultTime() == null ? 0 :
+					// program.getDefaultTime().toEpochSecond(ZoneOffset.of("+0")));
+					program.getDefaultTime() == null ? 0 : defaultSeconds);
+			// System.out.println(program.getDefaultTime());
+			// System.out.println(program.getDefaultTime().toEpochSecond(ZoneOffset.of("+0")));
 
 			int rowsAffected = pst.executeUpdate();
 			if (rowsAffected == 1) {
