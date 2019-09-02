@@ -667,15 +667,11 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 			int index = 1;
 			pst.setString(index++, program.getName());
-			// System.out.println(program.getDefaultTime());
-			Long defaultSeconds = new Long(program.getDefaultTime().getDayOfMonth() * 3600 * 24
-					+ program.getDefaultTime().getHour() * 3600 + program.getDefaultTime().getMinute() * 60);
-			pst.setLong(index++,
-					// program.getDefaultTime() == null ? 0 :
-					// program.getDefaultTime().toEpochSecond(ZoneOffset.of("+0")));
-					program.getDefaultTime() == null ? 0 : defaultSeconds);
-			// System.out.println(program.getDefaultTime());
-			// System.out.println(program.getDefaultTime().toEpochSecond(ZoneOffset.of("+0")));
+			int defDay = (program.getDefaultTime().getDayOfMonth() - 1) * 24 * 60 * 60;
+			int defHour = program.getDefaultTime().getHour() * 60 * 60;
+			int defMin = program.getDefaultTime().getMinute() * 60;
+			Long defaultSeconds = 1000 * new Long(defDay + defHour + defMin);
+			pst.setLong(index++, program.getDefaultTime() == null ? 0 : defaultSeconds);
 
 			int rowsAffected = pst.executeUpdate();
 			if (rowsAffected == 1) {
