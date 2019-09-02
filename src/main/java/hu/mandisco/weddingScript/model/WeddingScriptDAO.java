@@ -40,4 +40,6 @@ public interface WeddingScriptDAO {
 
 	public boolean addProgram(Program program);
 
+	public boolean editProgram(Program program);
+
 }

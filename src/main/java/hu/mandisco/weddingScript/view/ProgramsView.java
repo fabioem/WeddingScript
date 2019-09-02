@@ -28,6 +28,7 @@ public class ProgramsView extends BorderPane {
 			ProgramCreateWindow window = new ProgramCreateWindow(programItems);
 			window.display();
 		});
+
 		Button deleteButton = new Button("Törlés");
 		deleteButton.setOnAction(e -> {
 			Program selectedItem = programTable.getSelectionModel().getSelectedItem();
@@ -37,7 +38,15 @@ public class ProgramsView extends BorderPane {
 			}
 		});
 
-		toolBar.getItems().addAll(newButton, deleteButton);
+		Button editButton = new Button("Szerkesztés");
+		editButton.setOnAction(e -> {
+			Program selectedItem = programTable.getSelectionModel().getSelectedItem();
+			if (selectedItem != null) {
+				weddingScriptController.editProgram(selectedItem);
+			}
+		});
+
+		toolBar.getItems().addAll(newButton, deleteButton, editButton);
 		topMenu.getChildren().add(toolBar);
 
 		TableList tableList = new TableList();

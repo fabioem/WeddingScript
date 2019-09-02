@@ -5,8 +5,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import hu.mandisco.weddingScript.controller.WeddingScriptController;
+import hu.mandisco.weddingScript.model.bean.Attribute;
 import hu.mandisco.weddingScript.model.bean.Program;
 import hu.mandisco.weddingScript.model.bean.Script;
+import hu.mandisco.weddingScript.view.edit.ProgramEditWindow;
 import hu.mandisco.weddingScript.view.edit.ScriptEditWindow;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -22,6 +24,18 @@ public class TableList {
 		TableView<Program> table = new TableView<Program>();
 
 		table.setEditable(true);
+
+		table.setRowFactory(tv -> {
+			TableRow<Program> row = new TableRow<>();
+			row.setOnMouseClicked(event -> {
+				if (event.getClickCount() == 2 && (!row.isEmpty())) {
+					Program selectedProgram = row.getItem();
+					ProgramEditWindow window = new ProgramEditWindow();
+					window.display(selectedProgram);
+				}
+			});
+			return row;
+		});
 
 		TableColumn<Program, String> nameCol = new TableColumn<Program, String>("Név");
 		nameCol.setCellValueFactory(new PropertyValueFactory<Program, String>("name"));
@@ -75,16 +89,43 @@ public class TableList {
 					}
 				}
 			};
-
 			return cell;
 		});
+
+		TableColumn<Program, Attribute> attrCol = new TableColumn<Program, Attribute>("Attribútumok");
+		// attrCol.setCellValueFactory(new PropertyValueFactory<Program,
+		// Attribute>("attributes"));
+
 		table.getColumns().add(nameCol);
 		table.getColumns().add(timeCol);
+		table.getColumns().add(attrCol);
 
 		List<Program> programs = weddingScriptController.getScriptPrograms(script);
 		table.getItems().addAll(programs);
 
 		return table;
+	}
+
+	public TableView<Attribute> getAttributeListOfProgram(Program program) {
+		// TODO: not used maybe?
+		TableView<Attribute> table = new TableView<Attribute>();
+
+		table.setEditable(true);
+
+		TableColumn<Attribute, String> nameCol = new TableColumn<Attribute, String>("Név");
+		nameCol.setCellValueFactory(new PropertyValueFactory<Attribute, String>("name"));
+
+		TableColumn<Attribute, String> attrCol = new TableColumn<Attribute, String>("Érték");
+		attrCol.setCellValueFactory(new PropertyValueFactory<Attribute, String>("value"));
+
+		table.getColumns().add(nameCol);
+		table.getColumns().add(attrCol);
+
+		List<Attribute> attributes = weddingScriptController.getProgramAttributes(program);
+		table.getItems().addAll(attributes);
+
+		return table;
+
 	}
 
 	public TableView<Program> getProgramListNotInScript(Script script, TableView<Program> programTable) {

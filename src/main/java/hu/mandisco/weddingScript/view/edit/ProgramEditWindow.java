@@ -1,6 +1,7 @@
-package hu.mandisco.weddingScript.view.create;
+package hu.mandisco.weddingScript.view.edit;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import hu.mandisco.weddingScript.controller.WeddingScriptController;
 import hu.mandisco.weddingScript.model.bean.Program;
@@ -22,22 +23,16 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-public class ProgramCreateWindow {
+public class ProgramEditWindow {
 
 	private static WeddingScriptController weddingScriptController = new WeddingScriptController();
 
-	private ObservableList<Program> programItems;
-
-	public ProgramCreateWindow(ObservableList<Program> programItems) {
-		this.programItems = programItems;
-	}
-
-	public void display() {
+	public void display(Program program) {
 		Stage window = new Stage();
 
 		// Block events to other windows
 		window.initModality(Modality.APPLICATION_MODAL);
-		window.setTitle("Új program");
+		window.setTitle("Program szerkesztése");
 		window.setMinWidth(250);
 
 		// GridPane with 10px padding around edge
@@ -54,6 +49,7 @@ public class ProgramCreateWindow {
 		TextField nameInput = new TextField();
 		GridPane.setConstraints(nameInput, 1, 0);
 		nameInput.setPromptText("Név");
+		nameInput.setText(program.getName());
 
 		// Time Label
 		Label defaultTimeLabel = new Label("Időpont:");
@@ -72,6 +68,7 @@ public class ProgramCreateWindow {
 		daySpinner.setEditable(true);
 		SpinnerValueFactory<Integer> daySpinnerFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 1, 0);
 		daySpinner.setValueFactory(daySpinnerFactory);
+		daySpinner.getValueFactory().setValue(program.getDefaultTime().getDayOfMonth() - 1);
 
 		// Hour
 		Label hourLabel = new Label("Óra: ");
@@ -79,6 +76,7 @@ public class ProgramCreateWindow {
 		hourSpinner.setEditable(true);
 		SpinnerValueFactory<Integer> hourSpinnerFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 0);
 		hourSpinner.setValueFactory(hourSpinnerFactory);
+		hourSpinner.getValueFactory().setValue(program.getDefaultTime().getHour());
 
 		// Minute
 		Label minLabel = new Label("Perc: ");
@@ -87,6 +85,7 @@ public class ProgramCreateWindow {
 		SpinnerValueFactory<Integer> minuteSpinnerFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 59,
 				0);
 		minSpinner.setValueFactory(minuteSpinnerFactory);
+		minSpinner.getValueFactory().setValue(program.getDefaultTime().getMinute());
 
 		defaultTimeHBox.getChildren().addAll(dayLabel, daySpinner, hourLabel, hourSpinner, minLabel, minSpinner);
 		GridPane.setConstraints(defaultTimeHBox, 1, 1);
@@ -103,21 +102,16 @@ public class ProgramCreateWindow {
 		Button saveButton = new Button("Mentés");
 		GridPane.setConstraints(saveButton, 0, 3);
 		saveButton.setOnAction(e -> {
-			Program program = new Program();
 			program.setName(nameInput.getText());
 			LocalDateTime defaultTime = LocalDateTime.of(0, 1, daySpinner.getValue() + 1, hourSpinner.getValue(),
 					minSpinner.getValue(), 0);
-			System.out.println(hourSpinner.getValue());
 			program.setDefaultTime(defaultTime);
-			System.out.println(defaultTime);
 			if (nameInput.getText().isEmpty()) {
 				Alert alert = new Alert(AlertType.ERROR, "A név nem lehet üres!", ButtonType.OK);
 				alert.setHeaderText("Üres név");
 				alert.showAndWait();
 			} else {
-				weddingScriptController.addProgram(program);
-				programItems.clear();
-				programItems.addAll(weddingScriptController.getPrograms());
+				weddingScriptController.editProgram(program);
 				window.close();
 			}
 

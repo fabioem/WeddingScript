@@ -13,7 +13,6 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
@@ -41,6 +40,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 	private static final String SQL_INSERT_SCRIPT = "INSERT INTO scripts(name, date, comment) VALUES (?, ?, ?)";
 	private static final String SQL_INSERT_PROGRAM = "INSERT INTO programs(name, defaultTime) VALUES (?, ?)";
+
 	private static final String SQL_DELETE_SCRIPT = "DELETE FROM scripts where scriptId = ?";
 	private static final String SQL_DELETE_PROGRAM = "DELETE FROM programs where progId = ?";
 
@@ -707,5 +707,60 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 		return rvSucceeded;
 	}
+
+
+
+	@Override
+	public boolean editProgram(Program program) {
+		String errorName = "program";
+		boolean rvSucceeded = false;
+		Connection conn = null;
+		PreparedStatement pst = null;
+
+		try {
+
+			conn = DriverManager.getConnection(databaseConnectionURL);
+			pst = conn.prepareStatement("UPDATE programs SET name = ?, defaultTime = ? WHERE progId = ?;");
+
+			int index = 1;
+			pst.setString(index++, program.getName());
+			Long defaultSeconds = new Long(program.getDefaultTime().getDayOfMonth() * 3600 * 24
+					+ program.getDefaultTime().getHour() * 3600 + program.getDefaultTime().getMinute() * 60);
+			pst.setLong(index++,
+					program.getDefaultTime() == null ? 0 : defaultSeconds);
+			pst.setInt(index++, program.getProgId());
+
+			int rowsAffected = pst.executeUpdate();
+			if (rowsAffected == 1) {
+				rvSucceeded = true;
+			}
+		} catch (SQLException e) {
+			System.out.println("Failed to execute editing " + errorName + ".");
+			e.printStackTrace();
+		} finally {
+
+			try {
+				if (pst != null) {
+					pst.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Failed to close statement when editing " + errorName + ".");
+				e.printStackTrace();
+			}
+
+			try {
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Failed to close connection when editing " + errorName + ".");
+				e.printStackTrace();
+			}
+		}
+
+		return rvSucceeded;
+	}
+
+
 
 }

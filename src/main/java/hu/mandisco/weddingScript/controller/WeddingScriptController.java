@@ -67,6 +67,10 @@ public class WeddingScriptController {
 
 	public boolean addProgram(Program program) {
 		return dao.addProgram(program);
+	}
+
+	public boolean editProgram(Program program) {
+		return dao.editProgram(program);
 	};
 
 }
