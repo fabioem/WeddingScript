@@ -72,6 +72,11 @@ public class ProgramCreateWindow {
 		daySpinner.setEditable(true);
 		SpinnerValueFactory<Integer> daySpinnerFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 1, 0);
 		daySpinner.setValueFactory(daySpinnerFactory);
+		daySpinner.focusedProperty().addListener((observable, oldValue, newValue) -> {
+			if (!newValue) {
+				daySpinner.increment(0);
+			}
+		});
 
 		// Hour
 		Label hourLabel = new Label("Óra: ");
@@ -79,6 +84,11 @@ public class ProgramCreateWindow {
 		hourSpinner.setEditable(true);
 		SpinnerValueFactory<Integer> hourSpinnerFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 0);
 		hourSpinner.setValueFactory(hourSpinnerFactory);
+		hourSpinner.focusedProperty().addListener((observable, oldValue, newValue) -> {
+			if (!newValue) {
+				hourSpinner.increment(0);
+			}
+		});
 
 		// Minute
 		Label minLabel = new Label("Perc: ");
@@ -87,6 +97,11 @@ public class ProgramCreateWindow {
 		SpinnerValueFactory<Integer> minuteSpinnerFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 59,
 				0);
 		minSpinner.setValueFactory(minuteSpinnerFactory);
+		minSpinner.focusedProperty().addListener((observable, oldValue, newValue) -> {
+			if (!newValue) {
+				minSpinner.increment(0);
+			}
+		});
 
 		defaultTimeHBox.getChildren().addAll(dayLabel, daySpinner, hourLabel, hourSpinner, minLabel, minSpinner);
 		GridPane.setConstraints(defaultTimeHBox, 1, 1);

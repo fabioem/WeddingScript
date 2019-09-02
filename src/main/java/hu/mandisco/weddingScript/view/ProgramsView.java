@@ -3,6 +3,7 @@ package hu.mandisco.weddingScript.view;
 import hu.mandisco.weddingScript.controller.WeddingScriptController;
 import hu.mandisco.weddingScript.model.bean.Program;
 import hu.mandisco.weddingScript.view.create.ProgramCreateWindow;
+import hu.mandisco.weddingScript.view.edit.ProgramEditWindow;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableView;
@@ -42,7 +43,8 @@ public class ProgramsView extends BorderPane {
 		editButton.setOnAction(e -> {
 			Program selectedItem = programTable.getSelectionModel().getSelectedItem();
 			if (selectedItem != null) {
-				weddingScriptController.editProgram(selectedItem);
+				ProgramEditWindow window = new ProgramEditWindow();
+				window.display(selectedItem);
 			}
 		});
 

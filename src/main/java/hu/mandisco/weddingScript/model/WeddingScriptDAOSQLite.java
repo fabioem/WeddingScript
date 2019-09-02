@@ -708,11 +708,10 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 		return rvSucceeded;
 	}
 
-
-
 	@Override
 	public boolean editProgram(Program program) {
 		String errorName = "program";
+		String errorType = "editing";
 		boolean rvSucceeded = false;
 		Connection conn = null;
 		PreparedStatement pst = null;
@@ -724,10 +723,11 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 			int index = 1;
 			pst.setString(index++, program.getName());
-			Long defaultSeconds = new Long(program.getDefaultTime().getDayOfMonth() * 3600 * 24
-					+ program.getDefaultTime().getHour() * 3600 + program.getDefaultTime().getMinute() * 60);
-			pst.setLong(index++,
-					program.getDefaultTime() == null ? 0 : defaultSeconds);
+			int defDay = (program.getDefaultTime().getDayOfMonth() - 1) * 24 * 60 * 60;
+			int defHour = program.getDefaultTime().getHour() * 60 * 60;
+			int defMin = program.getDefaultTime().getMinute() * 60;
+			Long defaultSeconds = 1000 * new Long(defDay + defHour + defMin);
+			pst.setLong(index++, program.getDefaultTime() == null ? 0 : defaultSeconds);
 			pst.setInt(index++, program.getProgId());
 
 			int rowsAffected = pst.executeUpdate();
@@ -735,7 +735,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				rvSucceeded = true;
 			}
 		} catch (SQLException e) {
-			System.out.println("Failed to execute editing " + errorName + ".");
+			System.out.println("Failed to execute " + errorType + " " + errorName + ".");
 			e.printStackTrace();
 		} finally {
 
@@ -744,7 +744,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close statement when editing " + errorName + ".");
+				System.out.println("Failed to close statement when " + errorType + " " + errorName + ".");
 				e.printStackTrace();
 			}
 
@@ -753,14 +753,12 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close connection when editing " + errorName + ".");
+				System.out.println("Failed to close connection when " + errorType + " " + errorName + ".");
 				e.printStackTrace();
 			}
 		}
 
 		return rvSucceeded;
 	}
-
-
 
 }
