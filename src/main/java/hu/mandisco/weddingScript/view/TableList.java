@@ -76,7 +76,7 @@ public class TableList {
 		sortedData.comparatorProperty().bind(table.comparatorProperty());
 		table.setItems(sortedData);
 		// programmatically set a sort column:
-		table.getSortOrder().addAll(defaultTimeCol);
+		table.getSortOrder().add(defaultTimeCol);
 		// note that you should always manipulate the underlying list, not the
 		// sortedList:
 		data.addAll(programs);
@@ -110,8 +110,7 @@ public class TableList {
 		});
 
 		TableColumn<Program, Attribute> attrCol = new TableColumn<Program, Attribute>("Attribútumok");
-		// attrCol.setCellValueFactory(new PropertyValueFactory<Program,
-		// Attribute>("attributes"));
+		attrCol.setCellValueFactory(new PropertyValueFactory<Program, Attribute>("attrId"));
 
 		table.getColumns().add(nameCol);
 		table.getColumns().add(timeCol);
@@ -128,7 +127,7 @@ public class TableList {
 		sortedData.comparatorProperty().bind(table.comparatorProperty());
 		table.setItems(sortedData);
 		// programmatically set a sort column:
-		table.getSortOrder().addAll(timeCol);
+		table.getSortOrder().add(timeCol);
 		// note that you should always manipulate the underlying list, not the
 		// sortedList:
 		data.addAll(programs);
@@ -196,20 +195,15 @@ public class TableList {
 					Program rowData = row.getItem();
 					programs.remove(rowData);
 
-					// TODO Handle exception
-					/*
-					 * Exception in thread "JavaFX Application Thread"
-					 * java.lang.UnsupportedOperationException at
-					 * java.util.AbstractList.remove(Unknown Source) at
-					 * java.util.AbstractList$Itr.remove(Unknown Source) at
-					 * java.util.AbstractList.removeRange(Unknown Source) at
-					 * java.util.AbstractList.clear(Unknown Source) at
-					 * hu.mandisco.weddingScript.view.TableList.lambda$10(
-					 * TableList.java:194)
-					 */
+					// Handle SortedList
+					ObservableList<Program> data = FXCollections.observableArrayList();
+					SortedList<Program> sortedData = new SortedList<>(data);
+					sortedData.comparatorProperty().bind(table.comparatorProperty());
+					table.setItems(sortedData);
+					data.addAll(programs);
 
-					table.getItems().clear();
-					table.getItems().addAll(programs);
+					// table.getItems().clear();
+					// table.getItems().addAll(programs);
 					weddingScriptController.addProgramToScript(script, rowData);
 					programTable.getItems().clear();
 					programTable.getItems().addAll(weddingScriptController.getScriptPrograms(script));
@@ -229,7 +223,7 @@ public class TableList {
 		sortedData.comparatorProperty().bind(table.comparatorProperty());
 		table.setItems(sortedData);
 		// programmatically set a sort column:
-		table.getSortOrder().addAll(defaultTimeCol);
+		table.getSortOrder().add(defaultTimeCol);
 		// note that you should always manipulate the underlying list, not the
 		// sortedList:
 		data.addAll(programs);
