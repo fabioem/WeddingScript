@@ -42,4 +42,10 @@ public interface WeddingScriptDAO {
 
 	public boolean editProgram(Program program);
 
+	public boolean removeAttribute(Attribute attribute);
+
+	public boolean addAttribute(Attribute attribute);
+
+	public List<Attribute> getAttributes();
+
 }

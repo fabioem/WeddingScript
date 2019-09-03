@@ -10,6 +10,9 @@ public class Attribute {
 	private AttributeType attrType;
 	// private int attrTypeId;
 	ObservableList<Attribute> attributes;
+	private int serviceId;
+	private boolean mandatory;
+
 
 	public ObservableList<Attribute> getAttributes() {
 		return attributes;
@@ -42,9 +45,6 @@ public class Attribute {
 	public void setDefaultValue(String defaultValue) {
 		this.defaultValue = defaultValue;
 	}
-
-	private int serviceId;
-	private boolean mandatory;
 
 	public int getAttrId() {
 		return attrId;

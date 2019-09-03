@@ -71,6 +71,19 @@ public class WeddingScriptController {
 
 	public boolean editProgram(Program program) {
 		return dao.editProgram(program);
+	}
+
+	public boolean removeAttribute(Attribute attribute) {
+		return dao.removeAttribute(attribute);
+
+	}
+
+	public boolean addAttribute(Attribute attribute) {
+		return dao.addAttribute(attribute);
+	}
+
+	public List<Attribute> getAttributes() {
+		return dao.getAttributes();
 	};
 
 }

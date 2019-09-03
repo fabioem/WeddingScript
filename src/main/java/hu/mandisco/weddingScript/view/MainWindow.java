@@ -12,6 +12,8 @@ public class MainWindow extends Application {
 	private BorderPane scriptLayout = new ScriptsView();
 	private BorderPane programLayout = new ProgramsView();
 
+	private BorderPane attributeLayout = new AttributesView();
+
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		primaryStage.setTitle("Forgatókönyv kezelő");
@@ -32,6 +34,7 @@ public class MainWindow extends Application {
 
 		scriptsTab.setContent(scriptLayout);
 		programsTab.setContent(programLayout);
+		attributesTab.setContent(attributeLayout);
 
 		// END
 		Scene scene = new Scene(tabPane, 800, 600);

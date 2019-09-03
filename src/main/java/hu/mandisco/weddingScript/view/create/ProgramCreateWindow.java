@@ -122,9 +122,7 @@ public class ProgramCreateWindow {
 			program.setName(nameInput.getText());
 			LocalDateTime defaultTime = LocalDateTime.of(0, 1, daySpinner.getValue() + 1, hourSpinner.getValue(),
 					minSpinner.getValue(), 0);
-			System.out.println(hourSpinner.getValue());
 			program.setDefaultTime(defaultTime);
-			System.out.println(defaultTime);
 			if (nameInput.getText().isEmpty()) {
 				Alert alert = new Alert(AlertType.ERROR, "A név nem lehet üres!", ButtonType.OK);
 				alert.setHeaderText("Üres név");

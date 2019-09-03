@@ -68,17 +68,12 @@ public class TableList {
 		List<Program> programs = weddingScriptController.getPrograms();
 		table.getItems().addAll(programs);
 
-		// SORT BY DEFAULT TIME
+		// SORT BY TIME
 		ObservableList<Program> data = FXCollections.observableArrayList();
 		SortedList<Program> sortedData = new SortedList<>(data);
-		// this ensures the sortedData is sorted according to the sort columns
-		// in the table:
 		sortedData.comparatorProperty().bind(table.comparatorProperty());
 		table.setItems(sortedData);
-		// programmatically set a sort column:
 		table.getSortOrder().add(defaultTimeCol);
-		// note that you should always manipulate the underlying list, not the
-		// sortedList:
 		data.addAll(programs);
 
 		return table;
@@ -119,17 +114,13 @@ public class TableList {
 		List<Program> programs = weddingScriptController.getScriptPrograms(script);
 		table.getItems().addAll(programs);
 
+		// TODO sorting doesn't work
 		// SORT BY TIME
 		ObservableList<Program> data = FXCollections.observableArrayList();
 		SortedList<Program> sortedData = new SortedList<>(data);
-		// this ensures the sortedData is sorted according to the sort columns
-		// in the table:
 		sortedData.comparatorProperty().bind(table.comparatorProperty());
 		table.setItems(sortedData);
-		// programmatically set a sort column:
 		table.getSortOrder().add(timeCol);
-		// note that you should always manipulate the underlying list, not the
-		// sortedList:
 		data.addAll(programs);
 
 		return table;
@@ -320,6 +311,11 @@ public class TableList {
 		scriptListTable.getItems().addAll(scripts);
 
 		return scriptListTable;
+	}
+
+	public TableView<Attribute> getAttributeList() {
+		// TODO TableList.getAttributeList()
+		return null;
 	}
 
 }

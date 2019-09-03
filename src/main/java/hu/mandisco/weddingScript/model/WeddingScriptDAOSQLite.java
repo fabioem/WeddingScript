@@ -39,7 +39,6 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 	private static final String SQL_SELECT_ATTRIBUTETYPES = "SELECT * FROM attributeTypes WHERE 1 = 1 ";
 
 	private static final String SQL_INSERT_SCRIPT = "INSERT INTO scripts(name, date, comment) VALUES (?, ?, ?)";
-	private static final String SQL_INSERT_PROGRAM = "INSERT INTO programs(name, defaultTime) VALUES (?, ?)";
 
 	private static final String SQL_DELETE_SCRIPT = "DELETE FROM scripts where scriptId = ?";
 	private static final String SQL_DELETE_PROGRAM = "DELETE FROM programs where progId = ?";
@@ -605,7 +604,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 	@Override
 	public List<Attribute> getProgramAttributes(Program program) {
-		// TODO Auto-generated method stub
+		// TODO getProgramAttributes
 		return null;
 	}
 
@@ -656,6 +655,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 	@Override
 	public boolean addProgram(Program program) {
 		String errorName = "program";
+		String errorType = "adding";
 		boolean rvSucceeded = false;
 		Connection conn = null;
 		PreparedStatement pst = null;
@@ -663,7 +663,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 		try {
 
 			conn = DriverManager.getConnection(databaseConnectionURL);
-			pst = conn.prepareStatement(SQL_INSERT_PROGRAM);
+			pst = conn.prepareStatement("INSERT INTO programs(name, defaultTime) VALUES (?, ?)");
 
 			int index = 1;
 			pst.setString(index++, program.getName());
@@ -678,7 +678,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				rvSucceeded = true;
 			}
 		} catch (SQLException e) {
-			System.out.println("Failed to execute adding " + errorName + ".");
+			System.out.println("Failed to execute " + errorType + " " + errorName + ".");
 			e.printStackTrace();
 		} finally {
 
@@ -687,7 +687,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close statement when adding " + errorName + ".");
+				System.out.println("Failed to close statement when " + errorType + " " + errorName + ".");
 				e.printStackTrace();
 			}
 
@@ -696,7 +696,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close connection when adding " + errorName + ".");
+				System.out.println("Failed to close connection when " + errorType + " " + errorName + ".");
 				e.printStackTrace();
 			}
 		}
@@ -755,6 +755,107 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 		}
 
 		return rvSucceeded;
+	}
+
+	@Override
+	public boolean removeAttribute(Attribute attribute) {
+		String errorName = "attribute";
+		String errorType = "removing";
+		boolean rvSucceeded = false;
+		Connection conn = null;
+		PreparedStatement pst = null;
+
+		try {
+
+			conn = DriverManager.getConnection(databaseConnectionURL);
+			pst = conn.prepareStatement("DELETE FROM attributes where attributeId = ?");
+
+			pst.setInt(1, attribute.getAttrId());
+
+			int rowsAffected = pst.executeUpdate();
+			if (rowsAffected == 1) {
+				rvSucceeded = true;
+			}
+		} catch (SQLException e) {
+			System.out.println("Failed to execute " + errorType + " " + errorName + ".");
+			e.printStackTrace();
+		} finally {
+
+			try {
+				if (pst != null) {
+					pst.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Failed to close statement when " + errorType + " " + errorName + ".");
+				e.printStackTrace();
+			}
+
+			try {
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Failed to close connection when " + errorType + " " + errorName + ".");
+				e.printStackTrace();
+			}
+		}
+
+		return rvSucceeded;
+	}
+
+	@Override
+	public boolean addAttribute(Attribute attribute) {
+
+		String errorName = "attribute";
+		String errorType = "adding";
+		boolean rvSucceeded = false;
+		Connection conn = null;
+		PreparedStatement pst = null;
+
+		try {
+
+			conn = DriverManager.getConnection(databaseConnectionURL);
+			pst = conn.prepareStatement(
+					"INSERT INTO attributes(name, defaultValue, attrTypeId, serviceId, mandatory) VALUES (?, ?, ?, ?, ?)");
+
+			int index = 1;
+
+			pst.setString(index++, attribute.getName());
+			pst.setString(index++, attribute.getDefaultValue());
+			pst.setLong(index++, attribute.getAttrType().getAttrTypeId());
+			pst.setLong(index++, attribute.getServiceId());
+			pst.setBoolean(index++, attribute.isMandatory());
+
+			int rowsAffected = pst.executeUpdate();
+			if (rowsAffected == 1) {
+				rvSucceeded = true;
+			}
+		} catch (SQLException e) {
+			System.out.println("Failed to execute " + errorType + " " + errorName + ".");
+			e.printStackTrace();
+		} finally {
+
+			try {
+				if (pst != null) {
+					pst.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Failed to close statement when " + errorType + " " + errorName + ".");
+				e.printStackTrace();
+			}
+
+			try {
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Failed to close connection when " + errorType + " " + errorName + ".");
+				e.printStackTrace();
+			}
+		}
+
+		return rvSucceeded;
+
 	}
 
 }
