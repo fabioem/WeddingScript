@@ -10,6 +10,9 @@ import hu.mandisco.weddingScript.model.bean.Program;
 import hu.mandisco.weddingScript.model.bean.Script;
 import hu.mandisco.weddingScript.view.edit.ProgramEditWindow;
 import hu.mandisco.weddingScript.view.edit.ScriptEditWindow;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.SortedList;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
@@ -30,7 +33,8 @@ public class TableList {
 			row.setOnMouseClicked(event -> {
 				if (event.getClickCount() == 2 && (!row.isEmpty())) {
 					Program selectedProgram = row.getItem();
-					ProgramEditWindow window = new ProgramEditWindow();
+					ObservableList<Program> programItems = table.getItems();
+					ProgramEditWindow window = new ProgramEditWindow(programItems);
 					window.display(selectedProgram);
 				}
 			});
@@ -63,6 +67,19 @@ public class TableList {
 
 		List<Program> programs = weddingScriptController.getPrograms();
 		table.getItems().addAll(programs);
+
+		// SORT BY DEFAULT TIME
+		ObservableList<Program> data = FXCollections.observableArrayList();
+		SortedList<Program> sortedData = new SortedList<>(data);
+		// this ensures the sortedData is sorted according to the sort columns
+		// in the table:
+		sortedData.comparatorProperty().bind(table.comparatorProperty());
+		table.setItems(sortedData);
+		// programmatically set a sort column:
+		table.getSortOrder().addAll(defaultTimeCol);
+		// note that you should always manipulate the underlying list, not the
+		// sortedList:
+		data.addAll(programs);
 
 		return table;
 	}
@@ -102,6 +119,19 @@ public class TableList {
 
 		List<Program> programs = weddingScriptController.getScriptPrograms(script);
 		table.getItems().addAll(programs);
+
+		// SORT BY TIME
+		ObservableList<Program> data = FXCollections.observableArrayList();
+		SortedList<Program> sortedData = new SortedList<>(data);
+		// this ensures the sortedData is sorted according to the sort columns
+		// in the table:
+		sortedData.comparatorProperty().bind(table.comparatorProperty());
+		table.setItems(sortedData);
+		// programmatically set a sort column:
+		table.getSortOrder().addAll(timeCol);
+		// note that you should always manipulate the underlying list, not the
+		// sortedList:
+		data.addAll(programs);
 
 		return table;
 	}
@@ -165,6 +195,19 @@ public class TableList {
 				if (event.getClickCount() == 2 && (!row.isEmpty())) {
 					Program rowData = row.getItem();
 					programs.remove(rowData);
+
+					// TODO Handle exception
+					/*
+					 * Exception in thread "JavaFX Application Thread"
+					 * java.lang.UnsupportedOperationException at
+					 * java.util.AbstractList.remove(Unknown Source) at
+					 * java.util.AbstractList$Itr.remove(Unknown Source) at
+					 * java.util.AbstractList.removeRange(Unknown Source) at
+					 * java.util.AbstractList.clear(Unknown Source) at
+					 * hu.mandisco.weddingScript.view.TableList.lambda$10(
+					 * TableList.java:194)
+					 */
+
 					table.getItems().clear();
 					table.getItems().addAll(programs);
 					weddingScriptController.addProgramToScript(script, rowData);
@@ -177,6 +220,19 @@ public class TableList {
 		});
 
 		table.getItems().addAll(programs);
+
+		// SORT BY DEFAULT TIME
+		ObservableList<Program> data = FXCollections.observableArrayList();
+		SortedList<Program> sortedData = new SortedList<>(data);
+		// this ensures the sortedData is sorted according to the sort columns
+		// in the table:
+		sortedData.comparatorProperty().bind(table.comparatorProperty());
+		table.setItems(sortedData);
+		// programmatically set a sort column:
+		table.getSortOrder().addAll(defaultTimeCol);
+		// note that you should always manipulate the underlying list, not the
+		// sortedList:
+		data.addAll(programs);
 
 		return table;
 	}

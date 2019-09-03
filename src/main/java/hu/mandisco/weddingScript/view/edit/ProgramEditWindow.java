@@ -1,7 +1,6 @@
 package hu.mandisco.weddingScript.view.edit;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import hu.mandisco.weddingScript.controller.WeddingScriptController;
 import hu.mandisco.weddingScript.model.bean.Program;
@@ -26,6 +25,12 @@ import javafx.stage.Stage;
 public class ProgramEditWindow {
 
 	private static WeddingScriptController weddingScriptController = new WeddingScriptController();
+
+	private ObservableList<Program> programItems;
+
+	public ProgramEditWindow(ObservableList<Program> programItems) {
+		this.programItems = programItems;
+	}
 
 	public void display(Program program) {
 		Stage window = new Stage();
@@ -127,6 +132,10 @@ public class ProgramEditWindow {
 				alert.showAndWait();
 			} else {
 				weddingScriptController.editProgram(program);
+				//Refresh items
+				programItems.clear();
+				programItems.addAll(weddingScriptController.getPrograms());
+
 				window.close();
 			}
 
