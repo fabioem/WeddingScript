@@ -117,4 +117,5 @@ public class ScriptEditWindow {
 		window.setScene(scene);
 		window.showAndWait();
 	}
+
 }

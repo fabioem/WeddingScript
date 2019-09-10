@@ -9,6 +9,7 @@ import hu.mandisco.weddingScript.model.bean.AttributeType;
 import hu.mandisco.weddingScript.model.bean.Program;
 import hu.mandisco.weddingScript.model.bean.Script;
 import hu.mandisco.weddingScript.model.bean.Service;
+import javafx.collections.ObservableList;
 
 public class WeddingScriptController {
 	private WeddingScriptDAO dao = new WeddingScriptDAOSQLite();
@@ -29,7 +30,7 @@ public class WeddingScriptController {
 		return dao.getServices();
 	}
 
-	public List<AttributeType> getAttributeTypes() {
+	public ObservableList<AttributeType> getAttributeTypes() {
 		return dao.getAttributeTypes();
 	}
 

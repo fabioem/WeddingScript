@@ -14,6 +14,11 @@ public class Attribute {
 	private boolean mandatory;
 
 
+	public Attribute() {
+		super();
+		value = defaultValue;
+	}
+
 	public ObservableList<Attribute> getAttributes() {
 		return attributes;
 	}
