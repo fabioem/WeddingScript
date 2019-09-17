@@ -133,6 +133,7 @@ public class ProgramEditWindow {
 			} else {
 				weddingScriptController.editProgram(program);
 				//Refresh items
+				//TODO handle exception
 				programItems.clear();
 				programItems.addAll(weddingScriptController.getPrograms());
 

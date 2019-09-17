@@ -67,6 +67,8 @@ public class TableList {
 		table.getColumns().add(defaultTimeCol);
 
 		List<Program> programs = weddingScriptController.getPrograms();
+
+		// TODO maybe comment next line
 		table.getItems().addAll(programs);
 
 		// SORT BY TIME
