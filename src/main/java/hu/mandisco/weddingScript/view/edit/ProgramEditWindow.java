@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 
 import hu.mandisco.weddingScript.controller.WeddingScriptController;
 import hu.mandisco.weddingScript.model.bean.Program;
-import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -25,12 +24,6 @@ import javafx.stage.Stage;
 public class ProgramEditWindow {
 
 	private static WeddingScriptController weddingScriptController = new WeddingScriptController();
-
-	private ObservableList<Program> programItems;
-
-	public ProgramEditWindow(ObservableList<Program> programItems) {
-		this.programItems = programItems;
-	}
 
 	public void display(Stage window, Program program) {
 		// Block events to other windows

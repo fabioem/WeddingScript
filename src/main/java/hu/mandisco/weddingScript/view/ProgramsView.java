@@ -79,8 +79,7 @@ public class ProgramsView extends BorderPane {
 
 			Program selectedItem = programTable.getSelectionModel().getSelectedItem();
 			if (selectedItem != null) {
-				ObservableList<Program> programItems = programTable.getItems();
-				ProgramEditWindow window = new ProgramEditWindow(programItems);
+				ProgramEditWindow window = new ProgramEditWindow();
 				window.display(stage, selectedItem);
 			}
 		});

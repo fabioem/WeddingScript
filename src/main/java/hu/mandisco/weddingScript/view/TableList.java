@@ -51,8 +51,7 @@ public class TableList {
 
 				if (event.getClickCount() == 2 && (!row.isEmpty())) {
 					Program selectedProgram = row.getItem();
-					ObservableList<Program> programItems = table.getItems();
-					ProgramEditWindow window = new ProgramEditWindow(programItems);
+					ProgramEditWindow window = new ProgramEditWindow();
 					window.display(stage, selectedProgram);
 				}
 			});
