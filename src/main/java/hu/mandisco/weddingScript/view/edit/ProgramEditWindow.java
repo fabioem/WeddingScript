@@ -32,9 +32,7 @@ public class ProgramEditWindow {
 		this.programItems = programItems;
 	}
 
-	public void display(Program program) {
-		Stage window = new Stage();
-
+	public void display(Stage window, Program program) {
 		// Block events to other windows
 		window.initModality(Modality.APPLICATION_MODAL);
 		window.setTitle("Program szerkesztése");
@@ -132,11 +130,6 @@ public class ProgramEditWindow {
 				alert.showAndWait();
 			} else {
 				weddingScriptController.editProgram(program);
-				//Refresh items
-				//TODO handle exception
-				programItems.clear();
-				programItems.addAll(weddingScriptController.getPrograms());
-
 				window.close();
 			}
 

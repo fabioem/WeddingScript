@@ -14,11 +14,14 @@ import hu.mandisco.weddingScript.view.edit.ProgramEditWindow;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
+import javafx.event.EventHandler;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 public class TableList {
 
@@ -32,11 +35,25 @@ public class TableList {
 		table.setRowFactory(tv -> {
 			TableRow<Program> row = new TableRow<>();
 			row.setOnMouseClicked(event -> {
+
+				Stage stage = new Stage();
+				stage.setOnHiding(new EventHandler<WindowEvent>() {
+
+					@Override
+					public void handle(WindowEvent paramT) {
+						ObservableList<Program> data = FXCollections.observableArrayList();
+						data.addAll(weddingScriptController.getPrograms());
+						SortedList<Program> sortedData = new SortedList<>(data);
+						sortedData.comparatorProperty().bind(table.comparatorProperty());
+						table.setItems(sortedData);
+					}
+				});
+
 				if (event.getClickCount() == 2 && (!row.isEmpty())) {
 					Program selectedProgram = row.getItem();
 					ObservableList<Program> programItems = table.getItems();
 					ProgramEditWindow window = new ProgramEditWindow(programItems);
-					window.display(selectedProgram);
+					window.display(stage, selectedProgram);
 				}
 			});
 			return row;

@@ -4,9 +4,6 @@ import java.time.LocalDateTime;
 
 import hu.mandisco.weddingScript.controller.WeddingScriptController;
 import hu.mandisco.weddingScript.model.bean.Program;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.collections.transformation.SortedList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -28,8 +25,7 @@ public class ProgramCreateWindow {
 
 	private static WeddingScriptController weddingScriptController = new WeddingScriptController();
 
-	public void display(ObservableList<Program> programItems) {
-		Stage window = new Stage();
+	public void display(Stage window) {
 
 		// Block events to other windows
 		window.initModality(Modality.APPLICATION_MODAL);
@@ -125,16 +121,6 @@ public class ProgramCreateWindow {
 				alert.showAndWait();
 			} else {
 				weddingScriptController.addProgram(program);
-				programItems.clear();
-				/*
-				 * TODO handle exception
-				 * Exception in thread "JavaFX Application Thread"
-				 * java.lang.UnsupportedOperationException at...
-				 * hu.mandisco.weddingScript.view.create.ProgramCreateWindow.
-				 * lambda$3(ProgramCreateWindow.java:130)
-				 *
-				 */
-				programItems.addAll(weddingScriptController.getPrograms());
 				window.close();
 			}
 

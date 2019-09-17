@@ -7,11 +7,14 @@ import hu.mandisco.weddingScript.view.edit.ProgramEditWindow;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
+import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableView;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 public class ProgramsView extends BorderPane {
 
@@ -27,9 +30,21 @@ public class ProgramsView extends BorderPane {
 		// TOOLBAR
 		Button newButton = new Button("Új");
 		newButton.setOnAction(e -> {
-			ObservableList<Program> programItems = programTable.getItems();
+			Stage stage = new Stage();
+			stage.setOnHiding(new EventHandler<WindowEvent>() {
+
+				@Override
+				public void handle(WindowEvent paramT) {
+					ObservableList<Program> data = FXCollections.observableArrayList();
+					data.addAll(weddingScriptController.getPrograms());
+					SortedList<Program> sortedData = new SortedList<>(data);
+					sortedData.comparatorProperty().bind(programTable.comparatorProperty());
+					programTable.setItems(sortedData);
+				}
+			});
 			ProgramCreateWindow window = new ProgramCreateWindow();
-			window.display(programItems);
+			window.display(stage);
+
 		});
 
 		Button deleteButton = new Button("Törlés");
@@ -42,18 +57,31 @@ public class ProgramsView extends BorderPane {
 				data.addAll(programTable.getItems());
 				data.remove(selectedItem);
 				programTable.setItems(sortedData);
-				// programTable.getItems().remove(selectedItem);
 				weddingScriptController.removeProgram(selectedItem);
 			}
 		});
 
 		Button editButton = new Button("Szerkesztés");
 		editButton.setOnAction(e -> {
+
+			Stage stage = new Stage();
+			stage.setOnHiding(new EventHandler<WindowEvent>() {
+
+				@Override
+				public void handle(WindowEvent paramT) {
+					ObservableList<Program> data = FXCollections.observableArrayList();
+					data.addAll(weddingScriptController.getPrograms());
+					SortedList<Program> sortedData = new SortedList<>(data);
+					sortedData.comparatorProperty().bind(programTable.comparatorProperty());
+					programTable.setItems(sortedData);
+				}
+			});
+
 			Program selectedItem = programTable.getSelectionModel().getSelectedItem();
 			if (selectedItem != null) {
 				ObservableList<Program> programItems = programTable.getItems();
 				ProgramEditWindow window = new ProgramEditWindow(programItems);
-				window.display(selectedItem);
+				window.display(stage, selectedItem);
 			}
 		});
 
