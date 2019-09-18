@@ -138,10 +138,16 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 			while (rs.next()) {
 				int attrId = rs.getInt("attributeId");
 				String name = rs.getString("name");
+				String defValue = rs.getString("defaultValue");
+				Boolean mandatory = rs.getInt("mandatory") != 0;
+
+				System.out.println(rs.getString("name") + "\t" + rs.getInt("mandatory") + "\t" + mandatory);
 
 				Attribute attribute = new Attribute();
 				attribute.setName(name);
 				attribute.setAttrId(attrId);
+				attribute.setDefaultValue(defValue);
+				attribute.setMandatory(mandatory);
 
 				attributes.add(attribute);
 			}
@@ -934,7 +940,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 			pst.setString(index++, attribute.getDefaultValue());
 			pst.setInt(index++, attribute.getAttrType().getAttrTypeId());
 			pst.setInt(index++, attribute.getServiceId());
-			pst.setBoolean(index++, attribute.isMandatory());
+			pst.setInt(index++, attribute.isMandatory() ? 1 : 0);
 
 			int rowsAffected = pst.executeUpdate();
 			if (rowsAffected == 1) {

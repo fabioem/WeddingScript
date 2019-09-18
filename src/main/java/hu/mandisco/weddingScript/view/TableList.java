@@ -9,8 +9,8 @@ import hu.mandisco.weddingScript.model.bean.Attribute;
 import hu.mandisco.weddingScript.model.bean.Program;
 import hu.mandisco.weddingScript.model.bean.Script;
 import hu.mandisco.weddingScript.view.edit.AttributeEditWindow;
-import hu.mandisco.weddingScript.view.edit.ScriptEditWindow;
 import hu.mandisco.weddingScript.view.edit.ProgramEditWindow;
+import hu.mandisco.weddingScript.view.edit.ScriptEditWindow;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
@@ -19,6 +19,7 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -84,8 +85,8 @@ public class TableList {
 
 		List<Program> programs = weddingScriptController.getPrograms();
 
-		// TODO maybe comment next line
-		table.getItems().addAll(programs);
+		// TODO maybe next line is unnecessary
+		// table.getItems().addAll(programs);
 
 		// SORT BY TIME
 		ObservableList<Program> data = FXCollections.observableArrayList();
@@ -353,11 +354,19 @@ public class TableList {
 		TableColumn<Attribute, String> nameCol = new TableColumn<Attribute, String>("Név");
 		nameCol.setCellValueFactory(new PropertyValueFactory<Attribute, String>("name"));
 
-		TableColumn<Attribute, String> valueCol = new TableColumn<Attribute, String>("Érték");
-		valueCol.setCellValueFactory(new PropertyValueFactory<Attribute, String>("value"));
+		TableColumn<Attribute, String> defValueCol = new TableColumn<Attribute, String>("Érték");
+		defValueCol.setCellValueFactory(new PropertyValueFactory<Attribute, String>("defaultValue"));
+
+		TableColumn<Attribute, Boolean> isMandatoryCol = new TableColumn<Attribute, Boolean>("Kötelező");
+		isMandatoryCol.setCellValueFactory(new PropertyValueFactory<Attribute, Boolean>("mandatory"));
+		// isMandatoryCol.setCellFactory(column -> new
+		// CheckBoxTableCell<Attribute, Boolean>());
+		isMandatoryCol.setCellFactory(CheckBoxTableCell.forTableColumn(isMandatoryCol));
+		isMandatoryCol.setEditable(false);
 
 		attributeListTable.getColumns().add(nameCol);
-		attributeListTable.getColumns().add(valueCol);
+		attributeListTable.getColumns().add(defValueCol);
+		attributeListTable.getColumns().add(isMandatoryCol);
 
 		List<Attribute> attrubutes = weddingScriptController.getAttributes();
 		attributeListTable.getItems().addAll(attrubutes);

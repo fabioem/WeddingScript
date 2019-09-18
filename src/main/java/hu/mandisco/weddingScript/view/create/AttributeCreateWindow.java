@@ -10,6 +10,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -64,21 +65,30 @@ public class AttributeCreateWindow {
 		GridPane.setConstraints(attrTypeLabel, 0, 2);
 
 		ObservableList<AttributeType> options = weddingScriptController.getAttributeTypes();
-		System.out.println(options);
 
 		ComboBox<AttributeType> attrTypeComboBox = new ComboBox<AttributeType>(options);
 		attrTypeComboBox.setValue(options.get(0));
 		GridPane.setConstraints(attrTypeComboBox, 1, 2);
 
+
+		// isDefault Label
+		Label isDefLabel = new Label("Alapértelmezett érték:");
+		GridPane.setConstraints(isDefLabel, 0, 3);
+
+		// Default Value Input
+		CheckBox isDefInput = new CheckBox();
+		GridPane.setConstraints(isDefInput, 1, 3);
+
 		// Save
 		Button saveButton = new Button("Mentés");
-		GridPane.setConstraints(saveButton, 0, 3);
+		GridPane.setConstraints(saveButton, 0, 4);
 		saveButton.setOnAction(e -> {
 
 			Attribute attribute = new Attribute();
 			attribute.setName(nameInput.getText());
-			attribute.setDefaultValue(defValueInput.getText());
+			attribute.setDefaultValue(isDefInput.getText());
 			attribute.setAttrType(attrTypeComboBox.getValue());
+			attribute.setMandatory(isDefInput.isPressed());
 
 			if (nameInput.getText().isEmpty()) {
 				Alert alert = new Alert(AlertType.ERROR, "A név nem lehet üres!", ButtonType.OK);
@@ -95,10 +105,10 @@ public class AttributeCreateWindow {
 
 		Button closeButton = new Button("Mégsem");
 		closeButton.setOnAction(e -> window.close());
-		GridPane.setConstraints(closeButton, 1, 3);
+		GridPane.setConstraints(closeButton, 1, 4);
 
 		// Add everything to grid
-		grid.getChildren().addAll(nameLabel, nameInput, defValueLabel, defValueInput, attrTypeLabel, attrTypeComboBox,
+		grid.getChildren().addAll(nameLabel, nameInput, defValueLabel, defValueInput, isDefLabel, isDefInput, attrTypeLabel, attrTypeComboBox,
 				saveButton, closeButton);
 
 		Scene scene = new Scene(grid);
