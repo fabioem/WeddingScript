@@ -20,7 +20,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -69,7 +68,6 @@ public class ScriptEditWindow {
 		scriptAttributesTable.setEditable(true);
 		centerLayout.setCenter(scriptAttributesTable);
 
-
 		// 2. Program
 		TableView<Program> programTable = new TableView<Program>();
 		programTable.setEditable(true);
@@ -100,20 +98,32 @@ public class ScriptEditWindow {
 		List<Program> programs = weddingScriptController.getScriptPrograms(script);
 		programTable.getItems().addAll(programs);
 
-		// 2.1 Program attributes
-		TableView<Attribute> progAttributeTable = new TableView<Attribute>();
+		// Center Grid
+		GridPane centerGrid = new GridPane();
 
-		// 2.1.1 Program attributes' attributes
+		// Script Attributes
+		GridPane.setConstraints(scriptAttributesTable, 0, 0);
+		TableView<Attribute> attributeAntiTable = tableList.getAttributeListNotInScript(script);
+		GridPane.setConstraints(attributeAntiTable, 1, 0);
 
-		VBox tablesBox = new VBox();
-		tablesBox.getChildren().addAll(scriptAttributesTable, programTable, progAttributeTable);
+		// Script programs
+		GridPane.setConstraints(programTable, 0, 1);
+		TableView<Program> programAntiTable = tableList.getProgramListNotInScript(script, programTable);
+		GridPane.setConstraints(programAntiTable, 1, 1);
 
-		centerLayout.setCenter(tablesBox);
+		// Center grid adding
+		centerGrid.getChildren().addAll(scriptAttributesTable, attributeAntiTable, programTable, programAntiTable);
+		GridPane.setHgrow(scriptAttributesTable, Priority.ALWAYS);
+		GridPane.setHgrow(attributeAntiTable, Priority.ALWAYS);
+		GridPane.setHgrow(programTable, Priority.ALWAYS);
+		GridPane.setHgrow(programAntiTable, Priority.ALWAYS);
+		GridPane.setHgrow(centerGrid, Priority.ALWAYS);
+		centerLayout.setCenter(centerGrid);
+
+		// Main center adding
 		layout.setCenter(centerLayout);
 
-		// RIGHT
-		layout.setRight(tableList.getProgramListNotInScript(script, programTable));
-
+		// Stuff
 		Scene scene = new Scene(layout, 700, 500);
 		window.setScene(scene);
 		window.showAndWait();

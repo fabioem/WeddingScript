@@ -98,4 +98,8 @@ public class WeddingScriptController {
 	public List<Attribute> getAttributesOfScript(Script script) {
 		return dao.getAttributesOfScript(script);
 	}
+
+	public List<Attribute> getAttributesNotInScript(Script script) {
+		return dao.getAttributesNotInScript(script);
+	}
 }

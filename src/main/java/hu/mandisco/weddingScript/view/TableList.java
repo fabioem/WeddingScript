@@ -175,7 +175,7 @@ public class TableList {
 		TableColumn<Program, String> nameCol = new TableColumn<Program, String>("Név");
 		nameCol.setCellValueFactory(new PropertyValueFactory<Program, String>("name"));
 
-		TableColumn<Program, LocalDateTime> defaultTimeCol = new TableColumn<Program, LocalDateTime>("Idő");
+		TableColumn<Program, LocalDateTime> defaultTimeCol = new TableColumn<Program, LocalDateTime>("Alap idő");
 		defaultTimeCol.setCellValueFactory(new PropertyValueFactory<Program, LocalDateTime>("defaultTime"));
 		defaultTimeCol.setCellFactory(column -> {
 			TableCell<Program, LocalDateTime> cell = new TableCell<Program, LocalDateTime>() {
@@ -404,6 +404,38 @@ public class TableList {
 		attributeListTable.getColumns().add(valueCol);
 
 		List<Attribute> attributes = weddingScriptController.getAttributesOfScript(script);
+		attributeListTable.getItems().addAll(attributes);
+
+		return attributeListTable;
+	}
+
+	public TableView<Attribute> getAttributeListNotInScript(Script script) {
+		TableView<Attribute> attributeListTable = new TableView<Attribute>();
+
+		attributeListTable.setEditable(true);
+
+		attributeListTable.setRowFactory(tv -> {
+			TableRow<Attribute> row = new TableRow<>();
+			row.setOnMouseClicked(event -> {
+				if (event.getClickCount() == 2 && (!row.isEmpty())) {
+					Attribute selectedAttribute = row.getItem();
+					AttributeEditWindow window = new AttributeEditWindow();
+					window.display(selectedAttribute);
+				}
+			});
+			return row;
+		});
+
+		TableColumn<Attribute, String> nameCol = new TableColumn<Attribute, String>("Név");
+		nameCol.setCellValueFactory(new PropertyValueFactory<Attribute, String>("name"));
+
+		TableColumn<Attribute, String> valueCol = new TableColumn<Attribute, String>("Alap érték");
+		valueCol.setCellValueFactory(new PropertyValueFactory<Attribute, String>("defaultValue"));
+
+		attributeListTable.getColumns().add(nameCol);
+		attributeListTable.getColumns().add(valueCol);
+
+		List<Attribute> attributes = weddingScriptController.getAttributesNotInScript(script);
 		attributeListTable.getItems().addAll(attributes);
 
 		return attributeListTable;

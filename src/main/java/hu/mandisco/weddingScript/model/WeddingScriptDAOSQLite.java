@@ -37,15 +37,6 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 	private static final String DATEFORMAT_DATETIME_FOR_INSERT = "yyyy-MM-dd HH:mm:ss";
 	// private static final String DATEFORMAT_DATE_FOR_INSERT = "yyyy-MM-dd";
 
-	private static final String SQL_SELECT_SERVICES = "SELECT * FROM services WHERE 1 = 1 ";
-	private static final String SQL_SELECT_SCRIPTS = "SELECT * FROM scripts WHERE 1 = 1 ";
-	private static final String SQL_SELECT_ATTRIBUTETYPES = "SELECT * FROM attributeTypes WHERE 1 = 1 ";
-
-	private static final String SQL_INSERT_SCRIPT = "INSERT INTO scripts(name, date, comment) VALUES (?, ?, ?)";
-
-	private static final String SQL_DELETE_SCRIPT = "DELETE FROM scripts where scriptId = ?";
-	private static final String SQL_DELETE_PROGRAM = "DELETE FROM programs where progId = ?";
-
 	Path currentWorkingFolder = Paths.get("").toAbsolutePath();
 	Path pathToTheDatabaseFile = currentWorkingFolder.resolve(DATABASE_FILE);
 	String databaseConnectionURL = JDBC_CONNECTION_PREFIX + pathToTheDatabaseFile.toUri().toString();
@@ -191,7 +182,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 			conn = DriverManager.getConnection(databaseConnectionURL);
 			conn.setAutoCommit(false);
 			st = conn.createStatement();
-			ResultSet rs = st.executeQuery(SQL_SELECT_ATTRIBUTETYPES);
+			ResultSet rs = st.executeQuery("SELECT * FROM attributeTypes");
 
 			while (rs.next()) {
 				int attrTypeId = rs.getInt("attrTypeId");
@@ -241,7 +232,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 			conn = DriverManager.getConnection(databaseConnectionURL);
 			conn.setAutoCommit(false);
 			st = conn.createStatement();
-			ResultSet rs = st.executeQuery(SQL_SELECT_SCRIPTS);
+			ResultSet rs = st.executeQuery("SELECT * FROM scripts");
 
 			while (rs.next()) {
 				int scriptId = rs.getInt("scriptId");
@@ -305,7 +296,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 			conn = DriverManager.getConnection(databaseConnectionURL);
 			conn.setAutoCommit(false);
 			st = conn.createStatement();
-			ResultSet rs = st.executeQuery(SQL_SELECT_SERVICES);
+			ResultSet rs = st.executeQuery("SELECT * FROM services");
 
 			while (rs.next()) {
 				int serviceId = rs.getInt("serviceId");
@@ -357,7 +348,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 		try {
 
 			conn = DriverManager.getConnection(databaseConnectionURL);
-			pst = conn.prepareStatement(SQL_INSERT_SCRIPT);
+			pst = conn.prepareStatement("INSERT INTO scripts(name, date, comment) VALUES (?, ?, ?)");
 
 			int index = 1;
 			pst.setString(index++, script.getName());
@@ -405,7 +396,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 		try {
 
 			conn = DriverManager.getConnection(databaseConnectionURL);
-			pst = conn.prepareStatement(SQL_DELETE_SCRIPT);
+			pst = conn.prepareStatement("DELETE FROM scripts where scriptId = ?");
 
 			pst.setInt(1, script.getScriptId());
 
@@ -732,7 +723,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 		try {
 
 			conn = DriverManager.getConnection(databaseConnectionURL);
-			pst = conn.prepareStatement(SQL_DELETE_PROGRAM);
+			pst = conn.prepareStatement("DELETE FROM programs where progId = ?");
 
 			pst.setInt(1, program.getProgId());
 
@@ -1095,6 +1086,70 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 			conn = DriverManager.getConnection(databaseConnectionURL);
 			pst = conn.prepareStatement(
 					"SELECT * FROM attributes, scriptAttr WHERE attributeId IN (SELECT attrId FROM scriptAttr WHERE scriptId = ?)");
+
+			int index = 1;
+			pst.setInt(index++, script.getScriptId());
+			conn.setAutoCommit(false);
+			ResultSet rs = pst.executeQuery();
+
+			while (rs.next()) {
+				int attrId = rs.getInt("attributeId");
+				String name = rs.getString("name");
+				String defValue = rs.getString("defaultValue");
+				String value = rs.getString("value");
+				Boolean mandatory = rs.getInt("mandatory") != 0;
+
+				Attribute attribute = new Attribute();
+				attribute.setName(name);
+				attribute.setAttrId(attrId);
+				attribute.setDefaultValue(defValue);
+				attribute.setValue(value);
+				attribute.setMandatory(mandatory);
+
+				scriptAttrList.add(attribute);
+			}
+
+			conn.commit();
+		} catch (SQLException e) {
+			System.out.println("Failed to execute " + errorDesc + ".");
+			e.printStackTrace();
+		} finally {
+
+			try {
+				if (pst != null) {
+					pst.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Failed to close statement when " + errorDesc + ".");
+				e.printStackTrace();
+			}
+
+			try {
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Failed to close connection when " + errorDesc + ".");
+				e.printStackTrace();
+			}
+		}
+
+		return scriptAttrList;
+
+	}
+
+	@Override
+	public List<Attribute> getAttributesNotInScript(Script script) {
+		Connection conn = null;
+		PreparedStatement pst = null;
+		String errorDesc = "listing script's attributes";
+		List<Attribute> scriptAttrList = new ArrayList<Attribute>();
+
+		try {
+
+			conn = DriverManager.getConnection(databaseConnectionURL);
+			pst = conn.prepareStatement(
+					"SELECT * FROM attributes, scriptAttr WHERE attributeId NOT IN (SELECT attrId FROM scriptAttr WHERE scriptId = ?)");
 
 			int index = 1;
 			pst.setInt(index++, script.getScriptId());
