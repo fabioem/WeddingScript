@@ -120,3 +120,4 @@ INSERT INTO progAttr VALUES(1, 0, ""); /* nyitótánchoz zene */
 INSERT INTO progAttr VALUES(0, 0, "Váradi Roma Café + Jazz-Lounge világsláger feldolgozások"); /* vacsorához zene */
 INSERT INTO progAttr VALUES(0, 1, "Vőlegény"); /* vacsorához beszéd */
 INSERT INTO progAttr VALUES(0, 2, "Nem"); /* vacsorához himnusz */
+INSERT INTO scriptAttr VALUES(0, 1, "Menyasszony édesanyja");

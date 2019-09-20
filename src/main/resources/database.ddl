@@ -1,5 +1,4 @@
 -- SCRIPT
-
 CREATE TABLE scripts(
 	scriptId INTEGER PRIMARY KEY AUTOINCREMENT,
 	name varchar(255) NOT NULL,
@@ -7,7 +6,6 @@ CREATE TABLE scripts(
 	comment varchar(255) NOT NULL,
 	lastEdited datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	created datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
-	
 );
 
 CREATE TABLE scriptProg(
@@ -19,7 +17,6 @@ CREATE TABLE scriptProg(
 );
 
 -- PROGRAM
-
 CREATE TABLE programs(
 	progId INTEGER PRIMARY KEY AUTOINCREMENT,
 	name varchar(255) NOT NULL,
@@ -35,7 +32,6 @@ CREATE TABLE progAttr(
 );
 
 -- ATTRIBUTE
-
 CREATE TABLE attributes(
 	attributeId INTEGER PRIMARY KEY AUTOINCREMENT,
 	name varchar(255) NOT NULL,
@@ -68,7 +64,6 @@ CREATE TABLE attrAttr(
 );
 
 -- SERVICE
-
 CREATE TABLE services(
 	serviceId INTEGER PRIMARY KEY AUTOINCREMENT,
 	name varchar(10) NOT NULL
@@ -97,7 +92,6 @@ CREATE TABLE serviceAttr(
 );
 
 -- Insert demo values
-
 INSERT INTO programs VALUES(0, "Vacsora", 68400000);
 INSERT INTO programs VALUES(1, "Nyitótánc", 75600000);
 INSERT INTO programs VALUES(2, "Újasszony tánc", 86400000);
@@ -116,7 +110,9 @@ INSERT INTO scriptProg VALUES(0, 2, 86400000);
 INSERT INTO attributes VALUES(0, "Zene", "", 2, null, 1);
 INSERT INTO attributes VALUES(1, "Beszéd", "vőlegény", 2, null, 1);
 INSERT INTO attributes VALUES(2, "Himnusz", "nem", 2, null, 1);
+INSERT INTO attributes VALUES(3, "Szolgáltatói asztal", "igen", 0, null, 0);
 INSERT INTO progAttr VALUES(1, 0, ""); /* nyitótánchoz zene */
 INSERT INTO progAttr VALUES(0, 0, "Váradi Roma Café + Jazz-Lounge világsláger feldolgozások"); /* vacsorához zene */
 INSERT INTO progAttr VALUES(0, 1, "Vőlegény"); /* vacsorához beszéd */
 INSERT INTO progAttr VALUES(0, 2, "Nem"); /* vacsorához himnusz */
+INSERT INTO scriptAttr VALUES(0, 3, "Külön teremben");

@@ -94,4 +94,8 @@ public class WeddingScriptController {
 	public boolean addAttributeToAttribute(Attribute mainAttribute, Attribute subAttribute) {
 		return dao.addAttributeToAttribute(mainAttribute, subAttribute);
 	}
+
+	public List<Attribute> getAttributesOfScript(Script script) {
+		return dao.getAttributesOfScript(script);
+	}
 }

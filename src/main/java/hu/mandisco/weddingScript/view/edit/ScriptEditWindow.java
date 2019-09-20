@@ -65,9 +65,10 @@ public class ScriptEditWindow {
 		centerLayout.setTop(topGrid);
 		// CENTER - CENTER
 		// 1. Script attributes
-		TableView<Attribute> scriptTable = new TableView<Attribute>();
-		scriptTable.setEditable(true);
-		//TODO Script attributes
+		TableView<Attribute> scriptAttributesTable = tableList.getAttributeListOfScript(script);
+		scriptAttributesTable.setEditable(true);
+		centerLayout.setCenter(scriptAttributesTable);
+
 
 		// 2. Program
 		TableView<Program> programTable = new TableView<Program>();
@@ -100,12 +101,12 @@ public class ScriptEditWindow {
 		programTable.getItems().addAll(programs);
 
 		// 2.1 Program attributes
-		TableView<Attribute> attributeTable = new TableView<Attribute>();
+		TableView<Attribute> progAttributeTable = new TableView<Attribute>();
 
 		// 2.1.1 Program attributes' attributes
 
 		VBox tablesBox = new VBox();
-		tablesBox.getChildren().addAll(scriptTable, programTable, attributeTable);
+		tablesBox.getChildren().addAll(scriptAttributesTable, programTable, progAttributeTable);
 
 		centerLayout.setCenter(tablesBox);
 		layout.setCenter(centerLayout);
