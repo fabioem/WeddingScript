@@ -974,4 +974,114 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 	}
 
+	public List<Attribute> getAttributesAttributes(Attribute mainAttribute) {
+		Connection conn = null;
+		PreparedStatement pst = null;
+		String errorDesc = "listing attribute's attributes";
+		List<Attribute> attrAttrList = new ArrayList<Attribute>();
+
+		try {
+
+			conn = DriverManager.getConnection(databaseConnectionURL);
+			pst = conn.prepareStatement(
+					"SELECT * FROM attributes WHERE attrId IN (SELECT attrId FROM attrAttr WHERE mainAttrId = ?)");
+
+			int index = 1;
+			pst.setInt(index++, mainAttribute.getAttrId());
+			conn.setAutoCommit(false);
+			ResultSet rs = pst.executeQuery();
+
+			while (rs.next()) {
+				int attrId = rs.getInt("attributeId");
+				String name = rs.getString("name");
+				String defValue = rs.getString("defaultValue");
+				Boolean mandatory = rs.getInt("mandatory") != 0;
+
+				Attribute attrAttr = new Attribute();
+				attrAttr.setName(name);
+				attrAttr.setAttrId(attrId);
+				attrAttr.setDefaultValue(defValue);
+				attrAttr.setMandatory(mandatory);
+
+				attrAttrList.add(attrAttr);
+			}
+
+			conn.commit();
+		} catch (SQLException e) {
+			System.out.println("Failed to execute " + errorDesc + ".");
+			e.printStackTrace();
+		} finally {
+
+			try {
+				if (pst != null) {
+					pst.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Failed to close statement when " + errorDesc + ".");
+				e.printStackTrace();
+			}
+
+			try {
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Failed to close connection when " + errorDesc + ".");
+				e.printStackTrace();
+			}
+		}
+
+		return attrAttrList;
+
+	}
+
+	public boolean addAttributeToAttribute(Attribute mainAttribute, Attribute subAttribute) {
+
+		String errorDesc = "adding sub attribute to main attribute";
+		boolean rvSucceeded = false;
+		Connection conn = null;
+		PreparedStatement pst = null;
+
+		try {
+
+			conn = DriverManager.getConnection(databaseConnectionURL);
+			pst = conn.prepareStatement("INSERT INTO attrAttr(mainAttrId, attrId) VALUES (?, ?)");
+
+			int index = 1;
+
+			pst.setInt(index++, mainAttribute.getAttrId());
+			pst.setInt(index++, subAttribute.getAttrId());
+
+			int rowsAffected = pst.executeUpdate();
+			if (rowsAffected == 1) {
+				rvSucceeded = true;
+			}
+		} catch (SQLException e) {
+			System.out.println("Failed to execute " + errorDesc + ".");
+			e.printStackTrace();
+		} finally {
+
+			try {
+				if (pst != null) {
+					pst.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Failed to close statement when " + errorDesc + ".");
+				e.printStackTrace();
+			}
+
+			try {
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Failed to close connection when " + errorDesc + ".");
+				e.printStackTrace();
+			}
+		}
+
+		return rvSucceeded;
+
+	}
+
 }

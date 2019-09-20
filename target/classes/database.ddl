@@ -60,6 +60,13 @@ CREATE TABLE scriptAttr(
 	FOREIGN KEY (attrId) REFERENCES attributes(attrId) ON DELETE CASCADE
 );
 
+CREATE TABLE attrAttr(
+	mainAttrId int NOT NULL,
+	attrId int NOT NULL,
+	FOREIGN KEY (mainAttrId) REFERENCES attributes(attrId) ON DELETE CASCADE
+	FOREIGN KEY (attrId) REFERENCES attributes(attrId) ON DELETE CASCADE
+);
+
 -- SERVICE
 
 CREATE TABLE services(

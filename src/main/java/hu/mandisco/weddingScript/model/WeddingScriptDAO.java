@@ -49,4 +49,7 @@ public interface WeddingScriptDAO {
 
 	public List<Attribute> getAttributes();
 
+	public List<Attribute> getAttributesAttributes(Attribute mainAttribute);
+
+	public boolean addAttributeToAttribute(Attribute mainAttribute, Attribute subAttribute);
 }
