@@ -8,15 +8,12 @@ public class Attribute {
 	private String value;
 	private String defaultValue;
 	private AttributeType attrType;
-	// private int attrTypeId;
 	ObservableList<Attribute> attributes;
 	private int serviceId;
 	private boolean mandatory;
 
-
 	public Attribute() {
 		super();
-		value = defaultValue;
 	}
 
 	public ObservableList<Attribute> getAttributes() {

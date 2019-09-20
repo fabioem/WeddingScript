@@ -22,7 +22,7 @@ public class AttributeEditWindow {
 
 	private BorderPane layout = new BorderPane();
 
-	public void display(Attribute attribute) {
+	public void display(Attribute mainAttribute) {
 		Stage window = new Stage();
 
 		// Block events to other windows
@@ -39,13 +39,13 @@ public class AttributeEditWindow {
 		topGrid.setHgap(10);
 
 		// Name - constrains use (child, column, row)
-		Label nameLabel = new Label(attribute.getName());
+		Label nameLabel = new Label(mainAttribute.getName());
 		GridPane.setConstraints(nameLabel, 0, 0);
 		GridPane.setHalignment(nameLabel, HPos.CENTER);
 		GridPane.setHgrow(nameLabel, Priority.ALWAYS);
 
 		// value
-		Label valueLabel = new Label(attribute.getValue());
+		Label valueLabel = new Label(mainAttribute.getValue());
 		GridPane.setConstraints(valueLabel, 0, 1);
 		GridPane.setHalignment(valueLabel, HPos.CENTER);
 		GridPane.setHgrow(nameLabel, Priority.ALWAYS);
@@ -56,7 +56,7 @@ public class AttributeEditWindow {
 		TableView<Attribute> attributeTable = new TableView<Attribute>();
 		attributeTable.setEditable(true);
 
-		List<Attribute> attributes = weddingScriptController.getAttributes();
+		List<Attribute> attributes = weddingScriptController.getAttributesAttributes(mainAttribute);
 		attributeTable.getItems().addAll(attributes);
 
 		VBox tablesBox = new VBox();

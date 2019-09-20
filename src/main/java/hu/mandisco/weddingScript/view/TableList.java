@@ -19,7 +19,6 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -354,22 +353,25 @@ public class TableList {
 		TableColumn<Attribute, String> nameCol = new TableColumn<Attribute, String>("Név");
 		nameCol.setCellValueFactory(new PropertyValueFactory<Attribute, String>("name"));
 
-		TableColumn<Attribute, String> defValueCol = new TableColumn<Attribute, String>("Érték");
+		TableColumn<Attribute, String> defValueCol = new TableColumn<Attribute, String>("Alapértelmezett érték");
 		defValueCol.setCellValueFactory(new PropertyValueFactory<Attribute, String>("defaultValue"));
 
 		TableColumn<Attribute, Boolean> isMandatoryCol = new TableColumn<Attribute, Boolean>("Kötelező");
 		isMandatoryCol.setCellValueFactory(new PropertyValueFactory<Attribute, Boolean>("mandatory"));
-		// isMandatoryCol.setCellFactory(column -> new
-		// CheckBoxTableCell<Attribute, Boolean>());
-		isMandatoryCol.setCellFactory(CheckBoxTableCell.forTableColumn(isMandatoryCol));
-		isMandatoryCol.setEditable(false);
+		isMandatoryCol.setCellFactory(tc -> new TableCell<Attribute, Boolean>() {
+			@Override
+			protected void updateItem(Boolean item, boolean empty) {
+				super.updateItem(item, empty);
+				setText(empty ? null : item.booleanValue() ? "igen" : "nem");
+			}
+		});
 
 		attributeListTable.getColumns().add(nameCol);
 		attributeListTable.getColumns().add(defValueCol);
 		attributeListTable.getColumns().add(isMandatoryCol);
 
-		List<Attribute> attrubutes = weddingScriptController.getAttributes();
-		attributeListTable.getItems().addAll(attrubutes);
+		List<Attribute> attributes = weddingScriptController.getAttributes();
+		attributeListTable.getItems().addAll(attributes);
 
 		return attributeListTable;
 	}

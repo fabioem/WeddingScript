@@ -141,12 +141,11 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				String defValue = rs.getString("defaultValue");
 				Boolean mandatory = rs.getInt("mandatory") != 0;
 
-				System.out.println(rs.getString("name") + "\t" + rs.getInt("mandatory") + "\t" + mandatory);
-
 				Attribute attribute = new Attribute();
 				attribute.setName(name);
 				attribute.setAttrId(attrId);
 				attribute.setDefaultValue(defValue);
+				attribute.setValue(defValue);
 				attribute.setMandatory(mandatory);
 
 				attributes.add(attribute);
@@ -984,7 +983,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 			conn = DriverManager.getConnection(databaseConnectionURL);
 			pst = conn.prepareStatement(
-					"SELECT * FROM attributes WHERE attrId IN (SELECT attrId FROM attrAttr WHERE mainAttrId = ?)");
+					"SELECT * FROM attributes WHERE attributeId IN (SELECT subAttrId FROM attrAttr WHERE mainAttrId = ?)");
 
 			int index = 1;
 			pst.setInt(index++, mainAttribute.getAttrId());
