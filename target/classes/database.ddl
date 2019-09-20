@@ -45,13 +45,13 @@ CREATE TABLE attributes(
 
 CREATE TABLE attributeTypes(
 	attrTypeId INTEGER PRIMARY KEY AUTOINCREMENT,
-	name varchar(10) NOT NULL
+	name varchar(10) UNIQUE NOT NULL
 );
 
 CREATE TABLE scriptAttr(
 	scriptId int NOT NULL,
 	attrId int NOT NULL,
-	value varchar(255) NOT NULL,
+	value varchar(255),
 	FOREIGN KEY (scriptId) REFERENCES scripts(scriptId) ON DELETE CASCADE,
 	FOREIGN KEY (attrId) REFERENCES attributes(attrId) ON DELETE CASCADE
 );

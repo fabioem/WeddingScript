@@ -58,7 +58,7 @@ public class ScriptEditWindow {
 		Label commentLabel = new Label(script.getComment());
 		GridPane.setConstraints(commentLabel, 0, 1);
 		GridPane.setHalignment(commentLabel, HPos.CENTER);
-		GridPane.setHgrow(nameLabel, Priority.ALWAYS);
+		GridPane.setHgrow(commentLabel, Priority.ALWAYS);
 
 		topGrid.getChildren().addAll(nameLabel, commentLabel);
 		centerLayout.setTop(topGrid);
@@ -69,8 +69,8 @@ public class ScriptEditWindow {
 		centerLayout.setCenter(scriptAttributesTable);
 
 		// 2. Program
-		TableView<Program> programTable = new TableView<Program>();
-		programTable.setEditable(true);
+		TableView<Program> scriptProgramsTable = new TableView<Program>();
+		scriptProgramsTable.setEditable(true);
 		TableColumn<Program, LocalDateTime> timeCol = new TableColumn<Program, LocalDateTime>("Idő");
 		timeCol.setCellValueFactory(new PropertyValueFactory<Program, LocalDateTime>("defaultTime"));
 		timeCol.setCellFactory(column -> {
@@ -92,30 +92,30 @@ public class ScriptEditWindow {
 		TableColumn<Program, String> nameCol = new TableColumn<Program, String>("Program");
 		nameCol.setCellValueFactory(new PropertyValueFactory<Program, String>("name"));
 
-		programTable.getColumns().add(timeCol);
-		programTable.getColumns().add(nameCol);
+		scriptProgramsTable.getColumns().add(timeCol);
+		scriptProgramsTable.getColumns().add(nameCol);
 
 		List<Program> programs = weddingScriptController.getScriptPrograms(script);
-		programTable.getItems().addAll(programs);
+		scriptProgramsTable.getItems().addAll(programs);
 
 		// Center Grid
 		GridPane centerGrid = new GridPane();
 
 		// Script Attributes
 		GridPane.setConstraints(scriptAttributesTable, 0, 0);
-		TableView<Attribute> attributeAntiTable = tableList.getAttributeListNotInScript(script);
+		TableView<Attribute> attributeAntiTable = tableList.getAttributeListNotInScript(script, scriptAttributesTable);
 		GridPane.setConstraints(attributeAntiTable, 1, 0);
 
 		// Script programs
-		GridPane.setConstraints(programTable, 0, 1);
-		TableView<Program> programAntiTable = tableList.getProgramListNotInScript(script, programTable);
+		GridPane.setConstraints(scriptProgramsTable, 0, 1);
+		TableView<Program> programAntiTable = tableList.getProgramListNotInScript(script, scriptProgramsTable);
 		GridPane.setConstraints(programAntiTable, 1, 1);
 
 		// Center grid adding
-		centerGrid.getChildren().addAll(scriptAttributesTable, attributeAntiTable, programTable, programAntiTable);
+		centerGrid.getChildren().addAll(scriptAttributesTable, attributeAntiTable, scriptProgramsTable, programAntiTable);
 		GridPane.setHgrow(scriptAttributesTable, Priority.ALWAYS);
 		GridPane.setHgrow(attributeAntiTable, Priority.ALWAYS);
-		GridPane.setHgrow(programTable, Priority.ALWAYS);
+		GridPane.setHgrow(scriptProgramsTable, Priority.ALWAYS);
 		GridPane.setHgrow(programAntiTable, Priority.ALWAYS);
 		GridPane.setHgrow(centerGrid, Priority.ALWAYS);
 		centerLayout.setCenter(centerGrid);

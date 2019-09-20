@@ -29,7 +29,7 @@ public interface WeddingScriptDAO {
 
 	public List<Attribute> getProgramAttributes(Program program);
 
-	public List<Program> getScriptProgramsInverse(Script script);
+	public List<Program> getProgramsNotInScript(Script script);
 
 	public boolean addScript(Script script);
 
@@ -56,4 +56,6 @@ public interface WeddingScriptDAO {
 	public List<Attribute> getAttributesOfScript(Script script);
 
 	public List<Attribute> getAttributesNotInScript(Script script);
+
+	public boolean addAttributeToScript(Script script, Attribute attribute);
 }

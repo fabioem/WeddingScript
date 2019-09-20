@@ -54,8 +54,8 @@ public class WeddingScriptController {
 		return dao.getScriptPrograms(script);
 	};
 
-	public List<Program> getScriptProgramsInverse(Script script) {
-		return dao.getScriptProgramsInverse(script);
+	public List<Program> getProgramsNotInScript(Script script) {
+		return dao.getProgramsNotInScript(script);
 	};
 
 	public List<Attribute> getProgramAttributes(Program program) {
@@ -101,5 +101,9 @@ public class WeddingScriptController {
 
 	public List<Attribute> getAttributesNotInScript(Script script) {
 		return dao.getAttributesNotInScript(script);
+	}
+
+	public boolean addAttributeToScript(Script script, Attribute attribute) {
+		return dao.addAttributeToScript(script, attribute);
 	}
 }

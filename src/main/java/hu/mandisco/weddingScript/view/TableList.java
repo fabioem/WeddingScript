@@ -196,7 +196,7 @@ public class TableList {
 		table.getColumns().add(nameCol);
 		table.getColumns().add(defaultTimeCol);
 
-		List<Program> programs = weddingScriptController.getScriptProgramsInverse(script);
+		List<Program> programs = weddingScriptController.getProgramsNotInScript(script);
 
 		table.setRowFactory(tv -> {
 			TableRow<Program> row = new TableRow<>();
@@ -212,8 +212,6 @@ public class TableList {
 					table.setItems(sortedData);
 					data.addAll(programs);
 
-					// table.getItems().clear();
-					// table.getItems().addAll(programs);
 					weddingScriptController.addProgramToScript(script, rowData);
 					programTable.getItems().clear();
 					programTable.getItems().addAll(weddingScriptController.getScriptPrograms(script));
@@ -409,22 +407,10 @@ public class TableList {
 		return attributeListTable;
 	}
 
-	public TableView<Attribute> getAttributeListNotInScript(Script script) {
-		TableView<Attribute> attributeListTable = new TableView<Attribute>();
+	public TableView<Attribute> getAttributeListNotInScript(Script script, TableView<Attribute> attributeTable) {
+		TableView<Attribute> table = new TableView<Attribute>();
 
-		attributeListTable.setEditable(true);
-
-		attributeListTable.setRowFactory(tv -> {
-			TableRow<Attribute> row = new TableRow<>();
-			row.setOnMouseClicked(event -> {
-				if (event.getClickCount() == 2 && (!row.isEmpty())) {
-					Attribute selectedAttribute = row.getItem();
-					AttributeEditWindow window = new AttributeEditWindow();
-					window.display(selectedAttribute);
-				}
-			});
-			return row;
-		});
+		table.setEditable(true);
 
 		TableColumn<Attribute, String> nameCol = new TableColumn<Attribute, String>("Név");
 		nameCol.setCellValueFactory(new PropertyValueFactory<Attribute, String>("name"));
@@ -432,13 +418,50 @@ public class TableList {
 		TableColumn<Attribute, String> valueCol = new TableColumn<Attribute, String>("Alap érték");
 		valueCol.setCellValueFactory(new PropertyValueFactory<Attribute, String>("defaultValue"));
 
-		attributeListTable.getColumns().add(nameCol);
-		attributeListTable.getColumns().add(valueCol);
+		table.getColumns().add(nameCol);
+		table.getColumns().add(valueCol);
 
 		List<Attribute> attributes = weddingScriptController.getAttributesNotInScript(script);
-		attributeListTable.getItems().addAll(attributes);
 
-		return attributeListTable;
+		table.setRowFactory(tv -> {
+			TableRow<Attribute> row = new TableRow<>();
+			row.setOnMouseClicked(event -> {
+				if (event.getClickCount() == 2 && (!row.isEmpty())) {
+					Attribute rowData = row.getItem();
+					attributes.remove(rowData);
+
+					// Handle SortedList
+					ObservableList<Attribute> data = FXCollections.observableArrayList();
+					SortedList<Attribute> sortedData = new SortedList<>(data);
+					sortedData.comparatorProperty().bind(table.comparatorProperty());
+					table.setItems(sortedData);
+					data.addAll(attributes);
+
+					weddingScriptController.addAttributeToScript(script, rowData);
+					attributeTable.getItems().clear();
+					attributeTable.getItems().addAll(weddingScriptController.getScriptAttributes(script));
+
+				}
+			});
+			return row;
+		});
+
+		table.getItems().addAll(attributes);
+
+		// SORT BY DEFAULT TIME
+		ObservableList<Attribute> data = FXCollections.observableArrayList();
+		SortedList<Attribute> sortedData = new SortedList<>(data);
+		// this ensures the sortedData is sorted according to the sort columns
+		// in the table:
+		sortedData.comparatorProperty().bind(table.comparatorProperty());
+		table.setItems(sortedData);
+		// programmatically set a sort column:
+		table.getSortOrder().add(nameCol);
+		// note that you should always manipulate the underlying list, not the
+		// sortedList:
+		data.addAll(attributes);
+
+		return table;
 	}
 
 }
