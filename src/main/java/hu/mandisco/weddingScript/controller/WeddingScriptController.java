@@ -26,7 +26,7 @@ public class WeddingScriptController {
 		return dao.getPrograms();
 	}
 
-	public List<Service> getServices() {
+	public ObservableList<Service> getServices() {
 		return dao.getServices();
 	}
 

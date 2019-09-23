@@ -19,7 +19,7 @@ public interface WeddingScriptDAO {
 
 	public List<Script> getScripts();
 
-	public List<Service> getServices();
+	public ObservableList<Service> getServices();
 
 	public ObservableList<AttributeType> getAttributeTypes();
 

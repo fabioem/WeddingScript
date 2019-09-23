@@ -83,13 +83,13 @@ CREATE TABLE scriptService(
 	FOREIGN KEY (scriptId) REFERENCES scripts(scriptId) ON DELETE CASCADE
 );
 
-CREATE TABLE serviceAttr(
-	serviceId int NOT NULL,
-	attrId int NOT NULL,
-	defaultValue varchar(255),
-	FOREIGN KEY (serviceId) REFERENCES services(serviceId) ON DELETE CASCADE,
-	FOREIGN KEY (attrId) REFERENCES attributes(attrId) ON DELETE CASCADE
-);
+-- CREATE TABLE serviceAttr(
+	-- serviceId int NOT NULL,
+	-- attrId int NOT NULL,
+	-- defaultValue varchar(255),
+	-- FOREIGN KEY (serviceId) REFERENCES services(serviceId) ON DELETE CASCADE,
+	-- FOREIGN KEY (attrId) REFERENCES attributes(attrId) ON DELETE CASCADE
+-- );
 
 -- Insert demo values
 INSERT INTO programs VALUES(0, "Vacsora", 68400000);
@@ -102,6 +102,7 @@ INSERT INTO services VALUES(1, "Műsorvezetés");
 INSERT INTO services VALUES(2, "LED-es oldalfal világítás");
 INSERT INTO services VALUES(3, "Ceremónia hangosítás kis cs.");
 INSERT INTO services VALUES(4, "Ceremónia hangosítás nagy cs.");
+INSERT INTO services VALUES(5, "Felhőtánc");
 INSERT INTO attributeTypes VALUES(0, "Basic");
 INSERT INTO attributeTypes VALUES(1, "Script");
 INSERT INTO attributeTypes VALUES(2, "Program");

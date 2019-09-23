@@ -8,6 +8,11 @@ public class Service {
 	ObservableList<Program> programList;
 	ObservableList<Attribute> attributeList;
 
+	@Override
+	public String toString() {
+		return name;
+	}
+
 	public ObservableList<Attribute> getAttributeList() {
 		return attributeList;
 	}

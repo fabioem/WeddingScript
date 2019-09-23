@@ -3,6 +3,7 @@ package hu.mandisco.weddingScript.view.create;
 import hu.mandisco.weddingScript.controller.WeddingScriptController;
 import hu.mandisco.weddingScript.model.bean.Attribute;
 import hu.mandisco.weddingScript.model.bean.AttributeType;
+import hu.mandisco.weddingScript.model.bean.Service;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -23,6 +24,7 @@ public class AttributeCreateWindow {
 	private static WeddingScriptController weddingScriptController = new WeddingScriptController();
 
 	private ObservableList<Attribute> attributeItems;
+	private Boolean programAttrTypeSelected = false;
 
 	public AttributeCreateWindow(ObservableList<Attribute> attributeItems) {
 		this.attributeItems = attributeItems;
@@ -60,35 +62,55 @@ public class AttributeCreateWindow {
 		GridPane.setConstraints(defValueInput, 1, 1);
 		defValueInput.setPromptText("Alapértelmezett érték");
 
-		// Attribute Type Label - constrains use (child, column, row)
+		// Attribute Type Label
 		Label attrTypeLabel = new Label("Attribútum típus:");
 		GridPane.setConstraints(attrTypeLabel, 0, 2);
 
-		ObservableList<AttributeType> options = weddingScriptController.getAttributeTypes();
-
-		ComboBox<AttributeType> attrTypeComboBox = new ComboBox<AttributeType>(options);
-		attrTypeComboBox.setValue(options.get(0));
+		// Attribute Type ComboBox
+		ObservableList<AttributeType> attrTypeOptions = weddingScriptController.getAttributeTypes();
+		ComboBox<AttributeType> attrTypeComboBox = new ComboBox<AttributeType>(attrTypeOptions);
+		attrTypeComboBox.setValue(attrTypeOptions.get(0));
 		GridPane.setConstraints(attrTypeComboBox, 1, 2);
 
-
 		// isDefault Label
-		Label isDefLabel = new Label("Alapértelmezett érték:");
-		GridPane.setConstraints(isDefLabel, 0, 3);
+		Label isMandatoryLabel = new Label("Kötelező");
+		GridPane.setConstraints(isMandatoryLabel, 0, 3);
 
 		// Default Value Input
-		CheckBox isDefInput = new CheckBox();
-		GridPane.setConstraints(isDefInput, 1, 3);
+		CheckBox isMandatoryInput = new CheckBox();
+		GridPane.setConstraints(isMandatoryInput, 1, 3);
+
+		// Service Label
+		Label serviceLabel = new Label("Szolgáltatás:");
+		GridPane.setConstraints(serviceLabel, 0, 4);
+		serviceLabel.setDisable(true);
+
+		// Service ComboBox
+		ObservableList<Service> serviceOptions = weddingScriptController.getServices();
+		ComboBox<Service> serviceComboBox = new ComboBox<Service>(serviceOptions);
+		GridPane.setConstraints(serviceComboBox, 1, 4);
+		serviceComboBox.setDisable(true);
+
+		// Event handling
+		attrTypeComboBox.setOnAction((e) -> {
+			programAttrTypeSelected = (attrTypeComboBox.getValue().getName().equals("Program"));
+			serviceLabel.setDisable(!programAttrTypeSelected);
+			serviceComboBox.setDisable(!programAttrTypeSelected);
+		});
 
 		// Save
 		Button saveButton = new Button("Mentés");
-		GridPane.setConstraints(saveButton, 0, 4);
+		GridPane.setConstraints(saveButton, 0, 5);
 		saveButton.setOnAction(e -> {
 
 			Attribute attribute = new Attribute();
 			attribute.setName(nameInput.getText());
-			attribute.setDefaultValue(isDefInput.getText());
+			attribute.setDefaultValue(defValueInput.getText());
 			attribute.setAttrType(attrTypeComboBox.getValue());
-			attribute.setMandatory(isDefInput.isPressed());
+			attribute.setMandatory(isMandatoryInput.isPressed());
+			if (programAttrTypeSelected) {
+				attribute.setServiceId(serviceComboBox.getValue().getServiceId());
+			}
 
 			if (nameInput.getText().isEmpty()) {
 				Alert alert = new Alert(AlertType.ERROR, "A név nem lehet üres!", ButtonType.OK);
@@ -105,11 +127,11 @@ public class AttributeCreateWindow {
 
 		Button closeButton = new Button("Mégsem");
 		closeButton.setOnAction(e -> window.close());
-		GridPane.setConstraints(closeButton, 1, 4);
+		GridPane.setConstraints(closeButton, 1, 5);
 
 		// Add everything to grid
-		grid.getChildren().addAll(nameLabel, nameInput, defValueLabel, defValueInput, isDefLabel, isDefInput, attrTypeLabel, attrTypeComboBox,
-				saveButton, closeButton);
+		grid.getChildren().addAll(nameLabel, nameInput, defValueLabel, defValueInput, serviceLabel, serviceComboBox,
+				isMandatoryLabel, isMandatoryInput, attrTypeLabel, attrTypeComboBox, saveButton, closeButton);
 
 		Scene scene = new Scene(grid);
 		window.setScene(scene);

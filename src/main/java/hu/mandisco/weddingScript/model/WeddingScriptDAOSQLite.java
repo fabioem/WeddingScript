@@ -32,8 +32,6 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 	private static final String DATABASE_FILE = "src\\main\\resources\\database.db";
 	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-	private static ObservableList<AttributeType> attributeTypeList = FXCollections.observableArrayList();
-
 	private static final String DATEFORMAT_DATETIME_FOR_INSERT = "yyyy-MM-dd HH:mm:ss";
 	// private static final String DATEFORMAT_DATE_FOR_INSERT = "yyyy-MM-dd";
 
@@ -41,10 +39,11 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 	Path pathToTheDatabaseFile = currentWorkingFolder.resolve(DATABASE_FILE);
 	String databaseConnectionURL = JDBC_CONNECTION_PREFIX + pathToTheDatabaseFile.toUri().toString();
 
-	List<Program> programs = new ArrayList<Program>();
-	List<Script> scripts = new ArrayList<Script>();
-	List<Service> services = new ArrayList<Service>();
-	List<Attribute> attributes = new ArrayList<Attribute>();
+	private static ObservableList<AttributeType> attributeTypeList = FXCollections.observableArrayList();
+	private static List<Program> programs = new ArrayList<Program>();
+	private static List<Script> scripts = new ArrayList<Script>();
+	private static ObservableList<Service> services = FXCollections.observableArrayList();
+	private static List<Attribute> attributes = new ArrayList<Attribute>();
 
 	public WeddingScriptDAOSQLite() {
 		super();
@@ -286,7 +285,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 	}
 
-	public List<Service> getServices() {
+	public ObservableList<Service> getServices() {
 		Connection conn = null;
 		Statement st = null;
 
@@ -1148,8 +1147,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 		try {
 
 			conn = DriverManager.getConnection(databaseConnectionURL);
-			pst = conn.prepareStatement(
-					"SELECT * FROM attributes, scriptAttr WHERE "
+			pst = conn.prepareStatement("SELECT * FROM attributes, scriptAttr WHERE "
 					+ "attrTypeId = (SELECT attrTypeId FROM attributeTypes WHERE name = \"Basic\") "
 					+ "AND attributeId NOT IN (SELECT attrId FROM scriptAttr WHERE scriptId = ?)");
 
