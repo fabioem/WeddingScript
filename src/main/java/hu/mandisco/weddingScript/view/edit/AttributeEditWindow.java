@@ -4,6 +4,7 @@ import java.util.List;
 
 import hu.mandisco.weddingScript.controller.WeddingScriptController;
 import hu.mandisco.weddingScript.model.bean.Attribute;
+import hu.mandisco.weddingScript.view.TableList;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -12,7 +13,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -24,6 +24,8 @@ public class AttributeEditWindow {
 
 	public void display(Attribute mainAttribute) {
 		Stage window = new Stage();
+
+		TableList tableList = new TableList();
 
 		// Block events to other windows
 		window.initModality(Modality.APPLICATION_MODAL);
@@ -38,7 +40,7 @@ public class AttributeEditWindow {
 		topGrid.setVgap(8);
 		topGrid.setHgap(10);
 
-		// Name - constrains use (child, column, row)
+		// Name
 		Label nameLabel = new Label(mainAttribute.getName());
 		GridPane.setConstraints(nameLabel, 0, 0);
 		GridPane.setHalignment(nameLabel, HPos.CENTER);
@@ -53,16 +55,13 @@ public class AttributeEditWindow {
 		topGrid.getChildren().addAll(nameLabel, valueLabel);
 		centerLayout.setTop(topGrid);
 		// CENTER - CENTER
-		TableView<Attribute> attributeTable = new TableView<Attribute>();
+		TableView<Attribute> attributeTable = tableList.getAttributeListOfAttributes(mainAttribute);
 		attributeTable.setEditable(true);
 
-		List<Attribute> attributes = weddingScriptController.getAttributesAttributes(mainAttribute);
+		List<Attribute> attributes = weddingScriptController.getAttributesOfAttribute(mainAttribute);
 		attributeTable.getItems().addAll(attributes);
 
-		VBox tablesBox = new VBox();
-		tablesBox.getChildren().addAll(attributeTable);
-
-		centerLayout.setCenter(tablesBox);
+		centerLayout.setCenter(attributeTable);
 		layout.setCenter(centerLayout);
 
 		Scene scene = new Scene(layout, 700, 500);

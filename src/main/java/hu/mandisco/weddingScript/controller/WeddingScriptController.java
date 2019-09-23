@@ -87,10 +87,6 @@ public class WeddingScriptController {
 		return dao.getAttributes();
 	};
 
-	public List<Attribute> getAttributesAttributes(Attribute mainAttribute){
-		return dao.getAttributesAttributes(mainAttribute);
-	}
-
 	public boolean addAttributeToAttribute(Attribute mainAttribute, Attribute subAttribute) {
 		return dao.addAttributeToAttribute(mainAttribute, subAttribute);
 	}
@@ -105,5 +101,9 @@ public class WeddingScriptController {
 
 	public boolean addAttributeToScript(Script script, Attribute attribute) {
 		return dao.addAttributeToScript(script, attribute);
+	}
+
+	public List<Attribute> getAttributesOfAttribute(Attribute attribute) {
+		return dao.getAttributesOfAttribute(attribute);
 	}
 }

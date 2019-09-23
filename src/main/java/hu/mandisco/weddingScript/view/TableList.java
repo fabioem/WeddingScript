@@ -464,4 +464,36 @@ public class TableList {
 		return table;
 	}
 
+	public TableView<Attribute> getAttributeListOfAttributes(Attribute attribute) {
+		TableView<Attribute> attributeListTable = new TableView<Attribute>();
+
+		attributeListTable.setEditable(true);
+
+		attributeListTable.setRowFactory(tv -> {
+			TableRow<Attribute> row = new TableRow<>();
+			row.setOnMouseClicked(event -> {
+				if (event.getClickCount() == 2 && (!row.isEmpty())) {
+					Attribute selectedAttribute = row.getItem();
+					AttributeEditWindow window = new AttributeEditWindow();
+					window.display(selectedAttribute);
+				}
+			});
+			return row;
+		});
+
+		TableColumn<Attribute, String> nameCol = new TableColumn<Attribute, String>("Név");
+		nameCol.setCellValueFactory(new PropertyValueFactory<Attribute, String>("name"));
+
+		TableColumn<Attribute, String> valueCol = new TableColumn<Attribute, String>("Érték");
+		valueCol.setCellValueFactory(new PropertyValueFactory<Attribute, String>("value"));
+
+		attributeListTable.getColumns().add(nameCol);
+		attributeListTable.getColumns().add(valueCol);
+
+		List<Attribute> attributes = weddingScriptController.getAttributesOfAttribute(attribute);
+		attributeListTable.getItems().addAll(attributes);
+
+		return attributeListTable;
+	}
+
 }

@@ -963,7 +963,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 	}
 
-	public List<Attribute> getAttributesAttributes(Attribute mainAttribute) {
+	public List<Attribute> getAttributesOfAttribute(Attribute mainAttribute) {
 		Connection conn = null;
 		PreparedStatement pst = null;
 		String errorDesc = "listing attribute's attributes";
@@ -1250,5 +1250,6 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 		return rvSucceeded;
 	}
+
 
 }

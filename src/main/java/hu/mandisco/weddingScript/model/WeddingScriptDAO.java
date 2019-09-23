@@ -49,7 +49,7 @@ public interface WeddingScriptDAO {
 
 	public List<Attribute> getAttributes();
 
-	public List<Attribute> getAttributesAttributes(Attribute mainAttribute);
+	public List<Attribute> getAttributesOfAttribute(Attribute mainAttribute);
 
 	public boolean addAttributeToAttribute(Attribute mainAttribute, Attribute subAttribute);
 
@@ -58,4 +58,5 @@ public interface WeddingScriptDAO {
 	public List<Attribute> getAttributesNotInScript(Script script);
 
 	public boolean addAttributeToScript(Script script, Attribute attribute);
+
 }
