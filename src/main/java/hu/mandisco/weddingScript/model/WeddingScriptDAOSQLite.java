@@ -1034,7 +1034,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 		try {
 
 			conn = DriverManager.getConnection(databaseConnectionURL);
-			pst = conn.prepareStatement("INSERT INTO attrAttr(mainAttrId, attrId) VALUES (?, ?)");
+			pst = conn.prepareStatement("INSERT INTO attrAttr(mainAttrId, subAttrId) VALUES (?, ?)");
 
 			int index = 1;
 
@@ -1083,10 +1083,12 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 		try {
 
 			conn = DriverManager.getConnection(databaseConnectionURL);
-			pst = conn.prepareStatement(
-					"SELECT * FROM attributes, scriptAttr WHERE attributeId IN (SELECT attrId FROM scriptAttr WHERE scriptId = ?)");
+			pst = conn.prepareStatement("SELECT * FROM attributes, scriptAttr WHERE scriptId = ? "
+					+ "AND attributes.attributeId = scriptAttr.attrId "
+					+ "AND attributeId IN (SELECT attrId FROM scriptAttr WHERE scriptId = ?)");
 
 			int index = 1;
+			pst.setInt(index++, script.getScriptId());
 			pst.setInt(index++, script.getScriptId());
 			conn.setAutoCommit(false);
 			ResultSet rs = pst.executeQuery();
@@ -1141,18 +1143,31 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 	public List<Attribute> getAttributesNotInScript(Script script) {
 		Connection conn = null;
 		PreparedStatement pst = null;
-		String errorDesc = "listing script's attributes";
+		String errorDesc = "reverse listing script's attributes";
 		List<Attribute> scriptAttrList = new ArrayList<Attribute>();
 
 		try {
 
 			conn = DriverManager.getConnection(databaseConnectionURL);
-			pst = conn.prepareStatement("SELECT * FROM attributes, scriptAttr WHERE "
+			// String sql = "SELECT * FROM attributes, scriptAttr WHERE 1 = 1 "
+			// + "AND attrTypeId = (SELECT attrTypeId FROM attributeTypes WHERE
+			// name = \"Basic\") "
+			// + "AND attributeId NOT IN (SELECT attrId FROM scriptAttr WHERE
+			// scriptId = ?) "
+			// + "AND attributes.attributeId = scriptAttr.attrId";
+
+			String sql = "SELECT * FROM attributes WHERE "
 					+ "attrTypeId = (SELECT attrTypeId FROM attributeTypes WHERE name = \"Basic\") "
-					+ "AND attributeId NOT IN (SELECT attrId FROM scriptAttr WHERE scriptId = ?)");
+					+ "AND attributeId NOT IN (SELECT attrId FROM scriptAttr WHERE scriptId = ?) ";
+
+			pst = conn.prepareStatement(sql);
+
+			System.out.println(sql);
+			System.out.println(script.getScriptId());
 
 			int index = 1;
 			pst.setInt(index++, script.getScriptId());
+
 			conn.setAutoCommit(false);
 			ResultSet rs = pst.executeQuery();
 
@@ -1160,14 +1175,14 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				int attrId = rs.getInt("attributeId");
 				String name = rs.getString("name");
 				String defValue = rs.getString("defaultValue");
-				String value = rs.getString("value");
+				// String value = rs.getString("value");
 				Boolean mandatory = rs.getInt("mandatory") != 0;
 
 				Attribute attribute = new Attribute();
 				attribute.setName(name);
 				attribute.setAttrId(attrId);
 				attribute.setDefaultValue(defValue);
-				attribute.setValue(value);
+				// attribute.setValue(value);
 				attribute.setMandatory(mandatory);
 
 				scriptAttrList.add(attribute);
@@ -1250,6 +1265,5 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 		return rvSucceeded;
 	}
-
 
 }
