@@ -8,6 +8,7 @@ import hu.mandisco.weddingScript.controller.WeddingScriptController;
 import hu.mandisco.weddingScript.model.bean.Attribute;
 import hu.mandisco.weddingScript.model.bean.Program;
 import hu.mandisco.weddingScript.model.bean.Script;
+import hu.mandisco.weddingScript.model.bean.Service;
 import hu.mandisco.weddingScript.view.TableList;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
@@ -88,8 +89,8 @@ public class ScriptEditWindow {
 		attributesTable.setEditable(true);
 
 		// 2. Program
-		TableView<Program> scriptProgramsTable = new TableView<Program>();
-		scriptProgramsTable.setEditable(true);
+		TableView<Program> programsTable = new TableView<Program>();
+		programsTable.setEditable(true);
 		TableColumn<Program, LocalDateTime> timeCol = new TableColumn<Program, LocalDateTime>("Idő");
 		timeCol.setCellValueFactory(new PropertyValueFactory<Program, LocalDateTime>("defaultTime"));
 		timeCol.setCellFactory(column -> {
@@ -108,14 +109,26 @@ public class ScriptEditWindow {
 			return cell;
 		});
 
-		TableColumn<Program, String> nameCol = new TableColumn<Program, String>("Program");
-		nameCol.setCellValueFactory(new PropertyValueFactory<Program, String>("name"));
+		TableColumn<Program, String> programsNameCol = new TableColumn<Program, String>("Program");
+		programsNameCol.setCellValueFactory(new PropertyValueFactory<Program, String>("name"));
 
-		scriptProgramsTable.getColumns().add(timeCol);
-		scriptProgramsTable.getColumns().add(nameCol);
+		programsTable.getColumns().add(timeCol);
+		programsTable.getColumns().add(programsNameCol);
 
 		List<Program> programs = weddingScriptController.getScriptPrograms(script);
-		scriptProgramsTable.getItems().addAll(programs);
+		programsTable.getItems().addAll(programs);
+
+		// 3. Service
+		TableView<Service> servicesTable = new TableView<Service>();
+		servicesTable.setEditable(true);
+
+		TableColumn<Service, String> scriptsNameCol = new TableColumn<Service, String>("Szolgáltatás");
+		scriptsNameCol.setCellValueFactory(new PropertyValueFactory<Service, String>("name"));
+
+		servicesTable.getColumns().add(scriptsNameCol);
+
+		List<Service> services = weddingScriptController.getServicesOfScript(script);
+		servicesTable.getItems().addAll(services);
 
 		// Center Grid
 		GridPane attributesCenterGrid = new GridPane();
@@ -130,24 +143,29 @@ public class ScriptEditWindow {
 		GridPane.setHgrow(attributeAntiTable, Priority.ALWAYS);
 
 		// Script programs
-		TableView<Program> programAntiTable = tableList.getProgramListNotInScript(script, scriptProgramsTable);
-		GridPane.setConstraints(scriptProgramsTable, 0, 0);
-		GridPane.setHgrow(scriptProgramsTable, Priority.ALWAYS);
+		TableView<Program> programAntiTable = tableList.getProgramListNotInScript(script, programsTable);
+		GridPane.setConstraints(programsTable, 0, 0);
+		GridPane.setHgrow(programsTable, Priority.ALWAYS);
 		GridPane.setConstraints(programAntiTable, 1, 0);
 		GridPane.setHgrow(programAntiTable, Priority.ALWAYS);
+
+		// Script services
+		TableView<Service> servicesAntiTable = tableList.getServiceListNotInScript(script, servicesTable);
+		GridPane.setConstraints(servicesTable, 0, 0);
+		GridPane.setHgrow(servicesTable, Priority.ALWAYS);
+		GridPane.setConstraints(servicesAntiTable, 1, 0);
+		GridPane.setHgrow(servicesAntiTable, Priority.ALWAYS);
 
 		// Center grid adding
 		attributesCenterGrid.getChildren().addAll(attributesTable, attributeAntiTable);
 		attributesTab.setContent(attributesCenterGrid);
 
-		programsCenterGrid.getChildren().addAll(scriptProgramsTable, programAntiTable);
+		programsCenterGrid.getChildren().addAll(programsTable, programAntiTable);
 		programsTab.setContent(programsCenterGrid);
 
-		/*
-		 * TODO services tab
-		 * servicesCenterGrid.getChildren().addAll();
-		 * servicesTab.setContent();
-		 */
+		// TODO services tab
+		servicesCenterGrid.getChildren().addAll(servicesTable, servicesAntiTable);
+		servicesTab.setContent(servicesCenterGrid);
 
 		GridPane.setHgrow(attributesCenterGrid, Priority.ALWAYS);
 		centerLayout.setCenter(tabPane);

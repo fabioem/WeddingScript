@@ -40,10 +40,6 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 	String databaseConnectionURL = JDBC_CONNECTION_PREFIX + pathToTheDatabaseFile.toUri().toString();
 
 	private static ObservableList<AttributeType> attributeTypeList = FXCollections.observableArrayList();
-	private static List<Program> programs = new ArrayList<Program>();
-	private static List<Script> scripts = new ArrayList<Script>();
-	private static ObservableList<Service> services = FXCollections.observableArrayList();
-	private static List<Attribute> attributes = new ArrayList<Attribute>();
 
 	public WeddingScriptDAOSQLite() {
 		super();
@@ -64,6 +60,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 		Connection conn = null;
 		Statement st = null;
 
+		List<Program> programs = new ArrayList<Program>();
 		programs.clear();
 
 		try {
@@ -117,6 +114,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 		Connection conn = null;
 		Statement st = null;
 
+		List<Attribute> attributes = new ArrayList<Attribute>();
 		attributes.clear();
 
 		try {
@@ -225,6 +223,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 		Connection conn = null;
 		Statement st = null;
 
+		List<Script> scripts = new ArrayList<Script>();
 		scripts.clear();
 
 		try {
@@ -289,6 +288,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 		Connection conn = null;
 		Statement st = null;
 
+		ObservableList<Service> services = FXCollections.observableArrayList();
 		services.clear();
 
 		try {
@@ -431,19 +431,22 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 	}
 
 	@Override
-	public List<Attribute> getScriptAttributes(Script script) {
+	public List<Attribute> getAttributesOfScript2(Script script) {
+		// TODO same as getAttributesOfScript ????
 		String errorName = "script attributes";
 		String errorType = "getting";
 		Connection conn = null;
 		PreparedStatement pst = null;
 
+		List<Attribute> attributes = new ArrayList<Attribute>();
 		attributes.clear();
 
 		try {
 			conn = DriverManager.getConnection(databaseConnectionURL);
 			conn.setAutoCommit(false);
 			pst = conn.prepareStatement(
-					"SELECT * FROM attributes WHERE attributeId IN (SELECT attrId FROM scriptAttr WHERE scriptId = ?)");
+					"SELECT * FROM attributes WHERE "
+					+ "attributeId IN (SELECT attrId FROM scriptAttr WHERE scriptId = ?)");
 
 			int index = 1;
 			pst.setInt(index++, script.getScriptId());
@@ -490,10 +493,12 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 	}
 
 	@Override
-	public List<Program> getScriptPrograms(Script script) {
+	public List<Program> getProgramsOfScript(Script script) {
 		Connection conn = null;
 		PreparedStatement pst = null;
+		String errorDesc = "listing programs";
 
+		List<Program> programs = new ArrayList<Program>();
 		programs.clear();
 
 		try {
@@ -524,7 +529,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 			conn.commit();
 		} catch (SQLException e) {
-			System.out.println("Failed to execute listing programs.");
+			System.out.println("Failed to execute " + errorDesc + ".");
 			e.printStackTrace();
 		} finally {
 			try {
@@ -532,7 +537,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close statement when listing programs.");
+				System.out.println("Failed to close statement when " + errorDesc + ".");
 				e.printStackTrace();
 			}
 
@@ -541,7 +546,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close connection when listing programs.");
+				System.out.println("Failed to close connection when " + errorDesc + ".");
 				e.printStackTrace();
 			}
 		}
@@ -553,14 +558,17 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 	public List<Program> getProgramsNotInScript(Script script) {
 		Connection conn = null;
 		PreparedStatement pst = null;
+		String errorDesc = "listing reverse programs of script";
 
+		List<Program> programs = new ArrayList<Program>();
 		programs.clear();
 
 		try {
 			conn = DriverManager.getConnection(databaseConnectionURL);
 
 			String sqlScript = "SELECT * FROM programs "
-					+ "WHERE progId not in (SELECT progId FROM scriptProg WHERE scriptId = ?);";
+					+ "WHERE progId NOT IN (SELECT progId FROM scriptProg WHERE scriptId = ?)";
+
 			pst = conn.prepareStatement(sqlScript);
 			pst.setInt(1, script.getScriptId());
 
@@ -582,7 +590,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 			conn.commit();
 		} catch (SQLException e) {
-			System.out.println("Failed to execute listing programs.");
+			System.out.println("Failed to execute " + errorDesc + ".");
 			e.printStackTrace();
 		} finally {
 			try {
@@ -590,7 +598,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close statement when listing programs.");
+				System.out.println("Failed to close statement when " + errorDesc + ".");
 				e.printStackTrace();
 			}
 
@@ -599,7 +607,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close connection when listing programs.");
+				System.out.println("Failed to close connection when " + errorDesc + ".");
 				e.printStackTrace();
 			}
 		}
@@ -655,12 +663,13 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 	}
 
 	@Override
-	public List<Attribute> getProgramAttributes(Program program) {
+	public List<Attribute> getAttributesOfProgram(Program program) {
 		String errorName = "program attributes";
 		String errorType = "getting";
 		Connection conn = null;
 		PreparedStatement pst = null;
 
+		List<Attribute> attributes = new ArrayList<Attribute>();
 		attributes.clear();
 
 		try {
@@ -1253,6 +1262,170 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 		}
 
 		return rvSucceeded;
+	}
+
+	@Override
+	public List<Service> getServicesOfScript(Script script) {
+		Connection conn = null;
+		PreparedStatement pst = null;
+		String errorDesc = "listing services of script";
+
+		ObservableList<Service> services = FXCollections.observableArrayList();
+		services.clear();
+
+		try {
+			conn = DriverManager.getConnection(databaseConnectionURL);
+
+			String sqlScript = "SELECT * FROM services WHERE "
+					+ "serviceId IN (SELECT serviceId FROM scriptService WHERE scriptId = ?)";
+			pst = conn.prepareStatement(sqlScript);
+			pst.setInt(1, script.getScriptId());
+
+			conn.setAutoCommit(false);
+			ResultSet rs = pst.executeQuery();
+
+			while (rs.next()) {
+				int serviceId = rs.getInt("serviceId");
+				String name = rs.getString("name");
+
+				Service service = new Service();
+				service.setName(name);
+				service.setServiceId(serviceId);
+
+				services.add(service);
+			}
+
+			conn.commit();
+		} catch (SQLException e) {
+			System.out.println("Failed to execute " + errorDesc + ".");
+			e.printStackTrace();
+		} finally {
+			try {
+				if (pst != null) {
+					pst.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Failed to close statement when " + errorDesc + ".");
+				e.printStackTrace();
+			}
+
+			try {
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Failed to close connection when " + errorDesc + ".");
+				e.printStackTrace();
+			}
+		}
+
+		return services;
+	}
+
+	@Override
+	public boolean addServiceToScript(Script script, Service service) {
+		String errorName = "adding service to a script";
+		boolean rvSucceeded = false;
+		Connection conn = null;
+		PreparedStatement pst = null;
+
+		try {
+
+			conn = DriverManager.getConnection(databaseConnectionURL);
+			pst = conn.prepareStatement("INSERT INTO scriptService(scriptId, serviceId) VALUES (?, ?)");
+
+			int index = 1;
+			pst.setInt(index++, script.getScriptId());
+			pst.setInt(index++, service.getServiceId());
+
+			int rowsAffected = pst.executeUpdate();
+			if (rowsAffected == 1) {
+				rvSucceeded = true;
+			}
+		} catch (SQLException e) {
+			System.out.println("Failed to execute " + errorName + ".");
+			e.printStackTrace();
+		} finally {
+
+			try {
+				if (pst != null) {
+					pst.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Failed to close statement when " + errorName + ".");
+				e.printStackTrace();
+			}
+
+			try {
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Failed to close connection when " + errorName + ".");
+				e.printStackTrace();
+			}
+		}
+
+		return rvSucceeded;
+	}
+
+	@Override
+	public List<Service> getServicesNotInScript(Script script) {
+		Connection conn = null;
+		PreparedStatement pst = null;
+		String errorDesc = "listing reverse services of script";
+
+		ObservableList<Service> services = FXCollections.observableArrayList();
+		services.clear();
+
+		try {
+			conn = DriverManager.getConnection(databaseConnectionURL);
+
+			String sqlScript = "SELECT * FROM services WHERE "
+					+ "serviceId NOT IN (SELECT serviceId FROM scriptService WHERE scriptId = ?)";
+
+			pst = conn.prepareStatement(sqlScript);
+			pst.setInt(1, script.getScriptId());
+
+			conn.setAutoCommit(false);
+			ResultSet rs = pst.executeQuery();
+
+			while (rs.next()) {
+				int serviceId = rs.getInt("serviceId");
+				String name = rs.getString("name");
+
+				Service service = new Service();
+				service.setName(name);
+				service.setServiceId(serviceId);
+
+				services.add(service);
+			}
+
+			conn.commit();
+		} catch (SQLException e) {
+			System.out.println("Failed to execute " + errorDesc + ".");
+			e.printStackTrace();
+		} finally {
+			try {
+				if (pst != null) {
+					pst.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Failed to close statement when " + errorDesc + ".");
+				e.printStackTrace();
+			}
+
+			try {
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Failed to close connection when " + errorDesc + ".");
+				e.printStackTrace();
+			}
+		}
+
+		return services;
 	}
 
 }

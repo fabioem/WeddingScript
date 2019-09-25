@@ -8,6 +8,7 @@ import hu.mandisco.weddingScript.controller.WeddingScriptController;
 import hu.mandisco.weddingScript.model.bean.Attribute;
 import hu.mandisco.weddingScript.model.bean.Program;
 import hu.mandisco.weddingScript.model.bean.Script;
+import hu.mandisco.weddingScript.model.bean.Service;
 import hu.mandisco.weddingScript.view.edit.AttributeEditWindow;
 import hu.mandisco.weddingScript.view.edit.ProgramEditWindow;
 import hu.mandisco.weddingScript.view.edit.ScriptEditWindow;
@@ -84,10 +85,7 @@ public class TableList {
 
 		List<Program> programs = weddingScriptController.getPrograms();
 
-		// TODO maybe next line is unnecessary
-		// table.getItems().addAll(programs);
-
-		// SORT BY TIME
+		// Sort by time
 		ObservableList<Program> data = FXCollections.observableArrayList();
 		SortedList<Program> sortedData = new SortedList<>(data);
 		sortedData.comparatorProperty().bind(table.comparatorProperty());
@@ -494,6 +492,52 @@ public class TableList {
 		attributeListTable.getItems().addAll(attributes);
 
 		return attributeListTable;
+	}
+
+	public TableView<Service> getServiceListNotInScript(Script script, TableView<Service> servicesTable) {
+		TableView<Service> table = new TableView<Service>();
+
+		table.setEditable(true);
+
+		TableColumn<Service, String> nameCol = new TableColumn<Service, String>("Szolgáltatás");
+		nameCol.setCellValueFactory(new PropertyValueFactory<Service, String>("name"));
+
+		table.getColumns().add(nameCol);
+
+		List<Service> services = weddingScriptController.getServicesNotInScript(script);
+
+		table.setRowFactory(tv -> {
+			TableRow<Service> row = new TableRow<>();
+			row.setOnMouseClicked(event -> {
+				if (event.getClickCount() == 2 && (!row.isEmpty())) {
+					Service rowData = row.getItem();
+					services.remove(rowData);
+
+					// Handle SortedList
+					ObservableList<Service> data = FXCollections.observableArrayList();
+					SortedList<Service> sortedData = new SortedList<>(data);
+					sortedData.comparatorProperty().bind(table.comparatorProperty());
+					table.setItems(sortedData);
+					data.addAll(services);
+
+					weddingScriptController.addServiceToScript(script, rowData);
+					servicesTable.getItems().clear();
+					servicesTable.getItems().addAll(weddingScriptController.getServicesOfScript(script));
+
+				}
+			});
+			return row;
+		});
+
+		table.getItems().addAll(services);
+
+		ObservableList<Service> data = FXCollections.observableArrayList();
+		SortedList<Service> sortedData = new SortedList<>(data);
+		sortedData.comparatorProperty().bind(table.comparatorProperty());
+		table.setItems(sortedData);
+		data.addAll(services);
+
+		return table;
 	}
 
 }

@@ -23,11 +23,11 @@ public interface WeddingScriptDAO {
 
 	public ObservableList<AttributeType> getAttributeTypes();
 
-	public List<Attribute> getScriptAttributes(Script script);
+	public List<Attribute> getAttributesOfScript2(Script script);
 
-	public List<Program> getScriptPrograms(Script script);
+	public List<Program> getProgramsOfScript(Script script);
 
-	public List<Attribute> getProgramAttributes(Program program);
+	public List<Attribute> getAttributesOfProgram(Program program);
 
 	public List<Program> getProgramsNotInScript(Script script);
 
@@ -58,5 +58,11 @@ public interface WeddingScriptDAO {
 	public List<Attribute> getAttributesNotInScript(Script script);
 
 	public boolean addAttributeToScript(Script script, Attribute attribute);
+
+	public List<Service> getServicesOfScript(Script script);
+
+	public boolean addServiceToScript(Script script, Service rowData);
+
+	public List<Service> getServicesNotInScript(Script script);
 
 }
