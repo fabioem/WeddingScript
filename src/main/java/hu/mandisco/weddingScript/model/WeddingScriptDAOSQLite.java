@@ -1149,21 +1149,10 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 		try {
 
 			conn = DriverManager.getConnection(databaseConnectionURL);
-			// String sql = "SELECT * FROM attributes, scriptAttr WHERE 1 = 1 "
-			// + "AND attrTypeId = (SELECT attrTypeId FROM attributeTypes WHERE
-			// name = \"Basic\") "
-			// + "AND attributeId NOT IN (SELECT attrId FROM scriptAttr WHERE
-			// scriptId = ?) "
-			// + "AND attributes.attributeId = scriptAttr.attrId";
-
 			String sql = "SELECT * FROM attributes WHERE "
 					+ "attrTypeId = (SELECT attrTypeId FROM attributeTypes WHERE name = \"Basic\") "
 					+ "AND attributeId NOT IN (SELECT attrId FROM scriptAttr WHERE scriptId = ?) ";
-
 			pst = conn.prepareStatement(sql);
-
-			System.out.println(sql);
-			System.out.println(script.getScriptId());
 
 			int index = 1;
 			pst.setInt(index++, script.getScriptId());
