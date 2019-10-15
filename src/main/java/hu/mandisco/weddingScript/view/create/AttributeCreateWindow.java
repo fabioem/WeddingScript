@@ -90,6 +90,7 @@ public class AttributeCreateWindow {
 		ComboBox<Service> serviceComboBox = new ComboBox<Service>(serviceOptions);
 		GridPane.setConstraints(serviceComboBox, 1, 4);
 		serviceComboBox.setDisable(true);
+		serviceComboBox.setValue(serviceOptions.get(0));
 
 		// Event handling
 		attrTypeComboBox.setOnAction((e) -> {

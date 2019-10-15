@@ -118,4 +118,13 @@ public class WeddingScriptController {
 	public List<Service> getServicesNotInScript(Script script) {
 		return dao.getServicesNotInScript(script);
 	}
+
+	public List<Attribute> getAttributesNotInProgram(Program program) {
+		return dao.getAttributesNotInProgram(program);
+	}
+
+	public boolean addAttributeToProgram(Program program, Attribute attribute) {
+		return dao.addAttributeToProgram(program, attribute);
+
+	}
 }

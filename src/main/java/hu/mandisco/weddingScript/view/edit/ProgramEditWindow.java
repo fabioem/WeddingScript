@@ -56,7 +56,7 @@ public class ProgramEditWindow {
 		defaultTimeHBox.setSpacing(10);
 		defaultTimeHBox.setAlignment(Pos.CENTER_LEFT);
 
-		// Spinner constants
+		// Spinner
 
 		// Day
 		Label dayLabel = new Label("Nap: ");

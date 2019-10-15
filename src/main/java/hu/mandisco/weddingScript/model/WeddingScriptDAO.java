@@ -65,4 +65,8 @@ public interface WeddingScriptDAO {
 
 	public List<Service> getServicesNotInScript(Script script);
 
+	public List<Attribute> getAttributesNotInProgram(Program program);
+
+	public boolean addAttributeToProgram(Program program, Attribute attribute);
+
 }

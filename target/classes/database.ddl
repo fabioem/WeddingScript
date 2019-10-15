@@ -26,7 +26,7 @@ CREATE TABLE programs(
 CREATE TABLE progAttr(
 	progId int NOT NULL,
 	attrId int NOT NULL,
-	defaultValue varchar(255) NOT NULL,
+	defaultValue varchar(255),
 	FOREIGN KEY (progId) REFERENCES programs(progId) ON DELETE CASCADE,
 	FOREIGN KEY (attrId) REFERENCES attributes(attrId) ON DELETE CASCADE
 );

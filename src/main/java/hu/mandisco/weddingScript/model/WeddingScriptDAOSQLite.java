@@ -684,7 +684,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 			ResultSet rs = pst.executeQuery();
 
 			while (rs.next()) {
-				int attrId = rs.getInt("attrId");
+				int attrId = rs.getInt("attributeId");
 				String name = rs.getString("name");
 
 				Attribute attribute = new Attribute();
@@ -1426,6 +1426,121 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 		}
 
 		return services;
+	}
+
+	@Override
+	public List<Attribute> getAttributesNotInProgram(Program program) {
+		Connection conn = null;
+		PreparedStatement pst = null;
+		String errorDesc = "reverse listing program's attributes";
+		List<Attribute> programAttrList = new ArrayList<Attribute>();
+
+		try {
+
+			conn = DriverManager.getConnection(databaseConnectionURL);
+			String sql = "SELECT * FROM attributes WHERE "
+					+ "attrTypeId = (SELECT attrTypeId FROM attributeTypes WHERE name = \"Program\") "
+					+ "AND attributeId NOT IN (SELECT attrId FROM progAttr WHERE progId = ?) ";
+			pst = conn.prepareStatement(sql);
+
+			int index = 1;
+			pst.setInt(index++, program.getProgId());
+
+			conn.setAutoCommit(false);
+			ResultSet rs = pst.executeQuery();
+
+			while (rs.next()) {
+				int attrId = rs.getInt("attributeId");
+				String name = rs.getString("name");
+				String defValue = rs.getString("defaultValue");
+				// String value = rs.getString("value");
+				Boolean mandatory = rs.getInt("mandatory") != 0;
+
+				Attribute attribute = new Attribute();
+				attribute.setName(name);
+				attribute.setAttrId(attrId);
+				attribute.setDefaultValue(defValue);
+				// attribute.setValue(value);
+				attribute.setMandatory(mandatory);
+
+				programAttrList.add(attribute);
+			}
+
+			conn.commit();
+		} catch (SQLException e) {
+			System.out.println("Failed to execute " + errorDesc + ".");
+			e.printStackTrace();
+		} finally {
+
+			try {
+				if (pst != null) {
+					pst.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Failed to close statement when " + errorDesc + ".");
+				e.printStackTrace();
+			}
+
+			try {
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Failed to close connection when " + errorDesc + ".");
+				e.printStackTrace();
+			}
+		}
+
+		return programAttrList;
+	}
+
+	@Override
+	public boolean addAttributeToProgram(Program program, Attribute attribute) {
+
+		String errorDesc = "adding attribute to program";
+		boolean rvSucceeded = false;
+		Connection conn = null;
+		PreparedStatement pst = null;
+
+		try {
+
+			conn = DriverManager.getConnection(databaseConnectionURL);
+			pst = conn.prepareStatement("INSERT INTO progAttr(progId, attrId) VALUES (?, ?)");
+
+			int index = 1;
+
+			pst.setInt(index++, program.getProgId());
+			pst.setInt(index++, attribute.getAttrId());
+
+			int rowsAffected = pst.executeUpdate();
+			if (rowsAffected == 1) {
+				rvSucceeded = true;
+			}
+		} catch (SQLException e) {
+			System.out.println("Failed to execute " + errorDesc + ".");
+			e.printStackTrace();
+		} finally {
+
+			try {
+				if (pst != null) {
+					pst.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Failed to close statement when " + errorDesc + ".");
+				e.printStackTrace();
+			}
+
+			try {
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Failed to close connection when " + errorDesc + ".");
+				e.printStackTrace();
+			}
+		}
+
+		return rvSucceeded;
 	}
 
 }
