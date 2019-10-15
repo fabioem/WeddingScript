@@ -1,6 +1,5 @@
 package hu.mandisco.weddingScript.view.edit;
 
-import hu.mandisco.weddingScript.controller.WeddingScriptController;
 import hu.mandisco.weddingScript.model.bean.Attribute;
 import hu.mandisco.weddingScript.model.bean.Program;
 import hu.mandisco.weddingScript.view.TableList;
@@ -16,8 +15,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class ProgramAttributesEditWindow {
-
-	private static WeddingScriptController weddingScriptController = new WeddingScriptController();
 
 	public void display(Stage window, Program program) {
 		// Block events to other windows
@@ -54,7 +51,6 @@ public class ProgramAttributesEditWindow {
 
 		tableGrid.getChildren().addAll(attributesTable, attributesAntiTable);
 
-
 		// Row 3 - button
 		Button okButton = new Button("OK");
 		okButton.setOnAction(e -> window.close());
@@ -62,10 +58,7 @@ public class ProgramAttributesEditWindow {
 		GridPane.setHalignment(okButton, HPos.CENTER);
 		GridPane.setHgrow(okButton, Priority.ALWAYS);
 
-
 		grid.getChildren().addAll(nameLabel, tableGrid, okButton);
-
-		// TODO
 
 		Scene scene = new Scene(grid);
 		window.setScene(scene);
