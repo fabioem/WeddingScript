@@ -12,7 +12,6 @@ import hu.mandisco.weddingScript.model.bean.Service;
 import hu.mandisco.weddingScript.view.edit.AttributeEditWindow;
 import hu.mandisco.weddingScript.view.edit.ProgramEditWindow;
 import hu.mandisco.weddingScript.view.edit.ScriptEditWindow;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
@@ -100,18 +99,12 @@ public class TableList {
 	}
 
 	public TableView<Program> getProgramListOfScript(Script script) {
-		//TODO not used maybe???
 		TableView<Program> table = new TableView<Program>();
 
 		table.setEditable(true);
 
 		TableColumn<Program, String> nameCol = new TableColumn<Program, String>("Név");
 		nameCol.setCellValueFactory(new PropertyValueFactory<Program, String>("name"));
-
-
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm");
-		TableColumn<Program, String> ldtCol = new TableColumn<Program, String>("time");
-		ldtCol.setCellValueFactory(foo -> new SimpleStringProperty(foo.getValue().getTime().format(formatter)));
 
 		TableColumn<Program, LocalDateTime> timeCol = new TableColumn<Program, LocalDateTime>("Idő");
 		timeCol.setCellValueFactory(new PropertyValueFactory<Program, LocalDateTime>("time"));
@@ -144,13 +137,34 @@ public class TableList {
 			}
 		});
 
-		TableColumn<Program, Attribute> attrCol = new TableColumn<Program, Attribute>("Attribútumok");
-		attrCol.setCellValueFactory(new PropertyValueFactory<Program, Attribute>("attrId"));
-
 		table.getColumns().add(nameCol);
 		table.getColumns().add(timeCol);
-		table.getColumns().add(ldtCol);
-		table.getColumns().add(attrCol);
+
+		// Test area START
+		// Need this to be able to edit cells
+		// DateTimeFormatter formatter =
+		// DateTimeFormatter.ofPattern(weddingScriptController.DATEFORMAT_TIME);
+		// TableColumn<Program, String> ldtCol = new TableColumn<Program,
+		// String>("LDTime");
+		// ldtCol.setCellValueFactory(foo -> new
+		// SimpleStringProperty(foo.getValue().getTime().format(formatter)));
+		// ldtCol.setCellFactory(TextFieldTableCell.<Attribute>forTableColumn());
+		// ldtCol.setOnEditCommit(new EventHandler<CellEditEvent<Program,
+		// String>>() {
+		// @Override
+		// public void handle(CellEditEvent<Program, String> t) {
+		// ((Program)
+		// t.getTableView().getItems().get(t.getTablePosition().getRow())).setTime(t.getNewValue());
+		// int scriptId = script.getScriptId();
+		// int programId = t.getRowValue().getProgId();
+		// LocalDateTime newTime = t.getNewValue();
+		// weddingScriptController.editScriptProgramTime(scriptId, programId,
+		// newTime);
+		// }
+		// });
+		//
+		// table.getColumns().add(ldtCol);
+		// Test area END
 
 		List<Program> programs = weddingScriptController.getScriptPrograms(script);
 		table.getItems().addAll(programs);
@@ -169,6 +183,7 @@ public class TableList {
 		sortedData.comparatorProperty().bind(table.comparatorProperty());
 		table.setItems(sortedData);
 		table.getSortOrder().add(timeCol);
+		// table.getSortOrder().add(ldtCol);
 		data.addAll(programs);
 
 		return table;

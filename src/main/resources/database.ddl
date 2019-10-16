@@ -106,8 +106,8 @@ INSERT INTO services VALUES(5, "Felhőtánc");
 INSERT INTO attributeTypes VALUES(0, "Basic");
 INSERT INTO attributeTypes VALUES(1, "Script");
 INSERT INTO attributeTypes VALUES(2, "Program");
-INSERT INTO scriptProg VALUES(0, 1, 75800000);
-INSERT INTO scriptProg VALUES(0, 2, 86400000);
+INSERT INTO scriptProg VALUES(0, 1, 75900000); --21:05 Nyitótánc
+INSERT INTO scriptProg VALUES(0, 2, 86400000); --24:00 Újasszony tánc
 INSERT INTO attributes VALUES(0, "Zene", "", 2, null, 1);
 INSERT INTO attributes VALUES(1, "Beszéd", "vőlegény", 2, null, 1);
 INSERT INTO attributes VALUES(2, "Himnusz", "nem", 2, null, 1);

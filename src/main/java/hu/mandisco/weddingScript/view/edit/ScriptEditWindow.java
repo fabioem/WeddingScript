@@ -1,6 +1,5 @@
 package hu.mandisco.weddingScript.view.edit;
 
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -16,7 +15,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -89,35 +87,7 @@ public class ScriptEditWindow {
 		attributesTable.setEditable(true);
 
 		// 2. Program
-		TableView<Program> programsTable = new TableView<Program>();
-		programsTable.setEditable(true);
-
-		TableColumn<Program, LocalDateTime> timeCol = new TableColumn<Program, LocalDateTime>("Idő");
-		timeCol.setCellValueFactory(new PropertyValueFactory<Program, LocalDateTime>("defaultTime"));
-		timeCol.setCellFactory(column -> {
-			TableCell<Program, LocalDateTime> cell = new TableCell<Program, LocalDateTime>() {
-				@Override
-				protected void updateItem(LocalDateTime item, boolean empty) {
-					super.updateItem(item, empty);
-					if (item == null || empty) {
-						setText(null);
-					} else {
-						setText(item.format(DateTimeFormatter.ofPattern(weddingScriptController.DATEFORMAT_TIME)));
-					}
-				}
-			};
-
-			return cell;
-		});
-
-		TableColumn<Program, String> programsNameCol = new TableColumn<Program, String>("Program");
-		programsNameCol.setCellValueFactory(new PropertyValueFactory<Program, String>("name"));
-
-		programsTable.getColumns().add(timeCol);
-		programsTable.getColumns().add(programsNameCol);
-
-		List<Program> programs = weddingScriptController.getScriptPrograms(script);
-		programsTable.getItems().addAll(programs);
+		TableView<Program> programsTable = tableList.getProgramListOfScript(script);
 
 		// 3. Service
 		TableView<Service> servicesTable = new TableView<Service>();
