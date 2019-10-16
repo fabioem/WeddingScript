@@ -49,6 +49,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 			System.out.println("Failed to load SQLite JDBC driver.");
 			e.printStackTrace();
 		}
+
+		attributeTypeList = getAttributeTypes();
 	}
 
 	public LocalDateTime dateToLocalDateTime(Date date) {
@@ -128,6 +130,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				String name = rs.getString("name");
 				String defValue = rs.getString("defaultValue");
 				Boolean mandatory = rs.getInt("mandatory") != 0;
+				int attrTypeId = rs.getInt("attrTypeId");
+				AttributeType attrType = attributeTypeList.get(attrTypeId);
 
 				Attribute attribute = new Attribute();
 				attribute.setName(name);
@@ -135,6 +139,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				attribute.setDefaultValue(defValue);
 				attribute.setValue(defValue);
 				attribute.setMandatory(mandatory);
+				attribute.setAttrType(attrType);
 
 				attributes.add(attribute);
 			}

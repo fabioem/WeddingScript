@@ -362,9 +362,13 @@ public class TableList {
 			}
 		});
 
+		TableColumn<Attribute, String> attrTypeCol = new TableColumn<Attribute, String>("Attribútum típus");
+		attrTypeCol.setCellValueFactory(new PropertyValueFactory<Attribute, String>("attrType"));
+
 		attributeListTable.getColumns().add(nameCol);
 		attributeListTable.getColumns().add(defValueCol);
 		attributeListTable.getColumns().add(isMandatoryCol);
+		attributeListTable.getColumns().add(attrTypeCol);
 
 		List<Attribute> attributes = weddingScriptController.getAttributes();
 		attributeListTable.getItems().addAll(attributes);
