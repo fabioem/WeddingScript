@@ -91,6 +91,7 @@ public class ScriptEditWindow {
 		// 2. Program
 		TableView<Program> programsTable = new TableView<Program>();
 		programsTable.setEditable(true);
+
 		TableColumn<Program, LocalDateTime> timeCol = new TableColumn<Program, LocalDateTime>("Idő");
 		timeCol.setCellValueFactory(new PropertyValueFactory<Program, LocalDateTime>("defaultTime"));
 		timeCol.setCellFactory(column -> {

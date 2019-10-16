@@ -1,5 +1,6 @@
 package hu.mandisco.weddingScript.controller;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import hu.mandisco.weddingScript.model.WeddingScriptDAO;
@@ -125,6 +126,15 @@ public class WeddingScriptController {
 
 	public boolean addAttributeToProgram(Program program, Attribute attribute) {
 		return dao.addAttributeToProgram(program, attribute);
+
+	}
+
+	public boolean editScriptAttributeValue(int scriptId, int attributeId, String newAttrValue) {
+		return dao.editScriptAttributeValue(scriptId, attributeId, newAttrValue);
+	}
+
+	public boolean editScriptProgramTime(int scriptId, int programId, LocalDateTime newTime) {
+		return dao.editScriptProgramTime(scriptId, programId, newTime);
 
 	}
 }

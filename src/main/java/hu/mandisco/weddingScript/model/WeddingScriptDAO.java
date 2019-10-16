@@ -1,5 +1,6 @@
 package hu.mandisco.weddingScript.model;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import hu.mandisco.weddingScript.model.bean.Attribute;
@@ -68,5 +69,9 @@ public interface WeddingScriptDAO {
 	public List<Attribute> getAttributesNotInProgram(Program program);
 
 	public boolean addAttributeToProgram(Program program, Attribute attribute);
+
+	public boolean editScriptAttributeValue(int scriptId, int attributeId, String newAttrValue);
+
+	public boolean editScriptProgramTime(int scriptId, int programId, LocalDateTime newTime);
 
 }

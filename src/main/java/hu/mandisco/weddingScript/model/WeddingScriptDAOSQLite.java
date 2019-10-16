@@ -449,8 +449,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 		try {
 			conn = DriverManager.getConnection(databaseConnectionURL);
 			conn.setAutoCommit(false);
-			pst = conn.prepareStatement(
-					"SELECT * FROM attributes WHERE "
+			pst = conn.prepareStatement("SELECT * FROM attributes WHERE "
 					+ "attributeId IN (SELECT attrId FROM scriptAttr WHERE scriptId = ?)");
 
 			int index = 1;
@@ -825,8 +824,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 	@Override
 	public boolean editProgram(Program program) {
-		String errorName = "program";
-		String errorType = "editing";
+		String errorDesc = "editing program";
 		boolean rvSucceeded = false;
 		Connection conn = null;
 		PreparedStatement pst = null;
@@ -850,7 +848,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				rvSucceeded = true;
 			}
 		} catch (SQLException e) {
-			System.out.println("Failed to execute " + errorType + " " + errorName + ".");
+			System.out.println("Failed to execute " + errorDesc + ".");
 			e.printStackTrace();
 		} finally {
 
@@ -859,7 +857,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close statement when " + errorType + " " + errorName + ".");
+				System.out.println("Failed to close statement when " + errorDesc + ".");
 				e.printStackTrace();
 			}
 
@@ -868,7 +866,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close connection when " + errorType + " " + errorName + ".");
+				System.out.println("Failed to close connection when " + errorDesc + ".");
 				e.printStackTrace();
 			}
 		}
@@ -1516,6 +1514,108 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 			pst.setInt(index++, program.getProgId());
 			pst.setInt(index++, attribute.getAttrId());
+
+			int rowsAffected = pst.executeUpdate();
+			if (rowsAffected == 1) {
+				rvSucceeded = true;
+			}
+		} catch (SQLException e) {
+			System.out.println("Failed to execute " + errorDesc + ".");
+			e.printStackTrace();
+		} finally {
+
+			try {
+				if (pst != null) {
+					pst.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Failed to close statement when " + errorDesc + ".");
+				e.printStackTrace();
+			}
+
+			try {
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Failed to close connection when " + errorDesc + ".");
+				e.printStackTrace();
+			}
+		}
+
+		return rvSucceeded;
+	}
+
+	@Override
+	public boolean editScriptAttributeValue(int scriptId, int attributeId, String newAttrValue) {
+		String errorDesc = "editing value of script attribute";
+		boolean rvSucceeded = false;
+		Connection conn = null;
+		PreparedStatement pst = null;
+
+		try {
+
+			conn = DriverManager.getConnection(databaseConnectionURL);
+			pst = conn.prepareStatement("UPDATE scriptAttr SET value = ? WHERE scriptId = ? AND attrId = ?;");
+
+			int index = 1;
+			pst.setString(index++, newAttrValue);
+			pst.setInt(index++, scriptId);
+			pst.setInt(index++, attributeId);
+
+			int rowsAffected = pst.executeUpdate();
+			if (rowsAffected == 1) {
+				rvSucceeded = true;
+			}
+		} catch (SQLException e) {
+			System.out.println("Failed to execute " + errorDesc + ".");
+			e.printStackTrace();
+		} finally {
+
+			try {
+				if (pst != null) {
+					pst.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Failed to close statement when " + errorDesc + ".");
+				e.printStackTrace();
+			}
+
+			try {
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Failed to close connection when " + errorDesc + ".");
+				e.printStackTrace();
+			}
+		}
+
+		return rvSucceeded;
+	}
+
+	@Override
+	public boolean editScriptProgramTime(int scriptId, int programId, LocalDateTime newTime) {
+		String errorDesc = "editing time of script program";
+		boolean rvSucceeded = false;
+		Connection conn = null;
+		PreparedStatement pst = null;
+
+		try {
+
+			conn = DriverManager.getConnection(databaseConnectionURL);
+			pst = conn.prepareStatement("UPDATE scriptProg SET value = ? WHERE scriptId = ? AND progId = ?;");
+
+			int index = 1;
+
+			int day = (newTime.getDayOfMonth() - 1) * 24 * 60 * 60;
+			int hour = newTime.getHour() * 60 * 60;
+			int min = newTime.getMinute() * 60;
+			Long newTimeSeconds = 1000 * new Long(day + hour + min);
+
+			pst.setLong(index++, newTimeSeconds);
+			pst.setInt(index++, scriptId);
+			pst.setInt(index++, programId);
 
 			int rowsAffected = pst.executeUpdate();
 			if (rowsAffected == 1) {

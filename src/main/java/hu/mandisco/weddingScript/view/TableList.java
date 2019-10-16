@@ -12,15 +12,18 @@ import hu.mandisco.weddingScript.model.bean.Service;
 import hu.mandisco.weddingScript.view.edit.AttributeEditWindow;
 import hu.mandisco.weddingScript.view.edit.ProgramEditWindow;
 import hu.mandisco.weddingScript.view.edit.ScriptEditWindow;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.EventHandler;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
@@ -97,12 +100,18 @@ public class TableList {
 	}
 
 	public TableView<Program> getProgramListOfScript(Script script) {
+		//TODO not used maybe???
 		TableView<Program> table = new TableView<Program>();
 
 		table.setEditable(true);
 
 		TableColumn<Program, String> nameCol = new TableColumn<Program, String>("Név");
 		nameCol.setCellValueFactory(new PropertyValueFactory<Program, String>("name"));
+
+
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm");
+		TableColumn<Program, String> ldtCol = new TableColumn<Program, String>("time");
+		ldtCol.setCellValueFactory(foo -> new SimpleStringProperty(foo.getValue().getTime().format(formatter)));
 
 		TableColumn<Program, LocalDateTime> timeCol = new TableColumn<Program, LocalDateTime>("Idő");
 		timeCol.setCellValueFactory(new PropertyValueFactory<Program, LocalDateTime>("time"));
@@ -117,8 +126,22 @@ public class TableList {
 						setText(item.format(DateTimeFormatter.ofPattern(weddingScriptController.DATEFORMAT_TIME)));
 					}
 				}
+
 			};
 			return cell;
+		});
+
+		// TODO handle time editing
+		// timeCol.setCellFactory(TextFieldTableCell.<Attribute>forTableColumn());
+		timeCol.setOnEditCommit(new EventHandler<CellEditEvent<Program, LocalDateTime>>() {
+			@Override
+			public void handle(CellEditEvent<Program, LocalDateTime> t) {
+				((Program) t.getTableView().getItems().get(t.getTablePosition().getRow())).setTime(t.getNewValue());
+				int scriptId = script.getScriptId();
+				int programId = t.getRowValue().getProgId();
+				LocalDateTime newTime = t.getNewValue();
+				weddingScriptController.editScriptProgramTime(scriptId, programId, newTime);
+			}
 		});
 
 		TableColumn<Program, Attribute> attrCol = new TableColumn<Program, Attribute>("Attribútumok");
@@ -126,12 +149,20 @@ public class TableList {
 
 		table.getColumns().add(nameCol);
 		table.getColumns().add(timeCol);
+		table.getColumns().add(ldtCol);
 		table.getColumns().add(attrCol);
 
 		List<Program> programs = weddingScriptController.getScriptPrograms(script);
 		table.getItems().addAll(programs);
 
 		// TODO sorting doesn't work
+		/*
+		 * https://stackoverflow.com/questions/38045546/formatting-an-
+		 * objectpropertylocaldatetime-in-a-tableview-column Alternatively, you
+		 * can have a DateTimeFormatter to convert the LocalDateTime into a
+		 * String, but in this case table sorting will not work (will use string
+		 * ordering). Thanks @JFValdes to point that out.
+		 */
 		// SORT BY TIME
 		ObservableList<Program> data = FXCollections.observableArrayList();
 		SortedList<Program> sortedData = new SortedList<>(data);
@@ -173,7 +204,8 @@ public class TableList {
 		TableColumn<Program, String> nameCol = new TableColumn<Program, String>("Név");
 		nameCol.setCellValueFactory(new PropertyValueFactory<Program, String>("name"));
 
-		TableColumn<Program, LocalDateTime> defaultTimeCol = new TableColumn<Program, LocalDateTime>("Alap idő");
+		TableColumn<Program, LocalDateTime> defaultTimeCol = new TableColumn<Program, LocalDateTime>(
+				"Alapértelmezett időpont");
 		defaultTimeCol.setCellValueFactory(new PropertyValueFactory<Program, LocalDateTime>("defaultTime"));
 		defaultTimeCol.setCellFactory(column -> {
 			TableCell<Program, LocalDateTime> cell = new TableCell<Program, LocalDateTime>() {
@@ -399,6 +431,17 @@ public class TableList {
 
 		TableColumn<Attribute, String> valueCol = new TableColumn<Attribute, String>("Érték");
 		valueCol.setCellValueFactory(new PropertyValueFactory<Attribute, String>("value"));
+		valueCol.setCellFactory(TextFieldTableCell.<Attribute>forTableColumn());
+		valueCol.setOnEditCommit(new EventHandler<CellEditEvent<Attribute, String>>() {
+			@Override
+			public void handle(CellEditEvent<Attribute, String> t) {
+				((Attribute) t.getTableView().getItems().get(t.getTablePosition().getRow())).setValue(t.getNewValue());
+				int scriptId = script.getScriptId();
+				int attributeId = t.getRowValue().getAttrId();
+				String newAttrValue = t.getNewValue();
+				weddingScriptController.editScriptAttributeValue(scriptId, attributeId, newAttrValue);
+			}
+		});
 
 		attributeListTable.getColumns().add(nameCol);
 		attributeListTable.getColumns().add(valueCol);
