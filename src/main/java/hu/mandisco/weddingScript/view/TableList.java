@@ -119,90 +119,6 @@ public class TableList {
 
 	}
 
-	public TableView<Program> getProgramListNotInScript(Script script, TableView<Program> programTable) {
-		// TableView<Program> programAntiTable = new TableView<Program>();
-		//
-		// programAntiTable.setEditable(true);
-		//
-		// TableColumn<Program, String> nameCol = new TableColumn<Program,
-		// String>("Név");
-		// nameCol.setCellValueFactory(new PropertyValueFactory<Program,
-		// String>("name"));
-		//
-		// TableColumn<Program, LocalDateTime> defaultTimeCol = new
-		// TableColumn<Program, LocalDateTime>(
-		// "Alapértelmezett időpont");
-		// defaultTimeCol.setCellValueFactory(new PropertyValueFactory<Program,
-		// LocalDateTime>("defaultTime"));
-		// defaultTimeCol.setCellFactory(column -> {
-		// TableCell<Program, LocalDateTime> cell = new TableCell<Program,
-		// LocalDateTime>() {
-		// @Override
-		// protected void updateItem(LocalDateTime item, boolean empty) {
-		// super.updateItem(item, empty);
-		// if (item == null || empty) {
-		// setText(null);
-		// } else {
-		// setText(item.format(DateTimeFormatter.ofPattern(weddingScriptController.DATEFORMAT_TIME)));
-		// }
-		// }
-		// };
-		//
-		// return cell;
-		// });
-		//
-		// programAntiTable.getColumns().add(nameCol);
-		// programAntiTable.getColumns().add(defaultTimeCol);
-		//
-		// List<Program> programs =
-		// weddingScriptController.getProgramsNotInScript(script);
-		//
-		// programAntiTable.setRowFactory(tv -> {
-		// TableRow<Program> row = new TableRow<>();
-		// row.setOnMouseClicked(event -> {
-		// if (event.getClickCount() == 2 && (!row.isEmpty())) {
-		// Program rowData = row.getItem();
-		// programs.remove(rowData);
-		//
-		// // Handle SortedList
-		// ObservableList<Program> data = FXCollections.observableArrayList();
-		// SortedList<Program> sortedData = new SortedList<>(data);
-		// sortedData.comparatorProperty().bind(programAntiTable.comparatorProperty());
-		// data.addAll(programs);
-		// programAntiTable.setItems(sortedData);
-		//
-		// weddingScriptController.addProgramToScript(script, rowData);
-		// // TODO handle java.lang.UnsupportedOperationException
-		//
-		// programTable.getItems().clear();
-		// programTable.getItems().addAll(weddingScriptController.getScriptPrograms(script));
-		//
-		// }
-		// });
-		// return row;
-		// });
-		//
-		// programAntiTable.getItems().addAll(programs);
-		//
-		// // Sort by default time
-		// ObservableList<Program> data = FXCollections.observableArrayList();
-		// SortedList<Program> sortedData = new SortedList<>(data);
-		// // this ensures the sortedData is sorted according to the sort
-		// columns
-		// // in the table:
-		// sortedData.comparatorProperty().bind(programAntiTable.comparatorProperty());
-		// programAntiTable.setItems(sortedData);
-		// // programmatically set a sort column:
-		// programAntiTable.getSortOrder().add(defaultTimeCol);
-		// // note that you should always manipulate the underlying list, not
-		// the
-		// // sortedList:
-		// data.addAll(programs);
-
-		// return programAntiTable;
-		return null;
-	}
-
 	public TableView<Script> getScriptList() {
 
 		TableView<Script> scriptListTable = new TableView<Script>();
@@ -427,7 +343,7 @@ public class TableList {
 
 		table.getItems().addAll(attributes);
 
-		// SORT BY DEFAULT TIME
+		// Sort by default time
 		ObservableList<Attribute> data = FXCollections.observableArrayList();
 		SortedList<Attribute> sortedData = new SortedList<>(data);
 		// this ensures the sortedData is sorted according to the sort columns
