@@ -24,8 +24,6 @@ public interface WeddingScriptDAO {
 
 	public ObservableList<AttributeType> getAttributeTypes();
 
-	public List<Attribute> getAttributesOfScript2(Script script);
-
 	public List<Program> getProgramsOfScript(Script script);
 
 	public List<Attribute> getAttributesOfProgram(Program program);
