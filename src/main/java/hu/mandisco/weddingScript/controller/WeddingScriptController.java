@@ -40,6 +40,7 @@ public class WeddingScriptController {
 	}
 
 	public boolean addProgramToScript(Script script, Program program) {
+		program.setTime(program.getDefaultTime());
 		return dao.addProgramToScript(script, program);
 	}
 
@@ -48,7 +49,7 @@ public class WeddingScriptController {
 	}
 
 	public List<Attribute> getScriptAttributes(Script script) {
-		return dao.getAttributesOfScript2(script);
+		return dao.getAttributesOfScript(script);
 	};
 
 	public List<Program> getScriptPrograms(Script script) {
@@ -77,7 +78,6 @@ public class WeddingScriptController {
 
 	public boolean removeAttribute(Attribute attribute) {
 		return dao.removeAttribute(attribute);
-
 	}
 
 	public boolean addAttribute(Attribute attribute) {
@@ -89,6 +89,7 @@ public class WeddingScriptController {
 	};
 
 	public boolean addAttributeToAttribute(Attribute mainAttribute, Attribute subAttribute) {
+		subAttribute.setValue(subAttribute.getDefaultValue());
 		return dao.addAttributeToAttribute(mainAttribute, subAttribute);
 	}
 
@@ -101,6 +102,7 @@ public class WeddingScriptController {
 	}
 
 	public boolean addAttributeToScript(Script script, Attribute attribute) {
+		attribute.setValue(attribute.getDefaultValue());
 		return dao.addAttributeToScript(script, attribute);
 	}
 
@@ -125,6 +127,7 @@ public class WeddingScriptController {
 	}
 
 	public boolean addAttributeToProgram(Program program, Attribute attribute) {
+		attribute.setValue(attribute.getDefaultValue());
 		return dao.addAttributeToProgram(program, attribute);
 
 	}

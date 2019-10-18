@@ -436,67 +436,6 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 	}
 
 	@Override
-	public List<Attribute> getAttributesOfScript2(Script script) {
-		// TODO same as getAttributesOfScript ????
-		String errorName = "script attributes";
-		String errorType = "getting";
-		Connection conn = null;
-		PreparedStatement pst = null;
-
-		List<Attribute> attributes = new ArrayList<Attribute>();
-		attributes.clear();
-
-		try {
-			conn = DriverManager.getConnection(databaseConnectionURL);
-			conn.setAutoCommit(false);
-			pst = conn.prepareStatement("SELECT * FROM attributes WHERE "
-					+ "attributeId IN (SELECT attrId FROM scriptAttr WHERE scriptId = ?)");
-
-			int index = 1;
-			pst.setInt(index++, script.getScriptId());
-			conn.setAutoCommit(false);
-			ResultSet rs = pst.executeQuery();
-
-			while (rs.next()) {
-				int attrId = rs.getInt("attributeId");
-				String name = rs.getString("name");
-
-				Attribute attribute = new Attribute();
-				attribute.setName(name);
-				attribute.setAttrId(attrId);
-
-				attributes.add(attribute);
-			}
-
-			conn.commit();
-
-		} catch (SQLException e) {
-			System.out.println("Failed to execute " + errorType + " " + errorName + ".");
-			e.printStackTrace();
-		} finally {
-
-			try {
-				if (pst != null) {
-					pst.close();
-				}
-			} catch (SQLException e) {
-				System.out.println("Failed to close statement when " + errorType + " " + errorName + ".");
-				e.printStackTrace();
-			}
-
-			try {
-				if (conn != null) {
-					conn.close();
-				}
-			} catch (SQLException e) {
-				System.out.println("Failed to close connection when " + errorType + " " + errorName + ".");
-				e.printStackTrace();
-			}
-		}
-		return attributes;
-	}
-
-	@Override
 	public List<Program> getProgramsOfScript(Script script) {
 		Connection conn = null;
 		PreparedStatement pst = null;
@@ -629,11 +568,17 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 		try {
 
 			conn = DriverManager.getConnection(databaseConnectionURL);
-			pst = conn.prepareStatement("INSERT INTO scriptProg(scriptId, progId) VALUES (?, ?)");
+			pst = conn.prepareStatement("INSERT INTO scriptProg(scriptId, progId, time) VALUES (?, ?, ?)");
 
 			int index = 1;
 			pst.setInt(index++, script.getScriptId());
 			pst.setInt(index++, program.getProgId());
+
+			int day = (program.getDefaultTime().getDayOfMonth() - 1) * 24 * 60 * 60;
+			int hour = program.getDefaultTime().getHour() * 60 * 60;
+			int min = program.getDefaultTime().getMinute() * 60;
+			Long seconds = 1000 * new Long(day + hour + min);
+			pst.setLong(index++, program.getTime() == null ? 0 : seconds);
 
 			int rowsAffected = pst.executeUpdate();
 			if (rowsAffected == 1) {
