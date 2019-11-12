@@ -72,4 +72,6 @@ public interface WeddingScriptDAO {
 
 	public boolean editScriptProgramTime(int scriptId, int programId, LocalDateTime newTime);
 
+	public boolean removeAttributeFromProgram(Program program, Attribute attribute);
+
 }

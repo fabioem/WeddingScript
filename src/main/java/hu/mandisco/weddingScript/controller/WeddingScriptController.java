@@ -140,4 +140,8 @@ public class WeddingScriptController {
 		return dao.editScriptProgramTime(scriptId, programId, newTime);
 
 	}
+
+	public boolean removeAttributeFromProgram(Program program, Attribute attribute) {
+		return dao.removeAttributeFromProgram(program, attribute);
+	}
 }

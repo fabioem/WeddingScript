@@ -212,9 +212,6 @@ public class ScriptEditWindow {
 		GridPane.setHgrow(attributeAntiTable, Priority.ALWAYS);
 
 		// Script programs
-		// TableView<Program> programAntiTable =
-		// tableList.getProgramListNotInScript(script, programsTable);
-
 		TableView<Program> programAntiTable = new TableView<Program>();
 
 		programAntiTable.setEditable(true);
