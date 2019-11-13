@@ -118,10 +118,9 @@ public class ProgramAttributesEditWindow {
 					programAttributesTable.setItems(sortedProgramAttributeData);
 
 					weddingScriptController.removeAttributeFromProgram(program, attributeRowData);
-					// antiAttributes.add(attributeRowData);
-					// programAntiAttributeData.add(attributeRowData);
-					programAntiAttributeData.setAll(weddingScriptController.getAttributesNotInProgram(program));
-
+					antiAttributes.add(attributeRowData);
+					programAntiAttributeData.setAll(antiAttributes);
+					programAntiAttributesTable.setItems(sortedProgramAntiAttributeData);
 				}
 			});
 			return row;
@@ -139,10 +138,9 @@ public class ProgramAttributesEditWindow {
 					programAntiAttributesTable.setItems(sortedProgramAntiAttributeData);
 
 					weddingScriptController.addAttributeToProgram(program, antiAttributeRowData);
-					// attributes.add(antiAttributeRowData);
-					// programAttributeData.add(antiAttributeRowData);
-					programAttributeData.setAll(weddingScriptController.getProgramAttributes(program));
-
+					attributes.add(antiAttributeRowData);
+					programAttributeData.setAll(attributes);
+					programAttributesTable.setItems(sortedProgramAttributeData);
 				}
 			});
 			return row;
