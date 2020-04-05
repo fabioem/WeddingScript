@@ -183,7 +183,7 @@ public class TableList {
 		scriptListTable.getColumns().add(lastEditedCol);
 		scriptListTable.getColumns().add(createdCol);
 
-		List<Script> scripts = weddingScriptController.getScripts();
+		ObservableList<Script> scripts = weddingScriptController.getScripts();
 		scriptListTable.getItems().addAll(scripts);
 
 		return scriptListTable;

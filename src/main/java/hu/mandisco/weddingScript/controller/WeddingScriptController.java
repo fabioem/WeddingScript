@@ -19,11 +19,11 @@ public class WeddingScriptController {
 	public final String DATEFORMAT_TIME = "HH:mm";
 	public final String DATEFORMAT_DATE = "yyyy.MM.dd";
 
-	public List<Script> getScripts() {
+	public ObservableList<Script> getScripts() {
 		return dao.getScripts();
 	}
 
-	public List<Program> getPrograms() {
+	public ObservableList<Program> getPrograms() {
 		return dao.getPrograms();
 	}
 
@@ -138,5 +138,9 @@ public class WeddingScriptController {
 
 	public boolean setAttribute(Attribute attribute) {
 		return dao.setAttribute(attribute);
+	}
+
+	public boolean setScript(Script script) {
+		return dao.setScript(script);
 	}
 }

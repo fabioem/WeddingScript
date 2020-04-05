@@ -24,7 +24,7 @@ public class AttributeCreateWindow {
 	private static WeddingScriptController weddingScriptController = new WeddingScriptController();
 
 	private ObservableList<Attribute> attributeItems;
-	private Boolean programAttrTypeSelected = false;
+	private Boolean serviceAttrTypeSelected = false;
 
 	public AttributeCreateWindow(ObservableList<Attribute> attributeItems) {
 		this.attributeItems = attributeItems;
@@ -94,9 +94,9 @@ public class AttributeCreateWindow {
 
 		// Event handling
 		attrTypeComboBox.setOnAction((e) -> {
-			programAttrTypeSelected = (attrTypeComboBox.getValue().getName().equals("Program"));
-			serviceLabel.setDisable(!programAttrTypeSelected);
-			serviceComboBox.setDisable(!programAttrTypeSelected);
+			serviceAttrTypeSelected = attrTypeComboBox.getValue().getName().equals("Service");
+			serviceLabel.setDisable(!serviceAttrTypeSelected);
+			serviceComboBox.setDisable(!serviceAttrTypeSelected);
 		});
 
 		// Save
@@ -109,7 +109,7 @@ public class AttributeCreateWindow {
 			attribute.setDefaultValue(defValueInput.getText());
 			attribute.setAttrType(attrTypeComboBox.getValue());
 			attribute.setMandatory(isMandatoryInput.isPressed());
-			if (programAttrTypeSelected) {
+			if (serviceAttrTypeSelected) {
 				attribute.setServiceId(serviceComboBox.getValue().getServiceId());
 			}
 

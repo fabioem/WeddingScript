@@ -14,17 +14,22 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.EventHandler;
-import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TableColumn.CellEditEvent;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -70,24 +75,36 @@ public class ScriptEditWindow {
 		topGrid.setVgap(8);
 		topGrid.setHgap(10);
 
-		// Name - constrains use (child, column, row)
-		String nameString = script.getName();
-		if (script.getDate() != null) {
-			nameString.concat(" - "
-					+ script.getDate().format(DateTimeFormatter.ofPattern(weddingScriptController.DATEFORMAT_DATE)));
-		}
-		Label nameLabel = new Label(nameString);
+		// Name Label - constrains use (child, column, row)
+		Label nameLabel = new Label("Név:");
 		GridPane.setConstraints(nameLabel, 0, 0);
-		GridPane.setHalignment(nameLabel, HPos.CENTER);
-		GridPane.setHgrow(nameLabel, Priority.ALWAYS);
 
-		// Comment
-		Label commentLabel = new Label(script.getComment());
-		GridPane.setConstraints(commentLabel, 0, 1);
-		GridPane.setHalignment(commentLabel, HPos.CENTER);
-		GridPane.setHgrow(commentLabel, Priority.ALWAYS);
+		// Name Input
+		TextField nameInput = new TextField();
+		GridPane.setConstraints(nameInput, 1, 0);
+		nameInput.setText(script.getName());
 
-		topGrid.getChildren().addAll(nameLabel, commentLabel);
+		// Date Label
+		Label dateLabel = new Label("Dátum:");
+		GridPane.setConstraints(dateLabel, 0, 1);
+
+		// Date Input
+		DatePicker dateInput = new DatePicker();
+		GridPane.setConstraints(dateInput, 1, 1);
+		if (script.getDate() != null) {
+			dateInput.setValue(script.getDate().toLocalDate());
+		}
+
+		// Comment Label
+		Label commentLabel = new Label("Komment:");
+		GridPane.setConstraints(commentLabel, 0, 2);
+
+		// Comment Input
+		TextField commentInput = new TextField();
+		commentInput.setText(script.getComment());
+		GridPane.setConstraints(commentInput, 1, 2);
+
+		topGrid.getChildren().addAll(nameLabel, nameInput, commentLabel, commentInput, dateLabel, dateInput);
 		centerLayout.setTop(topGrid);
 		// CENTER - CENTER
 		// 1. Script attributes
@@ -302,6 +319,38 @@ public class ScriptEditWindow {
 
 		// Main center adding
 		layout.setCenter(centerLayout);
+
+		// Save
+		Button saveButton = new Button("Mentés");
+		GridPane.setConstraints(saveButton, 0, 0);
+		saveButton.setOnAction(e -> {
+			if (nameInput.getText().isEmpty()) {
+				Alert alert = new Alert(AlertType.ERROR, "A név nem lehet üres!", ButtonType.OK);
+				alert.setHeaderText("Üres név");
+				alert.showAndWait();
+			} else {
+				script.setComment(commentInput.getText());
+				script.setName(nameInput.getText());
+				script.setDate(dateInput.getValue().atStartOfDay());
+
+				weddingScriptController.setScript(script);
+				window.close();
+			}
+
+		});
+
+		// Close
+		Button closeButton = new Button("Mégsem");
+		closeButton.setOnAction(e -> window.close());
+		GridPane.setConstraints(closeButton, 1, 0);
+
+		GridPane bottomGrid = new GridPane();
+		bottomGrid.setPadding(new Insets(10, 10, 10, 10));
+		bottomGrid.setVgap(8);
+		bottomGrid.setHgap(10);
+		bottomGrid.getChildren().addAll(saveButton, closeButton);
+
+		layout.setBottom(bottomGrid);
 
 		// Stuff
 		Scene scene = new Scene(layout, 700, 500);

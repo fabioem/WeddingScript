@@ -58,11 +58,11 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 	}
 
-	public List<Program> getPrograms() {
+	public ObservableList<Program> getPrograms() {
 		Connection conn = null;
 		Statement st = null;
 
-		List<Program> programs = new ArrayList<Program>();
+		ObservableList<Program> programs = FXCollections.observableArrayList();
 		programs.clear();
 
 		try {
@@ -224,12 +224,11 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 	}
 
-	public List<Script> getScripts() {
+	public ObservableList<Script> getScripts() {
 		Connection conn = null;
 		Statement st = null;
 
-		List<Script> scripts = new ArrayList<Script>();
-		scripts.clear();
+		ObservableList<Script> scripts = FXCollections.observableArrayList();
 
 		try {
 			conn = DriverManager.getConnection(databaseConnectionURL);
@@ -1414,7 +1413,6 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 			pst.setInt(index++, attribute.getAttrId());
 			pst.setString(index++, attribute.getDefaultValue());
 
-
 			int rowsAffected = pst.executeUpdate();
 			if (rowsAffected == 1) {
 				rvSucceeded = true;
@@ -1609,7 +1607,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 			conn = DriverManager.getConnection(databaseConnectionURL);
 			pst = conn.prepareStatement(
 					"UPDATE attributes SET name = ?, defaultValue = ?, attrTypeId = ?, serviceId = ?, mandatory = ?  "
-					+ "WHERE attributeId = ?;");
+							+ "WHERE attributeId = ?;");
 
 			int index = 1;
 
@@ -1619,6 +1617,56 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 			pst.setInt(index++, attribute.getServiceId());
 			pst.setInt(index++, attribute.isMandatory() ? 1 : 0);
 			pst.setInt(index++, attribute.getAttrId());
+
+			int rowsAffected = pst.executeUpdate();
+			if (rowsAffected == 1) {
+				rvSucceeded = true;
+			}
+		} catch (SQLException e) {
+			System.out.println("Failed to execute " + errorDesc + ".");
+			e.printStackTrace();
+		} finally {
+
+			try {
+				if (pst != null) {
+					pst.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Failed to close statement when " + errorDesc + ".");
+				e.printStackTrace();
+			}
+
+			try {
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Failed to close connection when " + errorDesc + ".");
+				e.printStackTrace();
+			}
+		}
+
+		return rvSucceeded;
+	}
+
+	@Override
+	public boolean setScript(Script script) {
+		String errorDesc = "editing script";
+		boolean rvSucceeded = false;
+		Connection conn = null;
+		PreparedStatement pst = null;
+
+		try {
+
+			conn = DriverManager.getConnection(databaseConnectionURL);
+			pst = conn.prepareStatement("UPDATE scripts SET name = ?, date = ?, comment = ?  " + "WHERE scriptId = ?;");
+
+			int index = 1;
+			pst.setString(index++, script.getName());
+			pst.setString(index++, script.getDate() == null ? ""
+					: script.getDate().format(DateTimeFormatter.ofPattern(DATEFORMAT_DATETIME_FOR_INSERT)));
+			pst.setString(index++, script.getComment());
+			pst.setInt(index++, script.getScriptId());
 
 			int rowsAffected = pst.executeUpdate();
 			if (rowsAffected == 1) {

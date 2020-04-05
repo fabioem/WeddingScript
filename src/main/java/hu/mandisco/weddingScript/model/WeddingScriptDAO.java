@@ -16,9 +16,9 @@ public interface WeddingScriptDAO {
 	public final String DATEFORMAT_TIME = "HH:mm";
 	public final String DATEFORMAT_DATE = "yyyy.MM.dd";
 
-	public List<Program> getPrograms();
+	public ObservableList<Program> getPrograms();
 
-	public List<Script> getScripts();
+	public ObservableList<Script> getScripts();
 
 	public ObservableList<Service> getServices();
 
@@ -71,5 +71,7 @@ public interface WeddingScriptDAO {
 	public boolean removeAttributeFromProgram(Program program, Attribute attribute);
 
 	public boolean setAttribute(Attribute attribute);
+
+	public boolean setScript(Script script);
 
 }

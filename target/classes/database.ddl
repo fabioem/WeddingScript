@@ -103,14 +103,15 @@ INSERT INTO services VALUES(2, "LED-es oldalfal világítás");
 INSERT INTO services VALUES(3, "Ceremónia hangosítás kis cs.");
 INSERT INTO services VALUES(4, "Ceremónia hangosítás nagy cs.");
 INSERT INTO services VALUES(5, "Felhőtánc");
---INSERT INTO attributeTypes VALUES(0, "Basic");
+--INSERT INTO attributeTypes VALUES(2, "Basic");
 INSERT INTO attributeTypes VALUES(0, "Script");
 INSERT INTO attributeTypes VALUES(1, "Program");
+INSERT INTO attributeTypes VALUES(2, "Service");
 INSERT INTO scriptProg VALUES(0, 1, 75900000); --21:05 Nyitótánc
 INSERT INTO scriptProg VALUES(0, 2, 86400000); --24:00 Újasszony tánc
-INSERT INTO attributes VALUES(0, "Zene", "", 2, null, 1);
-INSERT INTO attributes VALUES(1, "Beszéd", "vőlegény", 2, null, 1);
-INSERT INTO attributes VALUES(2, "Himnusz", "nem", 2, null, 1);
+INSERT INTO attributes VALUES(0, "Zene", "", 1, null, 1);
+INSERT INTO attributes VALUES(1, "Beszéd", "vőlegény", 1, null, 1);
+INSERT INTO attributes VALUES(2, "Himnusz", "nem", 1, null, 1);
 INSERT INTO attributes VALUES(3, "Szolgáltatói asztal", "igen", 0, null, 0);
 INSERT INTO progAttr VALUES(1, 0, ""); /* nyitótánchoz zene */
 INSERT INTO progAttr VALUES(0, 0, "Váradi Roma Café + Jazz-Lounge világsláger feldolgozások"); /* vacsorához zene */
