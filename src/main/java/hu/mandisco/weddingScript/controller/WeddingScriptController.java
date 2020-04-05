@@ -73,7 +73,7 @@ public class WeddingScriptController {
 	}
 
 	public boolean editProgram(Program program) {
-		return dao.editProgram(program);
+		return dao.setProgram(program);
 	}
 
 	public boolean removeAttribute(Attribute attribute) {
@@ -88,11 +88,6 @@ public class WeddingScriptController {
 		return dao.getAttributes();
 	};
 
-	public boolean addAttributeToAttribute(Attribute mainAttribute, Attribute subAttribute) {
-		subAttribute.setValue(subAttribute.getDefaultValue());
-		return dao.addAttributeToAttribute(mainAttribute, subAttribute);
-	}
-
 	public List<Attribute> getAttributesOfScript(Script script) {
 		return dao.getAttributesOfScript(script);
 	}
@@ -104,10 +99,6 @@ public class WeddingScriptController {
 	public boolean addAttributeToScript(Script script, Attribute attribute) {
 		attribute.setValue(attribute.getDefaultValue());
 		return dao.addAttributeToScript(script, attribute);
-	}
-
-	public List<Attribute> getAttributesOfAttribute(Attribute attribute) {
-		return dao.getAttributesOfAttribute(attribute);
 	}
 
 	public List<Service> getServicesOfScript(Script script) {
@@ -133,15 +124,19 @@ public class WeddingScriptController {
 	}
 
 	public boolean editScriptAttributeValue(int scriptId, int attributeId, String newAttrValue) {
-		return dao.editScriptAttributeValue(scriptId, attributeId, newAttrValue);
+		return dao.setScriptAttributeValue(scriptId, attributeId, newAttrValue);
 	}
 
 	public boolean editScriptProgramTime(int scriptId, int programId, LocalDateTime newTime) {
-		return dao.editScriptProgramTime(scriptId, programId, newTime);
+		return dao.setScriptProgramTime(scriptId, programId, newTime);
 
 	}
 
 	public boolean removeAttributeFromProgram(Program program, Attribute attribute) {
 		return dao.removeAttributeFromProgram(program, attribute);
+	}
+
+	public boolean setAttribute(Attribute attribute) {
+		return dao.setAttribute(attribute);
 	}
 }

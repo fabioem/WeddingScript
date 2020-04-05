@@ -97,7 +97,6 @@ public class ProgramAttributesEditWindow {
 		GridPane.setHgrow(programAntiAttributesTable, Priority.ALWAYS);
 
 		// Handling double clicks
-		// TODO add to the other table when deleting
 		ObservableList<Attribute> programAttributeData = FXCollections.observableArrayList();
 		SortedList<Attribute> sortedProgramAttributeData = new SortedList<>(programAttributeData);
 		sortedProgramAttributeData.comparatorProperty().bind(programAttributesTable.comparatorProperty());

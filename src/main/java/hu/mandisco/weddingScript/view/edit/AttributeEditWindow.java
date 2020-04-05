@@ -1,119 +1,136 @@
 package hu.mandisco.weddingScript.view.edit;
 
-import java.util.List;
-
 import hu.mandisco.weddingScript.controller.WeddingScriptController;
 import hu.mandisco.weddingScript.model.bean.Attribute;
-import hu.mandisco.weddingScript.view.TableList;
-import hu.mandisco.weddingScript.view.create.AttributeCreateToAttributeWindow;
-import javafx.collections.FXCollections;
+import hu.mandisco.weddingScript.model.bean.AttributeType;
+import hu.mandisco.weddingScript.model.bean.Service;
 import javafx.collections.ObservableList;
-import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableView;
-import javafx.scene.control.ToolBar;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class AttributeEditWindow {
 
-	private WeddingScriptController weddingScriptController = new WeddingScriptController();
+	private static WeddingScriptController weddingScriptController = new WeddingScriptController();
 
-	private ToolBar toolBar = new ToolBar();
-	private VBox topMenu = new VBox();
-	private BorderPane layout = new BorderPane();
+	private Boolean programAttrTypeSelected = false;
 
-	private TableView<Attribute> attributeTable;
-
-	public void display(Attribute mainAttribute) {
+	public void display(Attribute attribute) {
 		Stage window = new Stage();
-
-		TableList tableList = new TableList();
 
 		// Block events to other windows
 		window.initModality(Modality.APPLICATION_MODAL);
-		window.setTitle("Attribútum szerkesztése");
+		window.setTitle("Új attribútum");
 		window.setMinWidth(250);
 
-		// CENTER
-		// CENTER - TOP
-		BorderPane centerLayout = new BorderPane();
-		GridPane topGrid = new GridPane();
-		topGrid.setPadding(new Insets(10, 10, 10, 10));
-		topGrid.setVgap(8);
-		topGrid.setHgap(10);
+		// GridPane with 10px padding around edge
+		GridPane grid = new GridPane();
+		grid.setPadding(new Insets(10, 10, 10, 10));
+		grid.setVgap(8);
+		grid.setHgap(10);
 
-		// TOOLBAR
-		Button newButton = new Button("Új");
-		newButton.setOnAction(e -> {
-			ObservableList<Attribute> attributeItems = attributeTable == null ? FXCollections.observableArrayList()
-					: attributeTable.getItems();
-			AttributeCreateToAttributeWindow attrCreateWindow = new AttributeCreateToAttributeWindow(attributeItems);
-			attrCreateWindow.display(mainAttribute);
-		});
-
-		Button deleteButton = new Button("Törlés");
-		deleteButton.setOnAction(e -> {
-			if (attributeTable != null) {
-				Attribute selectedItem = attributeTable.getSelectionModel().getSelectedItem();
-				if (selectedItem != null) {
-					attributeTable.getItems().remove(selectedItem);
-					weddingScriptController.removeAttribute(selectedItem);
-				}
-			}
-
-		});
-
-		Button editButton = new Button("Szerkesztés");
-		editButton.setOnAction(e -> {
-			if (attributeTable != null) {
-				Attribute selectedItem = attributeTable.getSelectionModel().getSelectedItem();
-				if (selectedItem != null) {
-					AttributeEditWindow attributeEditWindow = new AttributeEditWindow();
-					attributeEditWindow.display(selectedItem);
-				}
-			}
-
-		});
-
-		toolBar.getItems().addAll(newButton, deleteButton, editButton);
-		topMenu.getChildren().add(toolBar);
-		GridPane.setConstraints(topMenu, 0, 2);
-
-		// Name
-		Label nameLabel = new Label(mainAttribute.getName());
+		// Name Label - constrains use (child, column, row)
+		Label nameLabel = new Label("Név:");
 		GridPane.setConstraints(nameLabel, 0, 0);
-		GridPane.setHalignment(nameLabel, HPos.CENTER);
-		GridPane.setHgrow(nameLabel, Priority.ALWAYS);
 
-		// value
-		Label valueLabel = new Label(mainAttribute.getValue());
-		GridPane.setConstraints(valueLabel, 0, 1);
-		GridPane.setHalignment(valueLabel, HPos.CENTER);
-		GridPane.setHgrow(nameLabel, Priority.ALWAYS);
+		// Name Input
+		TextField nameInput = new TextField();
+		GridPane.setConstraints(nameInput, 1, 0);
+		nameInput.setText(attribute.getName());
 
-		topGrid.getChildren().addAll(nameLabel, valueLabel, topMenu);
-		centerLayout.setTop(topGrid);
-		// CENTER - CENTER
-		TableView<Attribute> attributeTable = tableList.getAttributeListOfAttributes(mainAttribute);
-		attributeTable.setEditable(true);
+		// Default Value Label - constrains use (child, column, row)
+		Label defValueLabel = new Label("Alapértelmezett érték:");
+		GridPane.setConstraints(defValueLabel, 0, 1);
 
-		List<Attribute> attributes = weddingScriptController.getAttributesOfAttribute(mainAttribute);
-		attributeTable.getItems().addAll(attributes);
+		// Default Value Input
+		TextField defValueInput = new TextField();
+		GridPane.setConstraints(defValueInput, 1, 1);
+		defValueInput.setText(attribute.getDefaultValue());
 
-		centerLayout.setCenter(attributeTable);
-		layout.setCenter(centerLayout);
+		// Attribute Type Label
+		Label attrTypeLabel = new Label("Attribútum típus:");
+		GridPane.setConstraints(attrTypeLabel, 0, 2);
 
-		Scene scene = new Scene(layout, 700, 500);
+		// Attribute Type ComboBox
+		ObservableList<AttributeType> attrTypeOptions = weddingScriptController.getAttributeTypes();
+		ComboBox<AttributeType> attrTypeComboBox = new ComboBox<AttributeType>(attrTypeOptions);
+		attrTypeComboBox.setValue(attribute.getAttrType());
+		GridPane.setConstraints(attrTypeComboBox, 1, 2);
+
+		// Mandatory Label
+		Label isMandatoryLabel = new Label("Kötelező");
+		GridPane.setConstraints(isMandatoryLabel, 0, 3);
+
+		// Mandatory Value Input
+		CheckBox isMandatoryInput = new CheckBox();
+		GridPane.setConstraints(isMandatoryInput, 1, 3);
+		isMandatoryInput.setSelected(attribute.isMandatory());
+
+		// Service Label
+		Label serviceLabel = new Label("Szolgáltatás:");
+		GridPane.setConstraints(serviceLabel, 0, 4);
+		serviceLabel.setDisable(true);
+
+		// Service ComboBox
+		ObservableList<Service> serviceOptions = weddingScriptController.getServices();
+		ComboBox<Service> serviceComboBox = new ComboBox<Service>(serviceOptions);
+		GridPane.setConstraints(serviceComboBox, 1, 4);
+		serviceComboBox.setDisable(true);
+		serviceComboBox.setValue(serviceOptions.get(attribute.getServiceId()));
+
+		// Event handling
+		attrTypeComboBox.setOnAction((e) -> {
+			programAttrTypeSelected = (attrTypeComboBox.getValue().getName().equals("Program"));
+			serviceLabel.setDisable(!programAttrTypeSelected);
+			serviceComboBox.setDisable(!programAttrTypeSelected);
+		});
+
+		// Save
+		Button saveButton = new Button("Mentés");
+		GridPane.setConstraints(saveButton, 0, 5);
+		saveButton.setOnAction(e -> {
+
+			attribute.setName(nameInput.getText());
+			attribute.setDefaultValue(defValueInput.getText());
+			attribute.setAttrType(attrTypeComboBox.getValue());
+			attribute.setMandatory(isMandatoryInput.isPressed());
+			if (programAttrTypeSelected) {
+				attribute.setServiceId(serviceComboBox.getValue().getServiceId());
+			}
+
+			if (nameInput.getText().isEmpty()) {
+				Alert alert = new Alert(AlertType.ERROR, "A név nem lehet üres!", ButtonType.OK);
+				alert.setHeaderText("Üres név");
+				alert.showAndWait();
+			} else {
+				weddingScriptController.setAttribute(attribute);
+				window.close();
+			}
+
+		});
+
+		Button closeButton = new Button("Mégsem");
+		closeButton.setOnAction(e -> window.close());
+		GridPane.setConstraints(closeButton, 1, 5);
+
+		// Add everything to grid
+		grid.getChildren().addAll(nameLabel, nameInput, defValueLabel, defValueInput, serviceLabel, serviceComboBox,
+				isMandatoryLabel, isMandatoryInput, attrTypeLabel, attrTypeComboBox, saveButton, closeButton);
+
+		Scene scene = new Scene(grid);
 		window.setScene(scene);
 		window.showAndWait();
+
 	}
 
 }

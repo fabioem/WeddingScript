@@ -40,17 +40,13 @@ public interface WeddingScriptDAO {
 
 	public boolean addProgram(Program program);
 
-	public boolean editProgram(Program program);
+	public boolean setProgram(Program program);
 
 	public boolean removeAttribute(Attribute attribute);
 
 	public boolean addAttribute(Attribute attribute);
 
 	public List<Attribute> getAttributes();
-
-	public List<Attribute> getAttributesOfAttribute(Attribute mainAttribute);
-
-	public boolean addAttributeToAttribute(Attribute mainAttribute, Attribute subAttribute);
 
 	public List<Attribute> getAttributesOfScript(Script script);
 
@@ -68,10 +64,12 @@ public interface WeddingScriptDAO {
 
 	public boolean addAttributeToProgram(Program program, Attribute attribute);
 
-	public boolean editScriptAttributeValue(int scriptId, int attributeId, String newAttrValue);
+	public boolean setScriptAttributeValue(int scriptId, int attributeId, String newAttrValue);
 
-	public boolean editScriptProgramTime(int scriptId, int programId, LocalDateTime newTime);
+	public boolean setScriptProgramTime(int scriptId, int programId, LocalDateTime newTime);
 
 	public boolean removeAttributeFromProgram(Program program, Attribute attribute);
+
+	public boolean setAttribute(Attribute attribute);
 
 }

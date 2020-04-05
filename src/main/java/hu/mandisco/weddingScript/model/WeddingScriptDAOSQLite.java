@@ -768,7 +768,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 	}
 
 	@Override
-	public boolean editProgram(Program program) {
+	public boolean setProgram(Program program) {
 		String errorDesc = "editing program";
 		boolean rvSucceeded = false;
 		Connection conn = null;
@@ -920,6 +920,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 	}
 
+	@Deprecated
 	public List<Attribute> getAttributesOfAttribute(Attribute mainAttribute) {
 		Connection conn = null;
 		PreparedStatement pst = null;
@@ -978,55 +979,6 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 		}
 
 		return attrAttrList;
-
-	}
-
-	public boolean addAttributeToAttribute(Attribute mainAttribute, Attribute subAttribute) {
-
-		String errorDesc = "adding sub attribute to main attribute";
-		boolean rvSucceeded = false;
-		Connection conn = null;
-		PreparedStatement pst = null;
-
-		try {
-
-			conn = DriverManager.getConnection(databaseConnectionURL);
-			pst = conn.prepareStatement("INSERT INTO attrAttr(mainAttrId, subAttrId) VALUES (?, ?)");
-
-			int index = 1;
-
-			pst.setInt(index++, mainAttribute.getAttrId());
-			pst.setInt(index++, subAttribute.getAttrId());
-
-			int rowsAffected = pst.executeUpdate();
-			if (rowsAffected == 1) {
-				rvSucceeded = true;
-			}
-		} catch (SQLException e) {
-			System.out.println("Failed to execute " + errorDesc + ".");
-			e.printStackTrace();
-		} finally {
-
-			try {
-				if (pst != null) {
-					pst.close();
-				}
-			} catch (SQLException e) {
-				System.out.println("Failed to close statement when " + errorDesc + ".");
-				e.printStackTrace();
-			}
-
-			try {
-				if (conn != null) {
-					conn.close();
-				}
-			} catch (SQLException e) {
-				System.out.println("Failed to close connection when " + errorDesc + ".");
-				e.printStackTrace();
-			}
-		}
-
-		return rvSucceeded;
 
 	}
 
@@ -1107,7 +1059,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 			conn = DriverManager.getConnection(databaseConnectionURL);
 			String sql = "SELECT * FROM attributes WHERE "
-					+ "attrTypeId = (SELECT attrTypeId FROM attributeTypes WHERE name = \"Basic\") "
+					+ "attrTypeId = (SELECT attrTypeId FROM attributeTypes WHERE name = \"Script\") "
 					+ "AND attributeId NOT IN (SELECT attrId FROM scriptAttr WHERE scriptId = ?) ";
 			pst = conn.prepareStatement(sql);
 
@@ -1174,12 +1126,13 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 		try {
 
 			conn = DriverManager.getConnection(databaseConnectionURL);
-			pst = conn.prepareStatement("INSERT INTO scriptAttr(scriptId, attrId) VALUES (?, ?)");
+			pst = conn.prepareStatement("INSERT INTO scriptAttr(scriptId, attrId, value) VALUES (?, ?, ?)");
 
 			int index = 1;
 
 			pst.setInt(index++, script.getScriptId());
 			pst.setInt(index++, attribute.getAttrId());
+			pst.setString(index++, attribute.getDefaultValue());
 
 			int rowsAffected = pst.executeUpdate();
 			if (rowsAffected == 1) {
@@ -1453,12 +1406,14 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 		try {
 
 			conn = DriverManager.getConnection(databaseConnectionURL);
-			pst = conn.prepareStatement("INSERT INTO progAttr(progId, attrId) VALUES (?, ?)");
+			pst = conn.prepareStatement("INSERT INTO progAttr(progId, attrId, value) VALUES (?, ?, ?)");
 
 			int index = 1;
 
 			pst.setInt(index++, program.getProgId());
 			pst.setInt(index++, attribute.getAttrId());
+			pst.setString(index++, attribute.getDefaultValue());
+
 
 			int rowsAffected = pst.executeUpdate();
 			if (rowsAffected == 1) {
@@ -1492,7 +1447,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 	}
 
 	@Override
-	public boolean editScriptAttributeValue(int scriptId, int attributeId, String newAttrValue) {
+	public boolean setScriptAttributeValue(int scriptId, int attributeId, String newAttrValue) {
 		String errorDesc = "editing value of script attribute";
 		boolean rvSucceeded = false;
 		Connection conn = null;
@@ -1540,7 +1495,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 	}
 
 	@Override
-	public boolean editScriptProgramTime(int scriptId, int programId, LocalDateTime newTime) {
+	public boolean setScriptProgramTime(int scriptId, int programId, LocalDateTime newTime) {
 		String errorDesc = "editing time of script program";
 		boolean rvSucceeded = false;
 		Connection conn = null;
@@ -1609,6 +1564,60 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 			int index = 1;
 
 			pst.setInt(index++, program.getProgId());
+			pst.setInt(index++, attribute.getAttrId());
+
+			int rowsAffected = pst.executeUpdate();
+			if (rowsAffected == 1) {
+				rvSucceeded = true;
+			}
+		} catch (SQLException e) {
+			System.out.println("Failed to execute " + errorDesc + ".");
+			e.printStackTrace();
+		} finally {
+
+			try {
+				if (pst != null) {
+					pst.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Failed to close statement when " + errorDesc + ".");
+				e.printStackTrace();
+			}
+
+			try {
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Failed to close connection when " + errorDesc + ".");
+				e.printStackTrace();
+			}
+		}
+
+		return rvSucceeded;
+	}
+
+	@Override
+	public boolean setAttribute(Attribute attribute) {
+		String errorDesc = "editing attribute";
+		boolean rvSucceeded = false;
+		Connection conn = null;
+		PreparedStatement pst = null;
+
+		try {
+
+			conn = DriverManager.getConnection(databaseConnectionURL);
+			pst = conn.prepareStatement(
+					"UPDATE attributes SET name = ?, defaultValue = ?, attrTypeId = ?, serviceId = ?, mandatory = ?  "
+					+ "WHERE attributeId = ?;");
+
+			int index = 1;
+
+			pst.setString(index++, attribute.getName());
+			pst.setString(index++, attribute.getDefaultValue());
+			pst.setInt(index++, attribute.getAttrType().getAttrTypeId());
+			pst.setInt(index++, attribute.getServiceId());
+			pst.setInt(index++, attribute.isMandatory() ? 1 : 0);
 			pst.setInt(index++, attribute.getAttrId());
 
 			int rowsAffected = pst.executeUpdate();
