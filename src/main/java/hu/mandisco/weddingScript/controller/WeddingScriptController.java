@@ -52,11 +52,11 @@ public class WeddingScriptController {
 		return dao.getAttributesOfScript(script);
 	};
 
-	public List<Program> getScriptPrograms(Script script) {
+	public ObservableList<Program> getScriptPrograms(Script script) {
 		return dao.getProgramsOfScript(script);
 	};
 
-	public List<Program> getProgramsNotInScript(Script script) {
+	public ObservableList<Program> getProgramsNotInScript(Script script) {
 		return dao.getProgramsNotInScript(script);
 	};
 

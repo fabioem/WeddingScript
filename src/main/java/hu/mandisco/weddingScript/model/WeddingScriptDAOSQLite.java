@@ -435,12 +435,12 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 	}
 
 	@Override
-	public List<Program> getProgramsOfScript(Script script) {
+	public ObservableList<Program> getProgramsOfScript(Script script) {
 		Connection conn = null;
 		PreparedStatement pst = null;
 		String errorDesc = "listing programs";
 
-		List<Program> programs = new ArrayList<Program>();
+		ObservableList<Program> programs = FXCollections.observableArrayList();
 		programs.clear();
 
 		try {
@@ -497,12 +497,12 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 	}
 
 	@Override
-	public List<Program> getProgramsNotInScript(Script script) {
+	public ObservableList<Program> getProgramsNotInScript(Script script) {
 		Connection conn = null;
 		PreparedStatement pst = null;
 		String errorDesc = "listing reverse programs of script";
 
-		List<Program> programs = new ArrayList<Program>();
+		ObservableList<Program> programs = FXCollections.observableArrayList();
 		programs.clear();
 
 		try {

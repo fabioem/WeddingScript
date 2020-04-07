@@ -24,11 +24,11 @@ public interface WeddingScriptDAO {
 
 	public ObservableList<AttributeType> getAttributeTypes();
 
-	public List<Program> getProgramsOfScript(Script script);
+	public ObservableList<Program> getProgramsOfScript(Script script);
 
 	public List<Attribute> getAttributesOfProgram(Program program);
 
-	public List<Program> getProgramsNotInScript(Script script);
+	public ObservableList<Program> getProgramsNotInScript(Script script);
 
 	public boolean addScript(Script script);
 

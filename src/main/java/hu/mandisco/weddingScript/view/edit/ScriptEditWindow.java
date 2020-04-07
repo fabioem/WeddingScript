@@ -43,9 +43,7 @@ public class ScriptEditWindow {
 
 	private BorderPane layout = new BorderPane();
 
-	public void display(Script script) {
-		Stage window = new Stage();
-
+	public void display(Stage window, Script script) {
 		TabPane tabPane = new TabPane();
 
 		Tab attributesTab = new Tab("Forgatókönyv");
@@ -155,32 +153,6 @@ public class ScriptEditWindow {
 		programsTable.getColumns().add(programNameCol);
 		programsTable.getColumns().add(programTimeCol);
 
-		// Test area START
-		// Need this to be able to edit cells
-		// DateTimeFormatter formatter =
-		// DateTimeFormatter.ofPattern(weddingScriptController.DATEFORMAT_TIME);
-		// TableColumn<Program, String> ldtCol = new TableColumn<Program,
-		// String>("LDTime");
-		// ldtCol.setCellValueFactory(foo -> new
-		// SimpleStringProperty(foo.getValue().getTime().format(formatter)));
-		// ldtCol.setCellFactory(TextFieldTableCell.<Attribute>forTableColumn());
-		// ldtCol.setOnEditCommit(new EventHandler<CellEditEvent<Program,
-		// String>>() {
-		// @Override
-		// public void handle(CellEditEvent<Program, String> t) {
-		// ((Program)
-		// t.getTableView().getItems().get(t.getTablePosition().getRow())).setTime(t.getNewValue());
-		// int scriptId = script.getScriptId();
-		// int programId = t.getRowValue().getProgId();
-		// LocalDateTime newTime = t.getNewValue();
-		// weddingScriptController.editScriptProgramTime(scriptId, programId,
-		// newTime);
-		// }
-		// });
-		//
-		// table.getColumns().add(ldtCol);
-		// Test area END
-
 		List<Program> scriptPrograms = weddingScriptController.getScriptPrograms(script);
 		programsTable.getItems().addAll(scriptPrograms);
 
@@ -258,7 +230,7 @@ public class ScriptEditWindow {
 		programAntiTable.getColumns().add(programAntiNameCol);
 		programAntiTable.getColumns().add(programAntiDefaultTimeCol);
 
-		List<Program> antiPrograms = weddingScriptController.getProgramsNotInScript(script);
+		ObservableList<Program> antiPrograms = weddingScriptController.getProgramsNotInScript(script);
 
 		programAntiTable.setRowFactory(tv -> {
 			TableRow<Program> row = new TableRow<>();

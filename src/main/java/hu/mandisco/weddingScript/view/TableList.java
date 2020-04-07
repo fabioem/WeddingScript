@@ -31,11 +31,12 @@ public class TableList {
 	private WeddingScriptController weddingScriptController = new WeddingScriptController();
 
 	public TableView<Program> getProgramList() {
-		TableView<Program> table = new TableView<Program>();
 
-		table.setEditable(true);
+		TableView<Program> programListTable = new TableView<Program>();
 
-		table.setRowFactory(tv -> {
+		programListTable.setEditable(true);
+
+		programListTable.setRowFactory(tv -> {
 			TableRow<Program> row = new TableRow<>();
 			row.setOnMouseClicked(event -> {
 
@@ -47,8 +48,8 @@ public class TableList {
 						ObservableList<Program> data = FXCollections.observableArrayList();
 						data.addAll(weddingScriptController.getPrograms());
 						SortedList<Program> sortedData = new SortedList<>(data);
-						sortedData.comparatorProperty().bind(table.comparatorProperty());
-						table.setItems(sortedData);
+						sortedData.comparatorProperty().bind(programListTable.comparatorProperty());
+						programListTable.setItems(sortedData);
 					}
 				});
 
@@ -82,20 +83,20 @@ public class TableList {
 			return cell;
 		});
 
-		table.getColumns().add(nameCol);
-		table.getColumns().add(defaultTimeCol);
+		programListTable.getColumns().add(nameCol);
+		programListTable.getColumns().add(defaultTimeCol);
 
 		List<Program> programs = weddingScriptController.getPrograms();
 
 		// Sort by time
 		ObservableList<Program> data = FXCollections.observableArrayList();
 		SortedList<Program> sortedData = new SortedList<>(data);
-		sortedData.comparatorProperty().bind(table.comparatorProperty());
-		table.setItems(sortedData);
-		table.getSortOrder().add(defaultTimeCol);
+		sortedData.comparatorProperty().bind(programListTable.comparatorProperty());
+		programListTable.setItems(sortedData);
+		programListTable.getSortOrder().add(defaultTimeCol);
 		data.addAll(programs);
 
-		return table;
+		return programListTable;
 	}
 
 	public TableView<Script> getScriptList() {
@@ -107,10 +108,24 @@ public class TableList {
 		scriptListTable.setRowFactory(tv -> {
 			TableRow<Script> row = new TableRow<>();
 			row.setOnMouseClicked(event -> {
+
+				Stage stage = new Stage();
+				stage.setOnHiding(new EventHandler<WindowEvent>() {
+
+					@Override
+					public void handle(WindowEvent paramT) {
+						ObservableList<Script> data = FXCollections.observableArrayList();
+						data.addAll(weddingScriptController.getScripts());
+						SortedList<Script> sortedData = new SortedList<>(data);
+						sortedData.comparatorProperty().bind(scriptListTable.comparatorProperty());
+						scriptListTable.setItems(sortedData);
+					}
+				});
+
 				if (event.getClickCount() == 2 && (!row.isEmpty())) {
 					Script selectedScript = row.getItem();
 					ScriptEditWindow window = new ScriptEditWindow();
-					window.display(selectedScript);
+					window.display(stage, selectedScript);
 				}
 			});
 			return row;
@@ -325,14 +340,9 @@ public class TableList {
 		// Sort by default time
 		ObservableList<Attribute> data = FXCollections.observableArrayList();
 		SortedList<Attribute> sortedData = new SortedList<>(data);
-		// this ensures the sortedData is sorted according to the sort columns
-		// in the table:
 		sortedData.comparatorProperty().bind(table.comparatorProperty());
 		table.setItems(sortedData);
-		// programmatically set a sort column:
 		table.getSortOrder().add(nameCol);
-		// note that you should always manipulate the underlying list, not the
-		// sortedList:
 		data.addAll(attributes);
 
 		return table;
@@ -358,11 +368,11 @@ public class TableList {
 					services.remove(rowData);
 
 					// Handle SortedList
-					ObservableList<Service> data = FXCollections.observableArrayList();
-					SortedList<Service> sortedData = new SortedList<>(data);
+					ObservableList<Service> serviceData = FXCollections.observableArrayList();
+					SortedList<Service> sortedData = new SortedList<>(serviceData);
 					sortedData.comparatorProperty().bind(table.comparatorProperty());
 					table.setItems(sortedData);
-					data.addAll(services);
+					serviceData.addAll(services);
 
 					weddingScriptController.addServiceToScript(script, rowData);
 					servicesTable.getItems().clear();
