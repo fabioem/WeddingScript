@@ -48,7 +48,7 @@ public interface WeddingScriptDAO {
 
 	public List<Attribute> getAttributes();
 
-	public List<Attribute> getAttributesOfScript(Script script);
+	public ObservableList<Attribute> getAttributesOfScript(Script script);
 
 	public List<Attribute> getAttributesNotInScript(Script script);
 
@@ -73,5 +73,7 @@ public interface WeddingScriptDAO {
 	public boolean setAttribute(Attribute attribute);
 
 	public boolean setScript(Script script);
+
+	public boolean removeAttributeFromScript(Script script, Attribute attribute);
 
 }

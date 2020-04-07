@@ -88,7 +88,7 @@ public class WeddingScriptController {
 		return dao.getAttributes();
 	};
 
-	public List<Attribute> getAttributesOfScript(Script script) {
+	public ObservableList<Attribute> getAttributesOfScript(Script script) {
 		return dao.getAttributesOfScript(script);
 	}
 
@@ -142,5 +142,9 @@ public class WeddingScriptController {
 
 	public boolean setScript(Script script) {
 		return dao.setScript(script);
+	}
+
+	public boolean removeAttributeFromScript(Script script, Attribute attribute) {
+		return dao.removeAttributeFromScript(script, attribute);
 	}
 }

@@ -263,8 +263,11 @@ public class TableList {
 			row.setOnMouseClicked(event -> {
 				if (event.getClickCount() == 2 && (!row.isEmpty())) {
 					Attribute selectedAttribute = row.getItem();
-					AttributeEditWindow window = new AttributeEditWindow();
-					window.display(selectedAttribute);
+					weddingScriptController.removeAttributeFromScript(script, selectedAttribute);
+					attributeListTable.getItems().clear();
+					attributeListTable.getItems().addAll(weddingScriptController.getAttributesOfScript(script));
+
+					//TODO: anti table refresh
 				}
 			});
 			return row;
@@ -290,16 +293,16 @@ public class TableList {
 		attributeListTable.getColumns().add(nameCol);
 		attributeListTable.getColumns().add(valueCol);
 
-		List<Attribute> attributes = weddingScriptController.getAttributesOfScript(script);
+		ObservableList<Attribute> attributes = weddingScriptController.getAttributesOfScript(script);
 		attributeListTable.getItems().addAll(attributes);
 
 		return attributeListTable;
 	}
 
 	public TableView<Attribute> getAttributeListNotInScript(Script script, TableView<Attribute> attributeTable) {
-		TableView<Attribute> table = new TableView<Attribute>();
+		TableView<Attribute> attributeAntiTable = new TableView<Attribute>();
 
-		table.setEditable(true);
+		attributeAntiTable.setEditable(true);
 
 		TableColumn<Attribute, String> nameCol = new TableColumn<Attribute, String>("Név");
 		nameCol.setCellValueFactory(new PropertyValueFactory<Attribute, String>("name"));
@@ -307,12 +310,12 @@ public class TableList {
 		TableColumn<Attribute, String> valueCol = new TableColumn<Attribute, String>("Alap érték");
 		valueCol.setCellValueFactory(new PropertyValueFactory<Attribute, String>("defaultValue"));
 
-		table.getColumns().add(nameCol);
-		table.getColumns().add(valueCol);
+		attributeAntiTable.getColumns().add(nameCol);
+		attributeAntiTable.getColumns().add(valueCol);
 
 		List<Attribute> attributes = weddingScriptController.getAttributesNotInScript(script);
 
-		table.setRowFactory(tv -> {
+		attributeAntiTable.setRowFactory(tv -> {
 			TableRow<Attribute> row = new TableRow<>();
 			row.setOnMouseClicked(event -> {
 				if (event.getClickCount() == 2 && (!row.isEmpty())) {
@@ -322,8 +325,8 @@ public class TableList {
 					// Handle SortedList
 					ObservableList<Attribute> data = FXCollections.observableArrayList();
 					SortedList<Attribute> sortedData = new SortedList<>(data);
-					sortedData.comparatorProperty().bind(table.comparatorProperty());
-					table.setItems(sortedData);
+					sortedData.comparatorProperty().bind(attributeAntiTable.comparatorProperty());
+					attributeAntiTable.setItems(sortedData);
 					data.addAll(attributes);
 
 					weddingScriptController.addAttributeToScript(script, rowData);
@@ -335,17 +338,17 @@ public class TableList {
 			return row;
 		});
 
-		table.getItems().addAll(attributes);
+		attributeAntiTable.getItems().addAll(attributes);
 
 		// Sort by default time
 		ObservableList<Attribute> data = FXCollections.observableArrayList();
 		SortedList<Attribute> sortedData = new SortedList<>(data);
-		sortedData.comparatorProperty().bind(table.comparatorProperty());
-		table.setItems(sortedData);
-		table.getSortOrder().add(nameCol);
+		sortedData.comparatorProperty().bind(attributeAntiTable.comparatorProperty());
+		attributeAntiTable.setItems(sortedData);
+		attributeAntiTable.getSortOrder().add(nameCol);
 		data.addAll(attributes);
 
-		return table;
+		return attributeAntiTable;
 	}
 
 	public TableView<Service> getServiceListNotInScript(Script script, TableView<Service> servicesTable) {

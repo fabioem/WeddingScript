@@ -982,11 +982,11 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 	}
 
 	@Override
-	public List<Attribute> getAttributesOfScript(Script script) {
+	public ObservableList<Attribute> getAttributesOfScript(Script script) {
 		Connection conn = null;
 		PreparedStatement pst = null;
 		String errorDesc = "listing script's attributes";
-		List<Attribute> scriptAttrList = new ArrayList<Attribute>();
+		ObservableList<Attribute> scriptAttrList = FXCollections.observableArrayList();
 
 		try {
 
@@ -1667,6 +1667,55 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					: script.getDate().format(DateTimeFormatter.ofPattern(DATEFORMAT_DATETIME_FOR_INSERT)));
 			pst.setString(index++, script.getComment());
 			pst.setInt(index++, script.getScriptId());
+
+			int rowsAffected = pst.executeUpdate();
+			if (rowsAffected == 1) {
+				rvSucceeded = true;
+			}
+		} catch (SQLException e) {
+			System.out.println("Failed to execute " + errorDesc + ".");
+			e.printStackTrace();
+		} finally {
+
+			try {
+				if (pst != null) {
+					pst.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Failed to close statement when " + errorDesc + ".");
+				e.printStackTrace();
+			}
+
+			try {
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Failed to close connection when " + errorDesc + ".");
+				e.printStackTrace();
+			}
+		}
+
+		return rvSucceeded;
+	}
+
+	@Override
+	public boolean removeAttributeFromScript(Script script, Attribute attribute) {
+
+		String errorDesc = "removing attribute from script";
+		boolean rvSucceeded = false;
+		Connection conn = null;
+		PreparedStatement pst = null;
+
+		try {
+
+			conn = DriverManager.getConnection(databaseConnectionURL);
+			pst = conn.prepareStatement("DELETE FROM scriptAttr WHERE scriptId = ? AND attrId = ?");
+
+			int index = 1;
+
+			pst.setInt(index++, script.getScriptId());
+			pst.setInt(index++, attribute.getAttrId());
 
 			int rowsAffected = pst.executeUpdate();
 			if (rowsAffected == 1) {
