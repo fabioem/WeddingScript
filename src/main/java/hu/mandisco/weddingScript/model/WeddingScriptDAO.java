@@ -50,7 +50,7 @@ public interface WeddingScriptDAO {
 
 	public ObservableList<Attribute> getAttributesOfScript(Script script);
 
-	public List<Attribute> getAttributesNotInScript(Script script);
+	public ObservableList<Attribute> getAttributesNotInScript(Script script);
 
 	public boolean addAttributeToScript(Script script, Attribute attribute);
 

@@ -1048,11 +1048,11 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 	}
 
 	@Override
-	public List<Attribute> getAttributesNotInScript(Script script) {
+	public ObservableList<Attribute> getAttributesNotInScript(Script script) {
 		Connection conn = null;
 		PreparedStatement pst = null;
 		String errorDesc = "reverse listing script's attributes";
-		List<Attribute> scriptAttrList = new ArrayList<Attribute>();
+		ObservableList<Attribute> scriptAttrList = FXCollections.observableArrayList();
 
 		try {
 

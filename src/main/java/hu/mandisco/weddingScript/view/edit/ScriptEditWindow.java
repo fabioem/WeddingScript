@@ -31,6 +31,7 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
@@ -105,13 +106,112 @@ public class ScriptEditWindow {
 		topGrid.getChildren().addAll(nameLabel, nameInput, commentLabel, commentInput, dateLabel, dateInput);
 		centerLayout.setTop(topGrid);
 		// CENTER - CENTER
-		// 1. Script attributes
-		TableView<Attribute> attributesTable = tableList.getAttributeListOfScript(script);
+
+		/*
+		 *
+		 * ATTRIBUTES
+		 *
+		 */
+		TableView<Attribute> attributesTable = new TableView<Attribute>();
+		TableView<Attribute> attributeAntiTable = new TableView<Attribute>();
+
 		attributesTable.setEditable(true);
 
-		// 2. Program
-		// TableView<Program> programsTable =
-		// tableList.getProgramListOfScript(script);
+		attributesTable.setRowFactory(tv -> {
+			TableRow<Attribute> row = new TableRow<>();
+			row.setOnMouseClicked(event -> {
+				if (event.getClickCount() == 2 && (!row.isEmpty())) {
+					Attribute selectedAttribute = row.getItem();
+					weddingScriptController.removeAttributeFromScript(script, selectedAttribute);
+					attributesTable.getItems().clear();
+					attributesTable.getItems().addAll(weddingScriptController.getAttributesOfScript(script));
+
+					// attributeAntiTable.getItems().add(selectedAttribute);
+					attributeAntiTable.getItems().clear();
+					attributeAntiTable.getItems().addAll(weddingScriptController.getAttributesNotInScript(script));
+					// TODO: anti table refresh
+				}
+			});
+			return row;
+		});
+
+		TableColumn<Attribute, String> nameCol = new TableColumn<Attribute, String>("Név");
+		nameCol.setCellValueFactory(new PropertyValueFactory<Attribute, String>("name"));
+
+		TableColumn<Attribute, String> valueCol = new TableColumn<Attribute, String>("Érték");
+		valueCol.setCellValueFactory(new PropertyValueFactory<Attribute, String>("value"));
+		valueCol.setCellFactory(TextFieldTableCell.<Attribute>forTableColumn());
+		valueCol.setOnEditCommit(new EventHandler<CellEditEvent<Attribute, String>>() {
+			@Override
+			public void handle(CellEditEvent<Attribute, String> t) {
+				((Attribute) t.getTableView().getItems().get(t.getTablePosition().getRow())).setValue(t.getNewValue());
+				int scriptId = script.getScriptId();
+				int attributeId = t.getRowValue().getAttrId();
+				String newAttrValue = t.getNewValue();
+				weddingScriptController.editScriptAttributeValue(scriptId, attributeId, newAttrValue);
+			}
+		});
+
+		attributesTable.getColumns().add(nameCol);
+		attributesTable.getColumns().add(valueCol);
+
+		ObservableList<Attribute> attributes = weddingScriptController.getAttributesOfScript(script);
+		attributesTable.getItems().addAll(attributes);
+		attributesTable.setEditable(true);
+
+		/*
+		 * ANTI ATTRIBUTES
+		 */
+
+		attributeAntiTable.setEditable(true);
+
+		TableColumn<Attribute, String> nameAntiCol = new TableColumn<Attribute, String>("Név");
+		nameAntiCol.setCellValueFactory(new PropertyValueFactory<Attribute, String>("name"));
+
+		TableColumn<Attribute, String> valueAntiCol = new TableColumn<Attribute, String>("Alap érték");
+		valueAntiCol.setCellValueFactory(new PropertyValueFactory<Attribute, String>("defaultValue"));
+
+		attributeAntiTable.getColumns().add(nameAntiCol);
+		attributeAntiTable.getColumns().add(valueAntiCol);
+
+		ObservableList<Attribute> antiAttributes = weddingScriptController.getAttributesNotInScript(script);
+
+		attributeAntiTable.setRowFactory(tv -> {
+			TableRow<Attribute> row = new TableRow<>();
+			row.setOnMouseClicked(event -> {
+				if (event.getClickCount() == 2 && (!row.isEmpty())) {
+					Attribute rowData = row.getItem();
+					antiAttributes.remove(rowData);
+					attributeAntiTable.setItems(antiAttributes);
+
+					weddingScriptController.addAttributeToScript(script, rowData);
+					attributesTable.getItems().clear();
+					attributesTable.getItems().addAll(weddingScriptController.getScriptAttributes(script));
+
+				}
+			});
+			return row;
+		});
+
+		attributeAntiTable.getItems().addAll(antiAttributes);
+
+		// Sort by default time
+		ObservableList<Attribute> data = FXCollections.observableArrayList();
+		SortedList<Attribute> sortedData = new SortedList<>(data);
+		sortedData.comparatorProperty().bind(attributeAntiTable.comparatorProperty());
+		attributeAntiTable.setItems(sortedData);
+		attributeAntiTable.getSortOrder().add(nameAntiCol);
+		data.addAll(antiAttributes);
+
+		GridPane.setConstraints(attributesTable, 0, 0);
+		GridPane.setHgrow(attributesTable, Priority.ALWAYS);
+		GridPane.setConstraints(attributeAntiTable, 1, 0);
+		GridPane.setHgrow(attributeAntiTable, Priority.ALWAYS);
+
+		/*
+		 * 2. PROGRAM
+		 */
+
 		TableView<Program> programsTable = new TableView<Program>();
 
 		programsTable.setEditable(true);
@@ -193,13 +293,6 @@ public class ScriptEditWindow {
 		GridPane programsCenterGrid = new GridPane();
 		GridPane servicesCenterGrid = new GridPane();
 
-		// Script Attributes
-		TableView<Attribute> attributeAntiTable = tableList.getAttributeListNotInScript(script, attributesTable);
-		GridPane.setConstraints(attributesTable, 0, 0);
-		GridPane.setHgrow(attributesTable, Priority.ALWAYS);
-		GridPane.setConstraints(attributeAntiTable, 1, 0);
-		GridPane.setHgrow(attributeAntiTable, Priority.ALWAYS);
-
 		// Script programs
 		TableView<Program> programAntiTable = new TableView<Program>();
 
@@ -257,12 +350,12 @@ public class ScriptEditWindow {
 		programAntiTable.getItems().addAll(antiPrograms);
 
 		// Sort by default time
-		ObservableList<Program> data = FXCollections.observableArrayList();
-		SortedList<Program> sortedData = new SortedList<>(data);
-		sortedData.comparatorProperty().bind(programAntiTable.comparatorProperty());
-		programAntiTable.setItems(sortedData);
+		ObservableList<Program> antiData = FXCollections.observableArrayList();
+		SortedList<Program> sortedAntiData = new SortedList<>(antiData);
+		sortedAntiData.comparatorProperty().bind(programAntiTable.comparatorProperty());
+		programAntiTable.setItems(sortedAntiData);
 		programAntiTable.getSortOrder().add(programAntiDefaultTimeCol);
-		data.addAll(antiPrograms);
+		antiData.addAll(antiPrograms);
 		GridPane.setConstraints(programsTable, 0, 0);
 		GridPane.setHgrow(programsTable, Priority.ALWAYS);
 		GridPane.setConstraints(programAntiTable, 1, 0);
