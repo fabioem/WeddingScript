@@ -37,6 +37,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.converter.LocalDateTimeStringConverter;
 
 public class ScriptEditWindow {
 
@@ -220,25 +221,40 @@ public class ScriptEditWindow {
 		programNameCol.setCellValueFactory(new PropertyValueFactory<Program, String>("name"));
 
 		TableColumn<Program, LocalDateTime> programTimeCol = new TableColumn<Program, LocalDateTime>("Idő");
+		programTimeCol.setEditable(true);
 		programTimeCol.setCellValueFactory(new PropertyValueFactory<Program, LocalDateTime>("time"));
-		programTimeCol.setCellFactory(column -> {
-			TableCell<Program, LocalDateTime> cell = new TableCell<Program, LocalDateTime>() {
-				@Override
-				protected void updateItem(LocalDateTime item, boolean empty) {
-					super.updateItem(item, empty);
-					if (item == null || empty) {
-						setText(null);
-					} else {
-						setText(item.format(DateTimeFormatter.ofPattern(weddingScriptController.DATEFORMAT_TIME)));
-					}
-				}
+		// programTimeCol.setCellFactory(column -> {
+		// TableCell<Program, LocalDateTime> cell = new TableCell<Program,
+		// LocalDateTime>() {
+		// @Override
+		// protected void updateItem(LocalDateTime item, boolean empty) {
+		// super.updateItem(item, empty);
+		// if (item == null || empty) {
+		// setText(null);
+		// } else {
+		// setText(item.format(DateTimeFormatter.ofPattern(weddingScriptController.DATEFORMAT_TIME)));
+		// }
+		// }
+		//
+		// };
+		// return cell;
+		// });
 
-			};
-			return cell;
-		});
+		// TODO Handle time editing
 
-		// TODO handle time editing
-		// timeCol.setCellFactory(TextFieldTableCell.<Attribute>forTableColumn());
+		// DateTimeFormatter dateTimeFormatter = new
+		// DateTimeFormatterBuilder().optionalStart()
+		// .appendPattern("yyyy.MM.dd ").optionalEnd().appendPattern("HH:mm")
+		// .parseDefaulting(ChronoField.YEAR,
+		// 1970).parseDefaulting(ChronoField.MONTH_OF_YEAR, 1)
+		// .parseDefaulting(ChronoField.DAY_OF_MONTH, 1).toFormatter();
+		// programTimeCol.setCellFactory(
+		// TextFieldTableCell.forTableColumn(new
+		// LocalDateTimeStringConverter(dateTimeFormatter, null)));
+
+		programTimeCol.setCellFactory(TextFieldTableCell.forTableColumn(
+				new LocalDateTimeStringConverter(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"), null)));
+
 		programTimeCol.setOnEditCommit(new EventHandler<CellEditEvent<Program, LocalDateTime>>() {
 			@Override
 			public void handle(CellEditEvent<Program, LocalDateTime> t) {

@@ -1502,7 +1502,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 		try {
 
 			conn = DriverManager.getConnection(databaseConnectionURL);
-			pst = conn.prepareStatement("UPDATE scriptProg SET value = ? WHERE scriptId = ? AND progId = ?;");
+			pst = conn.prepareStatement("UPDATE scriptProg SET time = ? WHERE scriptId = ? AND progId = ?;");
 
 			int index = 1;
 
