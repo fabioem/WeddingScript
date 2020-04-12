@@ -438,7 +438,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 	public ObservableList<Program> getProgramsOfScript(Script script) {
 		Connection conn = null;
 		PreparedStatement pst = null;
-		String errorDesc = "listing programs";
+		String errorDesc = "listing programs of script";
 
 		ObservableList<Program> programs = FXCollections.observableArrayList();
 		programs.clear();
@@ -463,7 +463,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				Program program = new Program();
 				program.setName(name);
 				program.setProgId(progId);
-				program.setDefaultTime(LocalDateTime.ofInstant(Instant.ofEpochMilli(defaultTime), ZoneId.of("+0")));
+				program.setDefaultTime(
+						LocalDateTime.ofInstant(Instant.ofEpochMilli(defaultTime), ZoneId.of("+0")));
 				program.setTime(LocalDateTime.ofInstant(Instant.ofEpochMilli(time), ZoneId.of("+0")));
 
 				programs.add(program);

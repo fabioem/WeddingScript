@@ -2,7 +2,10 @@ package hu.mandisco.weddingScript.view.edit;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
 import java.util.List;
+import java.util.Locale;
 
 import hu.mandisco.weddingScript.controller.WeddingScriptController;
 import hu.mandisco.weddingScript.model.bean.Attribute;
@@ -104,7 +107,8 @@ public class ScriptEditWindow {
 		commentInput.setText(script.getComment());
 		GridPane.setConstraints(commentInput, 1, 2);
 
-		topGrid.getChildren().addAll(nameLabel, nameInput, commentLabel, commentInput, dateLabel, dateInput);
+		topGrid.getChildren().addAll(nameLabel, nameInput, commentLabel, commentInput, dateLabel,
+				dateInput);
 		centerLayout.setTop(topGrid);
 		// CENTER - CENTER
 
@@ -125,11 +129,13 @@ public class ScriptEditWindow {
 					Attribute selectedAttribute = row.getItem();
 					weddingScriptController.removeAttributeFromScript(script, selectedAttribute);
 					attributesTable.getItems().clear();
-					attributesTable.getItems().addAll(weddingScriptController.getAttributesOfScript(script));
+					attributesTable.getItems()
+							.addAll(weddingScriptController.getAttributesOfScript(script));
 
 					// attributeAntiTable.getItems().add(selectedAttribute);
 					attributeAntiTable.getItems().clear();
-					attributeAntiTable.getItems().addAll(weddingScriptController.getAttributesNotInScript(script));
+					attributeAntiTable.getItems()
+							.addAll(weddingScriptController.getAttributesNotInScript(script));
 					// TODO: anti table refresh
 				}
 			});
@@ -145,18 +151,21 @@ public class ScriptEditWindow {
 		valueCol.setOnEditCommit(new EventHandler<CellEditEvent<Attribute, String>>() {
 			@Override
 			public void handle(CellEditEvent<Attribute, String> t) {
-				((Attribute) t.getTableView().getItems().get(t.getTablePosition().getRow())).setValue(t.getNewValue());
+				((Attribute) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.setValue(t.getNewValue());
 				int scriptId = script.getScriptId();
 				int attributeId = t.getRowValue().getAttrId();
 				String newAttrValue = t.getNewValue();
-				weddingScriptController.editScriptAttributeValue(scriptId, attributeId, newAttrValue);
+				weddingScriptController.editScriptAttributeValue(scriptId, attributeId,
+						newAttrValue);
 			}
 		});
 
 		attributesTable.getColumns().add(nameCol);
 		attributesTable.getColumns().add(valueCol);
 
-		ObservableList<Attribute> attributes = weddingScriptController.getAttributesOfScript(script);
+		ObservableList<Attribute> attributes = weddingScriptController
+				.getAttributesOfScript(script);
 		attributesTable.getItems().addAll(attributes);
 		attributesTable.setEditable(true);
 
@@ -169,13 +178,16 @@ public class ScriptEditWindow {
 		TableColumn<Attribute, String> nameAntiCol = new TableColumn<Attribute, String>("Név");
 		nameAntiCol.setCellValueFactory(new PropertyValueFactory<Attribute, String>("name"));
 
-		TableColumn<Attribute, String> valueAntiCol = new TableColumn<Attribute, String>("Alap érték");
-		valueAntiCol.setCellValueFactory(new PropertyValueFactory<Attribute, String>("defaultValue"));
+		TableColumn<Attribute, String> valueAntiCol = new TableColumn<Attribute, String>(
+				"Alap érték");
+		valueAntiCol
+				.setCellValueFactory(new PropertyValueFactory<Attribute, String>("defaultValue"));
 
 		attributeAntiTable.getColumns().add(nameAntiCol);
 		attributeAntiTable.getColumns().add(valueAntiCol);
 
-		ObservableList<Attribute> antiAttributes = weddingScriptController.getAttributesNotInScript(script);
+		ObservableList<Attribute> antiAttributes = weddingScriptController
+				.getAttributesNotInScript(script);
 
 		attributeAntiTable.setRowFactory(tv -> {
 			TableRow<Attribute> row = new TableRow<>();
@@ -187,7 +199,8 @@ public class ScriptEditWindow {
 
 					weddingScriptController.addAttributeToScript(script, rowData);
 					attributesTable.getItems().clear();
-					attributesTable.getItems().addAll(weddingScriptController.getScriptAttributes(script));
+					attributesTable.getItems()
+							.addAll(weddingScriptController.getScriptAttributes(script));
 
 				}
 			});
@@ -220,45 +233,24 @@ public class ScriptEditWindow {
 		TableColumn<Program, String> programNameCol = new TableColumn<Program, String>("Név");
 		programNameCol.setCellValueFactory(new PropertyValueFactory<Program, String>("name"));
 
-		TableColumn<Program, LocalDateTime> programTimeCol = new TableColumn<Program, LocalDateTime>("Idő");
+		TableColumn<Program, LocalDateTime> programTimeCol = new TableColumn<Program, LocalDateTime>(
+				"Idő");
 		programTimeCol.setEditable(true);
-		programTimeCol.setCellValueFactory(new PropertyValueFactory<Program, LocalDateTime>("time"));
-		// programTimeCol.setCellFactory(column -> {
-		// TableCell<Program, LocalDateTime> cell = new TableCell<Program,
-		// LocalDateTime>() {
-		// @Override
-		// protected void updateItem(LocalDateTime item, boolean empty) {
-		// super.updateItem(item, empty);
-		// if (item == null || empty) {
-		// setText(null);
-		// } else {
-		// setText(item.format(DateTimeFormatter.ofPattern(weddingScriptController.DATEFORMAT_TIME)));
-		// }
-		// }
-		//
-		// };
-		// return cell;
-		// });
+		programTimeCol
+				.setCellValueFactory(new PropertyValueFactory<Program, LocalDateTime>("time"));
 
-		// TODO Handle time editing
+		DateTimeFormatter parseFormatter = new DateTimeFormatterBuilder()
+				.appendPattern("D'. nap' HH:mm").parseDefaulting(ChronoField.YEAR, 1970)
+				.toFormatter(Locale.ENGLISH);
 
-		// DateTimeFormatter dateTimeFormatter = new
-		// DateTimeFormatterBuilder().optionalStart()
-		// .appendPattern("yyyy.MM.dd ").optionalEnd().appendPattern("HH:mm")
-		// .parseDefaulting(ChronoField.YEAR,
-		// 1970).parseDefaulting(ChronoField.MONTH_OF_YEAR, 1)
-		// .parseDefaulting(ChronoField.DAY_OF_MONTH, 1).toFormatter();
-		// programTimeCol.setCellFactory(
-		// TextFieldTableCell.forTableColumn(new
-		// LocalDateTimeStringConverter(dateTimeFormatter, null)));
-
-		programTimeCol.setCellFactory(TextFieldTableCell.forTableColumn(
-				new LocalDateTimeStringConverter(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm"), null)));
+		programTimeCol.setCellFactory(TextFieldTableCell
+				.forTableColumn(new LocalDateTimeStringConverter(parseFormatter, null)));
 
 		programTimeCol.setOnEditCommit(new EventHandler<CellEditEvent<Program, LocalDateTime>>() {
 			@Override
 			public void handle(CellEditEvent<Program, LocalDateTime> t) {
-				((Program) t.getTableView().getItems().get(t.getTablePosition().getRow())).setTime(t.getNewValue());
+				((Program) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.setTime(t.getNewValue());
 				int scriptId = script.getScriptId();
 				int programId = t.getRowValue().getProgId();
 				LocalDateTime newTime = t.getNewValue();
@@ -271,15 +263,6 @@ public class ScriptEditWindow {
 
 		List<Program> scriptPrograms = weddingScriptController.getScriptPrograms(script);
 		programsTable.getItems().addAll(scriptPrograms);
-
-		// TODO sorting doesn't work
-		/*
-		 * https://stackoverflow.com/questions/38045546/formatting-an-
-		 * objectpropertylocaldatetime-in-a-tableview-column Alternatively, you
-		 * can have a DateTimeFormatter to convert the LocalDateTime into a
-		 * String, but in this case table sorting will not work (will use string
-		 * ordering). Thanks @JFValdes to point that out.
-		 */
 
 		// Sort by time
 		ObservableList<Program> programData = FXCollections.observableArrayList();
@@ -296,7 +279,8 @@ public class ScriptEditWindow {
 		TableView<Service> servicesTable = new TableView<Service>();
 		servicesTable.setEditable(true);
 
-		TableColumn<Service, String> scriptsNameCol = new TableColumn<Service, String>("Szolgáltatás");
+		TableColumn<Service, String> scriptsNameCol = new TableColumn<Service, String>(
+				"Szolgáltatás");
 		scriptsNameCol.setCellValueFactory(new PropertyValueFactory<Service, String>("name"));
 
 		servicesTable.getColumns().add(scriptsNameCol);
@@ -319,7 +303,8 @@ public class ScriptEditWindow {
 
 		TableColumn<Program, LocalDateTime> programAntiDefaultTimeCol = new TableColumn<Program, LocalDateTime>(
 				"Alapértelmezett időpont");
-		programAntiDefaultTimeCol.setCellValueFactory(new PropertyValueFactory<Program, LocalDateTime>("defaultTime"));
+		programAntiDefaultTimeCol.setCellValueFactory(
+				new PropertyValueFactory<Program, LocalDateTime>("defaultTime"));
 		programAntiDefaultTimeCol.setCellFactory(column -> {
 			TableCell<Program, LocalDateTime> cell = new TableCell<Program, LocalDateTime>() {
 				@Override
@@ -328,7 +313,8 @@ public class ScriptEditWindow {
 					if (item == null || empty) {
 						setText(null);
 					} else {
-						setText(item.format(DateTimeFormatter.ofPattern(weddingScriptController.DATEFORMAT_TIME)));
+						setText(item.format(DateTimeFormatter
+								.ofPattern(weddingScriptController.DATEFORMAT_TIME)));
 					}
 				}
 			};
@@ -339,7 +325,8 @@ public class ScriptEditWindow {
 		programAntiTable.getColumns().add(programAntiNameCol);
 		programAntiTable.getColumns().add(programAntiDefaultTimeCol);
 
-		ObservableList<Program> antiPrograms = weddingScriptController.getProgramsNotInScript(script);
+		ObservableList<Program> antiPrograms = weddingScriptController
+				.getProgramsNotInScript(script);
 
 		programAntiTable.setRowFactory(tv -> {
 			TableRow<Program> row = new TableRow<>();
@@ -351,7 +338,8 @@ public class ScriptEditWindow {
 					// Handle SortedList
 					ObservableList<Program> programAntiData = FXCollections.observableArrayList();
 					SortedList<Program> sortedProgramAntiData = new SortedList<>(programAntiData);
-					sortedProgramAntiData.comparatorProperty().bind(programAntiTable.comparatorProperty());
+					sortedProgramAntiData.comparatorProperty()
+							.bind(programAntiTable.comparatorProperty());
 					programAntiData.addAll(antiPrograms);
 					programAntiTable.setItems(sortedProgramAntiData);
 
@@ -378,7 +366,8 @@ public class ScriptEditWindow {
 		GridPane.setHgrow(programAntiTable, Priority.ALWAYS);
 
 		// Script services
-		TableView<Service> servicesAntiTable = tableList.getServiceListNotInScript(script, servicesTable);
+		TableView<Service> servicesAntiTable = tableList.getServiceListNotInScript(script,
+				servicesTable);
 		GridPane.setConstraints(servicesTable, 0, 0);
 		GridPane.setHgrow(servicesTable, Priority.ALWAYS);
 		GridPane.setConstraints(servicesAntiTable, 1, 0);
