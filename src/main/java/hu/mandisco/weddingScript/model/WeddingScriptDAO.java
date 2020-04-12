@@ -76,4 +76,14 @@ public interface WeddingScriptDAO {
 
 	public boolean removeAttributeFromScript(Script script, Attribute attribute);
 
+	public ObservableList<Attribute> getAttributesOfScriptProgram(Script script, Program program);
+
+	public ObservableList<Attribute> getAttributesNotInScriptProgram(Script script,
+			Program program);
+
+	public boolean removeAttributeFromScriptProgram(Script script, Program program,
+			Attribute attribute);
+
+	public boolean addAttributeToScriptProgram(Script script, Program program, Attribute attribute);
+
 }

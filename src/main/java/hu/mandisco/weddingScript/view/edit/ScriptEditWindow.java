@@ -132,11 +132,9 @@ public class ScriptEditWindow {
 					attributesTable.getItems()
 							.addAll(weddingScriptController.getAttributesOfScript(script));
 
-					// attributeAntiTable.getItems().add(selectedAttribute);
 					attributeAntiTable.getItems().clear();
 					attributeAntiTable.getItems()
 							.addAll(weddingScriptController.getAttributesNotInScript(script));
-					// TODO: anti table refresh
 				}
 			});
 			return row;
@@ -223,12 +221,30 @@ public class ScriptEditWindow {
 		GridPane.setHgrow(attributeAntiTable, Priority.ALWAYS);
 
 		/*
+		 *
 		 * 2. PROGRAM
+		 *
 		 */
 
 		TableView<Program> programsTable = new TableView<Program>();
 
 		programsTable.setEditable(true);
+
+		programsTable.setRowFactory(tv -> {
+			TableRow<Program> row = new TableRow<>();
+			row.setOnMouseClicked(event -> {
+				if (event.getClickCount() == 2 && (!row.isEmpty())) {
+					Program rowData = row.getItem();
+
+					Stage stage = new Stage();
+
+					ScriptProgramAttributesEditWindow editWindow = new ScriptProgramAttributesEditWindow();
+					editWindow.display(stage, rowData, script);
+
+				}
+			});
+			return row;
+		});
 
 		TableColumn<Program, String> programNameCol = new TableColumn<Program, String>("Név");
 		programNameCol.setCellValueFactory(new PropertyValueFactory<Program, String>("name"));
@@ -293,7 +309,9 @@ public class ScriptEditWindow {
 		GridPane programsCenterGrid = new GridPane();
 		GridPane servicesCenterGrid = new GridPane();
 
-		// Script programs
+		/*
+		 * ANTI PROGRAM
+		 */
 		TableView<Program> programAntiTable = new TableView<Program>();
 
 		programAntiTable.setEditable(true);

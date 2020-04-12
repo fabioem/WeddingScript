@@ -16,6 +16,15 @@ CREATE TABLE scriptProg(
 	FOREIGN KEY (progId) REFERENCES programs(progId) ON DELETE CASCADE
 );
 
+CREATE TABLE scriptProgAttr(
+	scriptId int NOT NULL,
+	progId int NOT NULL,
+	attrId int NOT NULL,
+	value varchar(255),
+	FOREIGN KEY (scriptId) REFERENCES scripts(scriptId) ON DELETE CASCADE,
+	FOREIGN KEY (progId) REFERENCES programs(progId) ON DELETE CASCADE
+);
+
 -- PROGRAM
 CREATE TABLE programs(
 	progId INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -56,13 +65,6 @@ CREATE TABLE scriptAttr(
 	FOREIGN KEY (attrId) REFERENCES attributes(attrId) ON DELETE CASCADE
 );
 
-CREATE TABLE attrAttr(
-	mainAttrId int NOT NULL,
-	subAttrId int NOT NULL,
-	FOREIGN KEY (mainAttrId) REFERENCES attributes(attrId) ON DELETE CASCADE
-	FOREIGN KEY (subAttrId) REFERENCES attributes(attrId) ON DELETE CASCADE
-);
-
 -- SERVICE
 CREATE TABLE services(
 	serviceId INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -82,14 +84,6 @@ CREATE TABLE scriptService(
 	FOREIGN KEY (serviceId) REFERENCES services(serviceId) ON DELETE CASCADE,
 	FOREIGN KEY (scriptId) REFERENCES scripts(scriptId) ON DELETE CASCADE
 );
-
--- CREATE TABLE serviceAttr(
-	-- serviceId int NOT NULL,
-	-- attrId int NOT NULL,
-	-- defaultValue varchar(255),
-	-- FOREIGN KEY (serviceId) REFERENCES services(serviceId) ON DELETE CASCADE,
-	-- FOREIGN KEY (attrId) REFERENCES attributes(attrId) ON DELETE CASCADE
--- );
 
 -- Insert demo values
 INSERT INTO programs VALUES(0, "Vacsora", 68400000);
