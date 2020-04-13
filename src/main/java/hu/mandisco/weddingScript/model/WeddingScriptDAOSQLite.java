@@ -77,12 +77,14 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				int progId = rs.getInt("progId");
 				String name = rs.getString("name");
 				int defaultTime = rs.getInt("defaultTime");
+				Boolean defaultProgram = rs.getInt("defaultProgram") != 0;
 
 				Program program = new Program();
 				program.setName(name);
 				program.setProgId(progId);
 				program.setDefaultTime(LocalDateTime.ofInstant(Instant.ofEpochMilli(defaultTime),
 						ZoneId.of("+0")));
+				program.setDefaultProgram(defaultProgram);
 
 				programs.add(program);
 			}
@@ -370,6 +372,17 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 			if (rowsAffected == 1) {
 				rvSucceeded = true;
 			}
+
+			Statement st = null;
+			st = conn.createStatement();
+			ResultSet rs = st.executeQuery("SELECT last_insert_rowid() AS lastId");
+
+			int rowId = -1;
+			while (rs.next()) {
+				rowId = rs.getInt("lastId");
+			}
+			script.setScriptId(rowId);
+
 		} catch (SQLException e) {
 			System.out.println("Failed to execute " + errorDesc + ".");
 			e.printStackTrace();
@@ -466,6 +479,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				String name = rs.getString("name");
 				int defaultTime = rs.getInt("defaultTime");
 				int time = rs.getInt("time");
+				Boolean defaultProgram = rs.getInt("defaultProgram") != 0;
 
 				Program program = new Program();
 				program.setName(name);
@@ -474,7 +488,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 						ZoneId.of("+0")));
 				program.setTime(
 						LocalDateTime.ofInstant(Instant.ofEpochMilli(time), ZoneId.of("+0")));
-
+				program.setDefaultProgram(defaultProgram);
 				programs.add(program);
 			}
 
@@ -530,12 +544,14 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				int progId = rs.getInt("progId");
 				String name = rs.getString("name");
 				int defaultTime = rs.getInt("defaultTime");
+				Boolean defaultProgram = rs.getInt("defaultProgram") != 0;
 
 				Program program = new Program();
 				program.setName(name);
 				program.setProgId(progId);
 				program.setDefaultTime(LocalDateTime.ofInstant(Instant.ofEpochMilli(defaultTime),
 						ZoneId.of("+0")));
+				program.setDefaultProgram(defaultProgram);
 
 				programs.add(program);
 			}
@@ -2002,7 +2018,6 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 		return rvSucceeded;
 	}
 
-
 	public boolean addService(Service service) {
 		String errorDesc = "adding service";
 		boolean rvSucceeded = false;
@@ -2012,8 +2027,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 		try {
 
 			conn = DriverManager.getConnection(databaseConnectionURL);
-			pst = conn
-					.prepareStatement("INSERT INTO services(name) VALUES (?)");
+			pst = conn.prepareStatement("INSERT INTO services(name) VALUES (?)");
 
 			int index = 1;
 			pst.setString(index++, service.getName());
@@ -2059,8 +2073,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 		try {
 
 			conn = DriverManager.getConnection(databaseConnectionURL);
-			pst = conn.prepareStatement(
-					"UPDATE services SET name = ? WHERE serviceId = ?;");
+			pst = conn.prepareStatement("UPDATE services SET name = ? WHERE serviceId = ?;");
 
 			int index = 1;
 			pst.setString(index++, service.getName());
@@ -2139,6 +2152,63 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 		}
 
 		return rvSucceeded;
+	}
+
+	@Override
+	public List<Program> getDefaultPrograms() {
+		Connection conn = null;
+		Statement st = null;
+
+		ObservableList<Program> programs = FXCollections.observableArrayList();
+		programs.clear();
+
+		try {
+			conn = DriverManager.getConnection(databaseConnectionURL);
+			conn.setAutoCommit(false);
+			st = conn.createStatement();
+			ResultSet rs = st.executeQuery("SELECT * FROM programs WHERE defaultProgram = 1");
+
+			while (rs.next()) {
+				int progId = rs.getInt("progId");
+				String name = rs.getString("name");
+				int defaultTime = rs.getInt("defaultTime");
+				Boolean defaultProgram = rs.getInt("defaultProgram") != 0;
+
+				Program program = new Program();
+				program.setName(name);
+				program.setProgId(progId);
+				program.setDefaultTime(LocalDateTime.ofInstant(Instant.ofEpochMilli(defaultTime),
+						ZoneId.of("+0")));
+				program.setDefaultProgram(defaultProgram);
+
+				programs.add(program);
+			}
+
+			conn.commit();
+		} catch (SQLException e) {
+			System.out.println("Failed to execute listing programs.");
+			e.printStackTrace();
+		} finally {
+			try {
+				if (st != null) {
+					st.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Failed to close statement when listing programs.");
+				e.printStackTrace();
+			}
+
+			try {
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Failed to close connection when listing programs.");
+				e.printStackTrace();
+			}
+		}
+
+		return programs;
 	}
 
 }

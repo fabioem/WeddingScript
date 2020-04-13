@@ -71,13 +71,15 @@ public class ScriptCreateWindow {
 		GridPane.setConstraints(saveButton, 0, 3);
 		saveButton.setOnAction(e -> {
 			Script script = new Script(nameInput.getText(),
-					dateInput.getValue() == null ? null : dateInput.getValue().atStartOfDay(), commentInput.getText());
+					dateInput.getValue() == null ? null : dateInput.getValue().atStartOfDay(),
+					commentInput.getText());
 			if (nameInput.getText().isEmpty()) {
 				Alert alert = new Alert(AlertType.ERROR, "A név nem lehet üres!", ButtonType.OK);
 				alert.setHeaderText("Üres név");
 				alert.showAndWait();
 			} else {
 				weddingScriptController.addScript(script);
+				// scriptItems.add(script);
 				scriptItems.clear();
 				scriptItems.addAll(weddingScriptController.getScripts());
 				window.close();
@@ -90,8 +92,8 @@ public class ScriptCreateWindow {
 		GridPane.setConstraints(closeButton, 1, 3);
 
 		// Add everything to grid
-		grid.getChildren().addAll(nameLabel, nameInput, commentLabel, commentInput, dateLabel, dateInput, saveButton,
-				closeButton);
+		grid.getChildren().addAll(nameLabel, nameInput, commentLabel, commentInput, dateLabel,
+				dateInput, saveButton, closeButton);
 
 		Scene scene = new Scene(grid, 300, 200);
 		window.setScene(scene);

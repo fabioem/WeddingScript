@@ -95,4 +95,6 @@ public interface WeddingScriptDAO {
 
 	public boolean removeService(Service selectedItem);
 
+	public List<Program> getDefaultPrograms();
+
 }

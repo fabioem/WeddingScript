@@ -29,7 +29,8 @@ CREATE TABLE scriptProgAttr(
 CREATE TABLE programs(
 	progId INTEGER PRIMARY KEY AUTOINCREMENT,
 	name varchar(255) NOT NULL,
-	defaultTime int
+	defaultTime int,
+	defaultProgram boolean
 );
 
 CREATE TABLE progAttr(
@@ -86,9 +87,9 @@ CREATE TABLE scriptService(
 );
 
 -- Insert demo values
-INSERT INTO programs VALUES(0, "Vacsora", 68400000);
-INSERT INTO programs VALUES(1, "Nyitótánc", 75600000);
-INSERT INTO programs VALUES(2, "Újasszony tánc", 86400000);
+INSERT INTO programs VALUES(0, "Vacsora", 68400000, 1);
+INSERT INTO programs VALUES(1, "Nyitótánc", 75600000, 1);
+INSERT INTO programs VALUES(2, "Újasszony tánc", 86400000, 0);
 INSERT INTO scripts VALUES(0, "Judit és Dani", '2019-01-01 00:00:00.000', "Komment1", (DATETIME('now')), (DATETIME('now')));
 INSERT INTO scripts VALUES(1, "Juci és Béla", '2019-01-02 00:00:00.000', "Komi 2", (DATETIME('now')), (DATETIME('now')));
 INSERT INTO services VALUES(0, "Alap");
@@ -101,7 +102,7 @@ INSERT INTO services VALUES(5, "Felhőtánc");
 INSERT INTO attributeTypes VALUES(0, "Script");
 INSERT INTO attributeTypes VALUES(1, "Program");
 INSERT INTO attributeTypes VALUES(2, "Service");
-INSERT INTO scriptProg VALUES(0, 1, 75900000); --21:05 Nyitótánc
+INSERT INTO scriptProg VALUES(0, 1, 75900000); --21:00 Nyitótánc
 INSERT INTO scriptProg VALUES(0, 2, 86400000); --24:00 Újasszony tánc
 INSERT INTO attributes VALUES(0, "Zene", "", 1, null, 1);
 INSERT INTO attributes VALUES(1, "Beszéd", "vőlegény", 1, null, 1);

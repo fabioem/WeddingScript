@@ -9,6 +9,7 @@ public class Program {
 	private String name;
 	private LocalDateTime defaultTime;
 	private LocalDateTime time;
+	private Boolean defaultProgram;
 	ObservableList<Attribute> attributes;
 
 	public ObservableList<Attribute> getAttributes() {
@@ -49,6 +50,14 @@ public class Program {
 
 	public void setTime(LocalDateTime time) {
 		this.time = time;
+	}
+
+	public Boolean isDefaultProgram() {
+		return defaultProgram;
+	}
+
+	public void setDefaultProgram(boolean defaultProgram) {
+		this.defaultProgram = defaultProgram;
 	}
 
 }
