@@ -20,6 +20,7 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.stage.Modality;
@@ -62,6 +63,7 @@ public class ScriptProgramAttributesEditWindow {
 
 		TableColumn<Attribute, String> attrCol = new TableColumn<Attribute, String>("Érték");
 		attrCol.setCellValueFactory(new PropertyValueFactory<Attribute, String>("value"));
+		attrCol.setCellFactory(TextFieldTableCell.<Attribute>forTableColumn());
 		attrCol.setOnEditCommit(new EventHandler<CellEditEvent<Attribute, String>>() {
 			@Override
 			public void handle(CellEditEvent<Attribute, String> t) {

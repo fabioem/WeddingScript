@@ -1965,7 +1965,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 			conn = DriverManager.getConnection(databaseConnectionURL);
 			pst = conn.prepareStatement(
-					"UPDATE scriptProgAttr SET value = ? WHERE scriptId = ? progId = ? AND attrId = ?;");
+					"UPDATE scriptProgAttr SET value = ? WHERE scriptId = ? AND progId = ? AND attrId = ?;");
 
 			int index = 1;
 			pst.setString(index++, newAttributeValue);
