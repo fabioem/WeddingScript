@@ -751,7 +751,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 		try {
 
 			conn = DriverManager.getConnection(databaseConnectionURL);
-			pst = conn.prepareStatement("INSERT INTO programs(name, defaultTime) VALUES (?, ?)");
+			pst = conn.prepareStatement("INSERT INTO programs(name, defaultTime, defaultProgram) VALUES (?, ?, ?)");
 
 			int index = 1;
 			pst.setString(index++, program.getName());
@@ -760,6 +760,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 			int defMin = program.getDefaultTime().getMinute() * 60;
 			Long defaultSeconds = 1000 * new Long(defDay + defHour + defMin);
 			pst.setLong(index++, program.getDefaultTime() == null ? 0 : defaultSeconds);
+			pst.setInt(index++, program.isDefaultProgram() ? 1 : 0);
 
 			int rowsAffected = pst.executeUpdate();
 			if (rowsAffected == 1) {
@@ -805,7 +806,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 			conn = DriverManager.getConnection(databaseConnectionURL);
 			pst = conn.prepareStatement(
-					"UPDATE programs SET name = ?, defaultTime = ? WHERE progId = ?;");
+					"UPDATE programs SET name = ?, defaultTime = ?, defaultProgram = ? WHERE progId = ?;");
 
 			int index = 1;
 			pst.setString(index++, program.getName());
@@ -814,6 +815,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 			int defMin = program.getDefaultTime().getMinute() * 60;
 			Long defaultSeconds = 1000 * new Long(defDay + defHour + defMin);
 			pst.setLong(index++, program.getDefaultTime() == null ? 0 : defaultSeconds);
+			pst.setInt(index++, program.isDefaultProgram() ? 1 : 0);
 			pst.setInt(index++, program.getProgId());
 
 			int rowsAffected = pst.executeUpdate();

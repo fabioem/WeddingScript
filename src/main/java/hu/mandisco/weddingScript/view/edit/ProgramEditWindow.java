@@ -108,6 +108,7 @@ public class ProgramEditWindow {
 		// IsDefault Input
 		CheckBox isDefaultBox = new CheckBox();
 		GridPane.setConstraints(isDefaultBox, 1, 2);
+		isDefaultBox.setSelected(program.isDefaultProgram());
 
 		// Save
 		Button saveButton = new Button("Mentés");
@@ -117,12 +118,13 @@ public class ProgramEditWindow {
 			LocalDateTime defaultTime = LocalDateTime.of(0, 1, daySpinner.getValue() + 1, hourSpinner.getValue(),
 					minSpinner.getValue(), 0);
 			program.setDefaultTime(defaultTime);
+			program.setDefaultProgram(isDefaultBox.isSelected());
 			if (nameInput.getText().isEmpty()) {
 				Alert alert = new Alert(AlertType.ERROR, "A név nem lehet üres!", ButtonType.OK);
 				alert.setHeaderText("Üres név");
 				alert.showAndWait();
 			} else {
-				weddingScriptController.editProgram(program);
+				weddingScriptController.setProgram(program);
 				window.close();
 			}
 
