@@ -151,10 +151,9 @@ public class ScriptEditWindow {
 			public void handle(CellEditEvent<Attribute, String> t) {
 				((Attribute) t.getTableView().getItems().get(t.getTablePosition().getRow()))
 						.setValue(t.getNewValue());
-				int scriptId = script.getScriptId();
-				int attributeId = t.getRowValue().getAttrId();
+				Attribute attribute = t.getRowValue();
 				String newAttrValue = t.getNewValue();
-				weddingScriptController.editScriptAttributeValue(scriptId, attributeId,
+				weddingScriptController.setScriptAttributeValue(script, attribute,
 						newAttrValue);
 			}
 		});
@@ -267,10 +266,9 @@ public class ScriptEditWindow {
 			public void handle(CellEditEvent<Program, LocalDateTime> t) {
 				((Program) t.getTableView().getItems().get(t.getTablePosition().getRow()))
 						.setTime(t.getNewValue());
-				int scriptId = script.getScriptId();
-				int programId = t.getRowValue().getProgId();
+				Program program = t.getRowValue();
 				LocalDateTime newTime = t.getNewValue();
-				weddingScriptController.editScriptProgramTime(scriptId, programId, newTime);
+				weddingScriptController.setScriptProgramTime(script, program, newTime);
 			}
 		});
 

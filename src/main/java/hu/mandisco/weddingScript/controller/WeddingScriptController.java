@@ -122,12 +122,12 @@ public class WeddingScriptController {
 		return dao.addAttributeToProgram(program, attribute);
 	}
 
-	public boolean editScriptAttributeValue(int scriptId, int attributeId, String newAttrValue) {
-		return dao.setScriptAttributeValue(scriptId, attributeId, newAttrValue);
+	public boolean setScriptAttributeValue(Script script, Attribute attribute, String newAttrValue) {
+		return dao.setScriptAttributeValue(script, attribute, newAttrValue);
 	}
 
-	public boolean editScriptProgramTime(int scriptId, int programId, LocalDateTime newTime) {
-		return dao.setScriptProgramTime(scriptId, programId, newTime);
+	public boolean setScriptProgramTime(Script script, Program program, LocalDateTime newTime) {
+		return dao.setScriptProgramTime(script, program, newTime);
 	}
 
 	public boolean removeAttributeFromProgram(Program program, Attribute attribute) {
@@ -163,5 +163,11 @@ public class WeddingScriptController {
 	public boolean addAttributeToScriptProgram(Script script, Program program,
 			Attribute attribute) {
 		return dao.addAttributeToScriptProgram(script, program, attribute);
+	}
+
+	public boolean setScriptProgramAttributeValue(Script script, Program program,
+			Attribute attribute, String newAttributeValue) {
+		return dao.setScriptProgramAttributeValue(script, program, attribute, newAttributeValue);
+
 	}
 }
