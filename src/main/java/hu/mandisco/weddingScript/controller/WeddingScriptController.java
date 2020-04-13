@@ -122,7 +122,8 @@ public class WeddingScriptController {
 		return dao.addAttributeToProgram(program, attribute);
 	}
 
-	public boolean setScriptAttributeValue(Script script, Attribute attribute, String newAttrValue) {
+	public boolean setScriptAttributeValue(Script script, Attribute attribute,
+			String newAttrValue) {
 		return dao.setScriptAttributeValue(script, attribute, newAttrValue);
 	}
 
@@ -169,5 +170,17 @@ public class WeddingScriptController {
 			Attribute attribute, String newAttributeValue) {
 		return dao.setScriptProgramAttributeValue(script, program, attribute, newAttributeValue);
 
+	}
+
+	public boolean addService(Service service) {
+		return dao.addService(service);
+	}
+
+	public boolean setService(Service service) {
+		return dao.setService(service);
+	}
+
+	public boolean removeService(Service service) {
+		return dao.removeService(service);
 	}
 }

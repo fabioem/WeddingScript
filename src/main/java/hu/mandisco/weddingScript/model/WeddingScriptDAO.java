@@ -89,4 +89,10 @@ public interface WeddingScriptDAO {
 	public boolean setScriptProgramAttributeValue(Script script, Program program,
 			Attribute attribute, String newAttributeValue);
 
+	public boolean addService(Service service);
+
+	public boolean setService(Service service);
+
+	public boolean removeService(Service selectedItem);
+
 }

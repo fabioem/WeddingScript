@@ -8,6 +8,15 @@ public class Service {
 	ObservableList<Program> programList;
 	ObservableList<Attribute> attributeList;
 
+	public Service(String name) {
+		super();
+		this.name = name;
+	}
+
+	public Service() {
+		super();
+	}
+
 	@Override
 	public String toString() {
 		return name;

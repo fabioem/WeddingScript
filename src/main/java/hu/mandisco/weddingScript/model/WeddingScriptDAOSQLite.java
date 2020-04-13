@@ -347,8 +347,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 	@Override
 	public boolean addScript(Script script) {
-		String errorName = "script";
-		String errorType = "adding";
+		String errorDesc = "adding script";
 		boolean rvSucceeded = false;
 		Connection conn = null;
 		PreparedStatement pst = null;
@@ -372,7 +371,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				rvSucceeded = true;
 			}
 		} catch (SQLException e) {
-			System.out.println("Failed to execute " + errorType + " " + errorName + ".");
+			System.out.println("Failed to execute " + errorDesc + ".");
 			e.printStackTrace();
 		} finally {
 
@@ -381,8 +380,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				System.out.println(
-						"Failed to close statement when " + errorType + " " + errorName + ".");
+				System.out.println("Failed to close statement when " + errorDesc + ".");
 				e.printStackTrace();
 			}
 
@@ -391,8 +389,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				System.out.println(
-						"Failed to close connection when " + errorType + " " + errorName + ".");
+				System.out.println("Failed to close connection when " + errorDesc + ".");
 				e.printStackTrace();
 			}
 		}
@@ -1406,7 +1403,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 	}
 
 	@Override
-	public boolean setScriptAttributeValue(Script script, Attribute attribute, String newAttrValue) {
+	public boolean setScriptAttributeValue(Script script, Attribute attribute,
+			String newAttrValue) {
 		String errorDesc = "editing value of script attribute";
 		boolean rvSucceeded = false;
 		Connection conn = null;
@@ -1997,6 +1995,145 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				}
 			} catch (SQLException e) {
 				System.out.println("Failed to close connection when " + errorDesc + ".");
+				e.printStackTrace();
+			}
+		}
+
+		return rvSucceeded;
+	}
+
+
+	public boolean addService(Service service) {
+		String errorDesc = "adding service";
+		boolean rvSucceeded = false;
+		Connection conn = null;
+		PreparedStatement pst = null;
+
+		try {
+
+			conn = DriverManager.getConnection(databaseConnectionURL);
+			pst = conn
+					.prepareStatement("INSERT INTO services(name) VALUES (?)");
+
+			int index = 1;
+			pst.setString(index++, service.getName());
+
+			int rowsAffected = pst.executeUpdate();
+			if (rowsAffected == 1) {
+				rvSucceeded = true;
+			}
+		} catch (SQLException e) {
+			System.out.println("Failed to execute " + errorDesc + ".");
+			e.printStackTrace();
+		} finally {
+
+			try {
+				if (pst != null) {
+					pst.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Failed to close statement when " + errorDesc + ".");
+				e.printStackTrace();
+			}
+
+			try {
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Failed to close connection when " + errorDesc + ".");
+				e.printStackTrace();
+			}
+		}
+
+		return rvSucceeded;
+	}
+
+	@Override
+	public boolean setService(Service service) {
+		String errorDesc = "editing service";
+		boolean rvSucceeded = false;
+		Connection conn = null;
+		PreparedStatement pst = null;
+
+		try {
+
+			conn = DriverManager.getConnection(databaseConnectionURL);
+			pst = conn.prepareStatement(
+					"UPDATE services SET name = ? WHERE serviceId = ?;");
+
+			int index = 1;
+			pst.setString(index++, service.getName());
+			pst.setInt(index++, service.getServiceId());
+
+			int rowsAffected = pst.executeUpdate();
+			if (rowsAffected == 1) {
+				rvSucceeded = true;
+			}
+		} catch (SQLException e) {
+			System.out.println("Failed to execute " + errorDesc + ".");
+			e.printStackTrace();
+		} finally {
+
+			try {
+				if (pst != null) {
+					pst.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Failed to close statement when " + errorDesc + ".");
+				e.printStackTrace();
+			}
+
+			try {
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Failed to close connection when " + errorDesc + ".");
+				e.printStackTrace();
+			}
+		}
+
+		return rvSucceeded;
+	}
+
+	@Override
+	public boolean removeService(Service service) {
+		boolean rvSucceeded = false;
+		Connection conn = null;
+		PreparedStatement pst = null;
+
+		try {
+
+			conn = DriverManager.getConnection(databaseConnectionURL);
+			pst = conn.prepareStatement("DELETE FROM services where serviceId = ?");
+
+			pst.setInt(1, service.getServiceId());
+
+			int rowsAffected = pst.executeUpdate();
+			if (rowsAffected == 1) {
+				rvSucceeded = true;
+			}
+		} catch (SQLException e) {
+			System.out.println("Failed to execute removing script.");
+			e.printStackTrace();
+		} finally {
+
+			try {
+				if (pst != null) {
+					pst.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Failed to close statement when removing script.");
+				e.printStackTrace();
+			}
+
+			try {
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Failed to close connection when removing script.");
 				e.printStackTrace();
 			}
 		}

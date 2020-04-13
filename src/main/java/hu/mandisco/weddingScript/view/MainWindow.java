@@ -11,8 +11,8 @@ public class MainWindow extends Application {
 
 	private BorderPane scriptLayout = new ScriptsView();
 	private BorderPane programLayout = new ProgramsView();
-
 	private BorderPane attributeLayout = new AttributesView();
+	private BorderPane serviceLayout = new ServicesView();
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -32,9 +32,14 @@ public class MainWindow extends Application {
 		attributesTab.setClosable(false);
 		tabPane.getTabs().add(attributesTab);
 
+		Tab servicesTab = new Tab("Szolgáltatások");
+		servicesTab.setClosable(false);
+		tabPane.getTabs().add(servicesTab);
+
 		scriptsTab.setContent(scriptLayout);
 		programsTab.setContent(programLayout);
 		attributesTab.setContent(attributeLayout);
+		servicesTab.setContent(serviceLayout);
 
 		// END
 		Scene scene = new Scene(tabPane, 800, 600);

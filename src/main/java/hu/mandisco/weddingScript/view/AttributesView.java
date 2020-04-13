@@ -43,8 +43,6 @@ public class AttributesView extends BorderPane {
 		editButton.setOnAction(e -> {
 			Attribute selectedItem = attributeTable.getSelectionModel().getSelectedItem();
 			if (selectedItem != null) {
-				// ObservableList<Attribute> attributeItems =
-				// attributeTable.getItems();
 				AttributeEditWindow window = new AttributeEditWindow();
 				window.display(selectedItem);
 			}

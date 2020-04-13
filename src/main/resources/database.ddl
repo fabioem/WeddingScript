@@ -68,7 +68,7 @@ CREATE TABLE scriptAttr(
 -- SERVICE
 CREATE TABLE services(
 	serviceId INTEGER PRIMARY KEY AUTOINCREMENT,
-	name varchar(10) NOT NULL
+	name varchar(10) NOT NULL UNIQUE
 );
 
 CREATE TABLE serviceProg(
