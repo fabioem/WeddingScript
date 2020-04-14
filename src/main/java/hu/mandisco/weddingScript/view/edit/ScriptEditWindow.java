@@ -35,6 +35,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
@@ -153,8 +155,7 @@ public class ScriptEditWindow {
 						.setValue(t.getNewValue());
 				Attribute attribute = t.getRowValue();
 				String newAttrValue = t.getNewValue();
-				weddingScriptController.setScriptAttributeValue(script, attribute,
-						newAttrValue);
+				weddingScriptController.setScriptAttributeValue(script, attribute, newAttrValue);
 			}
 		});
 
@@ -409,6 +410,7 @@ public class ScriptEditWindow {
 		// Save
 		Button saveButton = new Button("Mentés");
 		GridPane.setConstraints(saveButton, 0, 0);
+		saveButton.setDefaultButton(true);
 		saveButton.setOnAction(e -> {
 			if (nameInput.getText().isEmpty()) {
 				Alert alert = new Alert(AlertType.ERROR, "A név nem lehet üres!", ButtonType.OK);
@@ -429,6 +431,13 @@ public class ScriptEditWindow {
 		Button closeButton = new Button("Mégsem");
 		closeButton.setOnAction(e -> window.close());
 		GridPane.setConstraints(closeButton, 1, 0);
+
+		// ESC button
+		window.addEventHandler(KeyEvent.KEY_RELEASED, (KeyEvent event) -> {
+			if (KeyCode.ESCAPE == event.getCode()) {
+				window.close();
+			}
+		});
 
 		GridPane bottomGrid = new GridPane();
 		bottomGrid.setPadding(new Insets(10, 10, 10, 10));

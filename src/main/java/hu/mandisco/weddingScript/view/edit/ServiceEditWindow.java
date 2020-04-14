@@ -10,6 +10,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -42,6 +44,7 @@ public class ServiceEditWindow {
 		// Save
 		Button saveButton = new Button("Mentés");
 		GridPane.setConstraints(saveButton, 0, 2);
+		saveButton.setDefaultButton(true);
 		saveButton.setOnAction(e -> {
 			service.setName(nameInput.getText());
 			if (nameInput.getText().isEmpty()) {
@@ -58,6 +61,14 @@ public class ServiceEditWindow {
 		Button closeButton = new Button("Mégsem");
 		closeButton.setOnAction(e -> window.close());
 		GridPane.setConstraints(closeButton, 1, 2);
+
+		//ESC button
+		window.addEventHandler(KeyEvent.KEY_RELEASED, (KeyEvent event) -> {
+	        if (KeyCode.ESCAPE == event.getCode()) {
+	        	window.close();
+	        }
+	    });
+
 
 		// Add everything to grid
 		grid.getChildren().addAll(nameLabel, nameInput, saveButton, closeButton);

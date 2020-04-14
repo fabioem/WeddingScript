@@ -21,6 +21,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.stage.Modality;
@@ -79,7 +81,8 @@ public class ScriptProgramAttributesEditWindow {
 		programAttributesTable.getColumns().add(nameCol);
 		programAttributesTable.getColumns().add(attrCol);
 
-		ObservableList<Attribute> attributes = weddingScriptController.getScriptProgramAttributes(script, program);
+		ObservableList<Attribute> attributes = weddingScriptController
+				.getScriptProgramAttributes(script, program);
 
 		programAttributesTable.getItems().addAll(attributes);
 		GridPane.setConstraints(programAttributesTable, 0, 0);
@@ -88,23 +91,29 @@ public class ScriptProgramAttributesEditWindow {
 		TableView<Attribute> programAntiAttributesTable = new TableView<Attribute>();
 		programAntiAttributesTable.setEditable(true);
 
-		TableColumn<Attribute, String> programAttrAntiNameCol = new TableColumn<Attribute, String>("Név");
-		programAttrAntiNameCol.setCellValueFactory(new PropertyValueFactory<Attribute, String>("name"));
+		TableColumn<Attribute, String> programAttrAntiNameCol = new TableColumn<Attribute, String>(
+				"Név");
+		programAttrAntiNameCol
+				.setCellValueFactory(new PropertyValueFactory<Attribute, String>("name"));
 
-		TableColumn<Attribute, String> programAttrAntiValueCol = new TableColumn<Attribute, String>("Alap érték");
-		programAttrAntiValueCol.setCellValueFactory(new PropertyValueFactory<Attribute, String>("defaultValue"));
+		TableColumn<Attribute, String> programAttrAntiValueCol = new TableColumn<Attribute, String>(
+				"Alap érték");
+		programAttrAntiValueCol
+				.setCellValueFactory(new PropertyValueFactory<Attribute, String>("defaultValue"));
 
 		programAntiAttributesTable.getColumns().add(programAttrAntiNameCol);
 		programAntiAttributesTable.getColumns().add(programAttrAntiValueCol);
 
-		List<Attribute> antiAttributes = weddingScriptController.getScriptAttributesNotInProgram(script, program);
+		List<Attribute> antiAttributes = weddingScriptController
+				.getScriptAttributesNotInProgram(script, program);
 
 		programAntiAttributesTable.getItems().addAll(antiAttributes);
 
 		// Sort by default time
 		ObservableList<Attribute> programAttrAntiData = FXCollections.observableArrayList();
 		SortedList<Attribute> sortedProgramAttrAntiData = new SortedList<>(programAttrAntiData);
-		sortedProgramAttrAntiData.comparatorProperty().bind(programAntiAttributesTable.comparatorProperty());
+		sortedProgramAttrAntiData.comparatorProperty()
+				.bind(programAntiAttributesTable.comparatorProperty());
 		programAntiAttributesTable.setItems(sortedProgramAttrAntiData);
 		programAntiAttributesTable.getSortOrder().add(programAttrAntiNameCol);
 		programAttrAntiData.addAll(antiAttributes);
@@ -115,11 +124,14 @@ public class ScriptProgramAttributesEditWindow {
 		// Handling double clicks
 		ObservableList<Attribute> programAttributeData = FXCollections.observableArrayList();
 		SortedList<Attribute> sortedProgramAttributeData = new SortedList<>(programAttributeData);
-		sortedProgramAttributeData.comparatorProperty().bind(programAttributesTable.comparatorProperty());
+		sortedProgramAttributeData.comparatorProperty()
+				.bind(programAttributesTable.comparatorProperty());
 
 		ObservableList<Attribute> programAntiAttributeData = FXCollections.observableArrayList();
-		SortedList<Attribute> sortedProgramAntiAttributeData = new SortedList<>(programAntiAttributeData);
-		sortedProgramAntiAttributeData.comparatorProperty().bind(programAntiAttributesTable.comparatorProperty());
+		SortedList<Attribute> sortedProgramAntiAttributeData = new SortedList<>(
+				programAntiAttributeData);
+		sortedProgramAntiAttributeData.comparatorProperty()
+				.bind(programAntiAttributesTable.comparatorProperty());
 
 		programAttributesTable.setRowFactory(tv -> {
 			TableRow<Attribute> row = new TableRow<>();
@@ -132,7 +144,8 @@ public class ScriptProgramAttributesEditWindow {
 					programAttributeData.setAll(attributes);
 					programAttributesTable.setItems(sortedProgramAttributeData);
 
-					weddingScriptController.removeAttributeFromScriptProgram(script, program, attributeRowData);
+					weddingScriptController.removeAttributeFromScriptProgram(script, program,
+							attributeRowData);
 					antiAttributes.add(attributeRowData);
 					programAntiAttributeData.setAll(antiAttributes);
 					programAntiAttributesTable.setItems(sortedProgramAntiAttributeData);
@@ -152,7 +165,8 @@ public class ScriptProgramAttributesEditWindow {
 					programAntiAttributeData.setAll(antiAttributes);
 					programAntiAttributesTable.setItems(sortedProgramAntiAttributeData);
 
-					weddingScriptController.addAttributeToScriptProgram(script, program, antiAttributeRowData);
+					weddingScriptController.addAttributeToScriptProgram(script, program,
+							antiAttributeRowData);
 					attributes.add(antiAttributeRowData);
 					programAttributeData.setAll(attributes);
 					programAttributesTable.setItems(sortedProgramAttributeData);
@@ -171,6 +185,13 @@ public class ScriptProgramAttributesEditWindow {
 		GridPane.setHgrow(okButton, Priority.ALWAYS);
 
 		grid.getChildren().addAll(nameLabel, tableGrid, okButton);
+
+		// ESC button
+		window.addEventHandler(KeyEvent.KEY_RELEASED, (KeyEvent event) -> {
+			if (KeyCode.ESCAPE == event.getCode()) {
+				window.close();
+			}
+		});
 
 		Scene scene = new Scene(grid);
 		window.setScene(scene);

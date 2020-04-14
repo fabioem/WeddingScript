@@ -9,6 +9,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
@@ -109,6 +111,7 @@ public class ProgramCreateWindow {
 		// Save
 		Button saveButton = new Button("Mentés");
 		GridPane.setConstraints(saveButton, 0, 3);
+		saveButton.setDefaultButton(true);
 		saveButton.setOnAction(e -> {
 			Program program = new Program();
 			program.setName(nameInput.getText());
@@ -130,6 +133,13 @@ public class ProgramCreateWindow {
 		Button closeButton = new Button("Mégsem");
 		closeButton.setOnAction(e -> window.close());
 		GridPane.setConstraints(closeButton, 1, 3);
+
+		//ESC button
+		window.addEventHandler(KeyEvent.KEY_RELEASED, (KeyEvent event) -> {
+	        if (KeyCode.ESCAPE == event.getCode()) {
+	        	window.close();
+	        }
+	    });
 
 		// Add everything to grid
 		grid.getChildren().addAll(nameLabel, nameInput, defaultTimeLabel, defaultTimeHBox, isDefaultLabel, isDefaultBox,

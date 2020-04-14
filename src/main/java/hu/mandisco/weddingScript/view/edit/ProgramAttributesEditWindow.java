@@ -17,6 +17,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.stage.Modality;
@@ -155,6 +157,13 @@ public class ProgramAttributesEditWindow {
 		GridPane.setHgrow(okButton, Priority.ALWAYS);
 
 		grid.getChildren().addAll(nameLabel, tableGrid, okButton);
+
+		//ESC button
+		window.addEventHandler(KeyEvent.KEY_RELEASED, (KeyEvent event) -> {
+	        if (KeyCode.ESCAPE == event.getCode()) {
+	        	window.close();
+	        }
+	    });
 
 		Scene scene = new Scene(grid);
 		window.setScene(scene);
