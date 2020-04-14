@@ -63,22 +63,24 @@ public class TableList {
 		TableColumn<Program, String> nameCol = new TableColumn<Program, String>("Név");
 		nameCol.setCellValueFactory(new PropertyValueFactory<Program, String>("name"));
 
-		TableColumn<Program, LocalDateTime> defaultTimeCol = new TableColumn<Program, LocalDateTime>("Idő");
-		defaultTimeCol.setCellValueFactory(new PropertyValueFactory<Program, LocalDateTime>("defaultTime"));
+		TableColumn<Program, LocalDateTime> defaultTimeCol = new TableColumn<Program, LocalDateTime>(
+				"Idő");
+		defaultTimeCol.setCellValueFactory(
+				new PropertyValueFactory<Program, LocalDateTime>("defaultTime"));
 		defaultTimeCol.setCellFactory(column -> {
-			TableCell<Program, LocalDateTime> cell = new TableCell<Program, LocalDateTime>() {
+
+			return new TableCell<Program, LocalDateTime>() {
 				@Override
 				protected void updateItem(LocalDateTime item, boolean empty) {
 					super.updateItem(item, empty);
 					if (item == null || empty) {
 						setText(null);
 					} else {
-						setText(item.format(DateTimeFormatter.ofPattern(weddingScriptController.DATEFORMAT_TIME)));
+						setText(item.format(DateTimeFormatter
+								.ofPattern(weddingScriptController.DATEFORMAT_TIME)));
 					}
 				}
 			};
-
-			return cell;
 		});
 
 		programListTable.getColumns().add(nameCol);
@@ -132,29 +134,32 @@ public class TableList {
 		TableColumn<Script, String> nameCol = new TableColumn<Script, String>("Név");
 		nameCol.setCellValueFactory(new PropertyValueFactory<Script, String>("name"));
 
-		TableColumn<Script, LocalDateTime> dateCol = new TableColumn<Script, LocalDateTime>("Dátum");
+		TableColumn<Script, LocalDateTime> dateCol = new TableColumn<Script, LocalDateTime>(
+				"Dátum");
 		dateCol.setCellValueFactory(new PropertyValueFactory<Script, LocalDateTime>("date"));
 		dateCol.setCellFactory(column -> {
-			TableCell<Script, LocalDateTime> cell = new TableCell<Script, LocalDateTime>() {
+
+			return new TableCell<Script, LocalDateTime>() {
 				@Override
 				protected void updateItem(LocalDateTime item, boolean empty) {
 					super.updateItem(item, empty);
 					if (item == null || empty) {
 						setText(null);
 					} else {
-						setText(item.format(DateTimeFormatter.ofPattern(weddingScriptController.DATEFORMAT_DATE)));
+						setText(item.format(DateTimeFormatter
+								.ofPattern(weddingScriptController.DATEFORMAT_DATE)));
 					}
 				}
 			};
-
-			return cell;
 		});
 
 		TableColumn<Script, String> commentCol = new TableColumn<Script, String>("Komment");
 		commentCol.setCellValueFactory(new PropertyValueFactory<Script, String>("comment"));
 
-		TableColumn<Script, LocalDateTime> lastEditedCol = new TableColumn<Script, LocalDateTime>("Utolsó módosítás");
-		lastEditedCol.setCellValueFactory(new PropertyValueFactory<Script, LocalDateTime>("lastEdited"));
+		TableColumn<Script, LocalDateTime> lastEditedCol = new TableColumn<Script, LocalDateTime>(
+				"Utolsó módosítás");
+		lastEditedCol
+				.setCellValueFactory(new PropertyValueFactory<Script, LocalDateTime>("lastEdited"));
 		lastEditedCol.setCellFactory(column -> {
 			TableCell<Script, LocalDateTime> cell = new TableCell<Script, LocalDateTime>() {
 				@Override
@@ -163,7 +168,8 @@ public class TableList {
 					if (item == null || empty) {
 						setText(null);
 					} else {
-						setText(item.format(DateTimeFormatter.ofPattern(weddingScriptController.DATEFORMAT_DATETIME)));
+						setText(item.format(DateTimeFormatter
+								.ofPattern(weddingScriptController.DATEFORMAT_DATETIME)));
 					}
 				}
 			};
@@ -171,7 +177,8 @@ public class TableList {
 			return cell;
 		});
 
-		TableColumn<Script, LocalDateTime> createdCol = new TableColumn<Script, LocalDateTime>("Létrehozva");
+		TableColumn<Script, LocalDateTime> createdCol = new TableColumn<Script, LocalDateTime>(
+				"Létrehozva");
 		createdCol.setCellValueFactory(new PropertyValueFactory<Script, LocalDateTime>("created"));
 		createdCol.setCellFactory(column -> {
 			TableCell<Script, LocalDateTime> cell = new TableCell<Script, LocalDateTime>() {
@@ -182,7 +189,8 @@ public class TableList {
 					if (item == null || empty) {
 						setText(null);
 					} else {
-						setText(item.format(DateTimeFormatter.ofPattern(weddingScriptController.DATEFORMAT_DATETIME)));
+						setText(item.format(DateTimeFormatter
+								.ofPattern(weddingScriptController.DATEFORMAT_DATETIME)));
 					}
 				}
 			};
@@ -223,11 +231,15 @@ public class TableList {
 		TableColumn<Attribute, String> nameCol = new TableColumn<Attribute, String>("Név");
 		nameCol.setCellValueFactory(new PropertyValueFactory<Attribute, String>("name"));
 
-		TableColumn<Attribute, String> defValueCol = new TableColumn<Attribute, String>("Alapértelmezett érték");
-		defValueCol.setCellValueFactory(new PropertyValueFactory<Attribute, String>("defaultValue"));
+		TableColumn<Attribute, String> defValueCol = new TableColumn<Attribute, String>(
+				"Alapértelmezett érték");
+		defValueCol
+				.setCellValueFactory(new PropertyValueFactory<Attribute, String>("defaultValue"));
 
-		TableColumn<Attribute, Boolean> isMandatoryCol = new TableColumn<Attribute, Boolean>("Kötelező");
-		isMandatoryCol.setCellValueFactory(new PropertyValueFactory<Attribute, Boolean>("mandatory"));
+		TableColumn<Attribute, Boolean> isMandatoryCol = new TableColumn<Attribute, Boolean>(
+				"Kötelező");
+		isMandatoryCol
+				.setCellValueFactory(new PropertyValueFactory<Attribute, Boolean>("mandatory"));
 		isMandatoryCol.setCellFactory(tc -> new TableCell<Attribute, Boolean>() {
 			@Override
 			protected void updateItem(Boolean item, boolean empty) {
@@ -236,7 +248,8 @@ public class TableList {
 			}
 		});
 
-		TableColumn<Attribute, String> attrTypeCol = new TableColumn<Attribute, String>("Attribútum típus");
+		TableColumn<Attribute, String> attrTypeCol = new TableColumn<Attribute, String>(
+				"Attribútum típus");
 		attrTypeCol.setCellValueFactory(new PropertyValueFactory<Attribute, String>("attrType"));
 
 		attributeListTable.getColumns().add(nameCol);
@@ -250,7 +263,8 @@ public class TableList {
 		return attributeListTable;
 	}
 
-	public TableView<Service> getServiceListNotInScript(Script script, TableView<Service> servicesTable) {
+	public TableView<Service> getServiceListNotInScript(Script script,
+			TableView<Service> servicesTable) {
 		TableView<Service> table = new TableView<Service>();
 
 		table.setEditable(true);
@@ -278,7 +292,8 @@ public class TableList {
 
 					weddingScriptController.addServiceToScript(script, rowData);
 					servicesTable.getItems().clear();
-					servicesTable.getItems().addAll(weddingScriptController.getServicesOfScript(script));
+					servicesTable.getItems()
+							.addAll(weddingScriptController.getServicesOfScript(script));
 
 				}
 			});

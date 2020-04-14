@@ -1488,7 +1488,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 			int day = (newTime.getDayOfMonth() - 1) * 24 * 60 * 60;
 			int hour = newTime.getHour() * 60 * 60;
 			int min = newTime.getMinute() * 60;
-			Long newTimeSeconds = 1000 * new Long(day + hour + min);
+			Long newTimeSeconds = 1000 * new Long((long)day + hour + min);
 
 			pst.setLong(index++, newTimeSeconds);
 			pst.setInt(index++, script.getScriptId());
