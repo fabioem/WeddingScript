@@ -15,10 +15,6 @@ import javafx.collections.ObservableList;
 public class WeddingScriptController {
 	private WeddingScriptDAO dao = new WeddingScriptDAOSQLite();
 
-	public final String DATEFORMAT_DATETIME = "yyyy.MM.dd HH:mm:ss";
-	public final String DATEFORMAT_TIME = "HH:mm";
-	public final String DATEFORMAT_DATE = "yyyy.MM.dd";
-
 	public ObservableList<Script> getScripts() {
 		return dao.getScripts();
 	}
@@ -59,15 +55,15 @@ public class WeddingScriptController {
 
 	public List<Attribute> getScriptAttributes(Script script) {
 		return dao.getAttributesOfScript(script);
-	};
+	}
 
 	public ObservableList<Program> getScriptPrograms(Script script) {
 		return dao.getProgramsOfScript(script);
-	};
+	}
 
 	public ObservableList<Program> getProgramsNotInScript(Script script) {
 		return dao.getProgramsNotInScript(script);
-	};
+	}
 
 	public List<Attribute> getProgramAttributes(Program program) {
 		return dao.getAttributesOfProgram(program);
@@ -95,7 +91,7 @@ public class WeddingScriptController {
 
 	public List<Attribute> getAttributes() {
 		return dao.getAttributes();
-	};
+	}
 
 	public ObservableList<Attribute> getAttributesOfScript(Script script) {
 		return dao.getAttributesOfScript(script);

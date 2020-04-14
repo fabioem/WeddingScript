@@ -77,7 +77,7 @@ public class TableList {
 						setText(null);
 					} else {
 						setText(item.format(DateTimeFormatter
-								.ofPattern(weddingScriptController.DATEFORMAT_TIME)));
+								.ofPattern(Labels.DATEFORMAT_TIME)));
 					}
 				}
 			};
@@ -147,7 +147,7 @@ public class TableList {
 						setText(null);
 					} else {
 						setText(item.format(DateTimeFormatter
-								.ofPattern(weddingScriptController.DATEFORMAT_DATE)));
+								.ofPattern(Labels.DATEFORMAT_DATE)));
 					}
 				}
 			};
@@ -169,7 +169,7 @@ public class TableList {
 						setText(null);
 					} else {
 						setText(item.format(DateTimeFormatter
-								.ofPattern(weddingScriptController.DATEFORMAT_DATETIME)));
+								.ofPattern(Labels.DATEFORMAT_DATETIME)));
 					}
 				}
 			};
@@ -190,7 +190,7 @@ public class TableList {
 						setText(null);
 					} else {
 						setText(item.format(DateTimeFormatter
-								.ofPattern(weddingScriptController.DATEFORMAT_DATETIME)));
+								.ofPattern(Labels.DATEFORMAT_DATETIME)));
 					}
 				}
 			};

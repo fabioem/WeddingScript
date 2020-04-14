@@ -17,23 +17,23 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import hu.mandisco.weddingScript.model.bean.Attribute;
 import hu.mandisco.weddingScript.model.bean.AttributeType;
 import hu.mandisco.weddingScript.model.bean.Program;
 import hu.mandisco.weddingScript.model.bean.Script;
 import hu.mandisco.weddingScript.model.bean.Service;
+import hu.mandisco.weddingScript.view.Labels;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
+	private static final Logger LOGGER = LogManager.getLogger();
 	private static final String JDBC_CONNECTION_PREFIX = "jdbc:sqlite:";
 	private static final String DATABASE_FILE = "src\\main\\resources\\database.db";
-	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-	private static final String DATEFORMAT_DATETIME_FOR_INSERT = "yyyy-MM-dd HH:mm:ss";
-	// private static final String DATEFORMAT_DATE_FOR_INSERT = "yyyy-MM-dd";
 
 	Path currentWorkingFolder = Paths.get("").toAbsolutePath();
 	Path pathToTheDatabaseFile = currentWorkingFolder.resolve(DATABASE_FILE);
@@ -48,8 +48,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 		try {
 			Class.forName("org.sqlite.JDBC");
 		} catch (ClassNotFoundException e) {
-			System.out.println("Failed to load SQLite JDBC driver.");
-			e.printStackTrace();
+			LOGGER.error("Failed to load SQLite JDBC driver.");
+			LOGGER.error(e);
 		}
 
 		attributeTypeList = getAttributeTypes();
@@ -61,8 +61,10 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 	}
 
 	public ObservableList<Program> getPrograms() {
+		String errorDesc = "listing programs";
 		Connection conn = null;
 		Statement st = null;
+		ResultSet rs = null;
 
 		ObservableList<Program> programs = FXCollections.observableArrayList();
 		programs.clear();
@@ -71,7 +73,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 			conn = DriverManager.getConnection(databaseConnectionURL);
 			conn.setAutoCommit(false);
 			st = conn.createStatement();
-			ResultSet rs = st.executeQuery("SELECT * FROM programs");
+			rs = st.executeQuery("SELECT * FROM programs");
 
 			while (rs.next()) {
 				int progId = rs.getInt("progId");
@@ -91,16 +93,26 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 			conn.commit();
 		} catch (SQLException e) {
-			System.out.println("Failed to execute listing programs.");
-			e.printStackTrace();
+			LOGGER.error(Labels.FAILED_TO_EXECUTE + errorDesc + ".");
+			LOGGER.error(e);
 		} finally {
+
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+			} catch (SQLException e) {
+				LOGGER.error(Labels.FAILED_TO_CLOSE_RESULTSET + errorDesc + ".");
+				LOGGER.error(e);
+			}
+
 			try {
 				if (st != null) {
 					st.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close statement when listing programs.");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_STATEMENT + errorDesc + ".");
+				LOGGER.error(e);
 			}
 
 			try {
@@ -108,8 +120,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close connection when listing programs.");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_CONNECTION + errorDesc + ".");
+				LOGGER.error(e);
 			}
 		}
 
@@ -118,8 +130,10 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 	}
 
 	public List<Attribute> getAttributes() {
+		String errorDesc = "listing attributes";
 		Connection conn = null;
 		Statement st = null;
+		ResultSet rs = null;
 
 		List<Attribute> attributes = new ArrayList<Attribute>();
 		attributes.clear();
@@ -128,7 +142,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 			conn = DriverManager.getConnection(databaseConnectionURL);
 			conn.setAutoCommit(false);
 			st = conn.createStatement();
-			ResultSet rs = st.executeQuery("SELECT * FROM attributes");
+			rs = st.executeQuery("SELECT * FROM attributes");
 
 			while (rs.next()) {
 				int attrId = rs.getInt("attributeId");
@@ -151,16 +165,26 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 			conn.commit();
 		} catch (SQLException e) {
-			System.out.println("Failed to execute listing attributes.");
-			e.printStackTrace();
+			LOGGER.error(Labels.FAILED_TO_EXECUTE + errorDesc + ".");
+			LOGGER.error(e);
 		} finally {
+
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+			} catch (SQLException e) {
+				LOGGER.error(Labels.FAILED_TO_CLOSE_RESULTSET + errorDesc + ".");
+				LOGGER.error(e);
+			}
+
 			try {
 				if (st != null) {
 					st.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close statement when listing attributes.");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_STATEMENT + errorDesc + ".");
+				LOGGER.error(e);
 			}
 
 			try {
@@ -168,8 +192,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close connection when listing attributes.");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_CONNECTION + errorDesc + ".");
+				LOGGER.error(e);
 			}
 		}
 
@@ -178,18 +202,22 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 	}
 
 	public ObservableList<AttributeType> getAttributeTypes() {
+		String errorDesc = "listing attribute types";
 		Connection conn = null;
 		Statement st = null;
+		ResultSet rs = null;
 
 		if (attributeTypeList != null) {
 			attributeTypeList.clear();
+		} else {
+			attributeTypeList = FXCollections.observableArrayList();
 		}
 
 		try {
 			conn = DriverManager.getConnection(databaseConnectionURL);
 			conn.setAutoCommit(false);
 			st = conn.createStatement();
-			ResultSet rs = st.executeQuery("SELECT * FROM attributeTypes");
+			rs = st.executeQuery("SELECT * FROM attributeTypes");
 
 			while (rs.next()) {
 				int attrTypeId = rs.getInt("attrTypeId");
@@ -203,16 +231,26 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 			conn.commit();
 		} catch (SQLException e) {
-			System.out.println("Failed to execute listing programs.");
-			e.printStackTrace();
+			LOGGER.error(Labels.FAILED_TO_EXECUTE + errorDesc + ".");
+			LOGGER.error(e);
 		} finally {
+
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+			} catch (SQLException e) {
+				LOGGER.error(Labels.FAILED_TO_CLOSE_RESULTSET + errorDesc + ".");
+				LOGGER.error(e);
+			}
+
 			try {
 				if (st != null) {
 					st.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close statement when listing programs.");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_STATEMENT + errorDesc + ".");
+				LOGGER.error(e);
 			}
 
 			try {
@@ -220,8 +258,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close connection when listing programs.");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_CONNECTION + errorDesc + ".");
+				LOGGER.error(e);
 			}
 		}
 
@@ -230,8 +268,10 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 	}
 
 	public ObservableList<Script> getScripts() {
+		String errorDesc = "listing scripts";
 		Connection conn = null;
 		Statement st = null;
+		ResultSet rs = null;
 
 		ObservableList<Script> scripts = FXCollections.observableArrayList();
 
@@ -239,9 +279,11 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 			conn = DriverManager.getConnection(databaseConnectionURL);
 			conn.setAutoCommit(false);
 			st = conn.createStatement();
-			ResultSet rs = st.executeQuery("SELECT * FROM scripts");
+			rs = st.executeQuery("SELECT * FROM scripts");
 
 			while (rs.next()) {
+				SimpleDateFormat dateFormat = new SimpleDateFormat(
+						Labels.DATEFORMAT_DATETIME_FOR_INSERT);
 				int scriptId = rs.getInt("scriptId");
 				String name = rs.getString("name");
 				LocalDateTime date = rs.getString("date").isEmpty() ? null
@@ -266,19 +308,29 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 			conn.commit();
 		} catch (SQLException e) {
-			System.out.println("Failed to execute listing programs.");
-			e.printStackTrace();
+			LOGGER.error(Labels.FAILED_TO_EXECUTE + errorDesc + ".");
+			LOGGER.error(e);
 		} catch (ParseException e) {
-			System.out.println("Failed to parse a date.");
-			e.printStackTrace();
+			LOGGER.error("Failed to parse a date.");
+			LOGGER.error(e);
 		} finally {
+
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+			} catch (SQLException e) {
+				LOGGER.error(Labels.FAILED_TO_CLOSE_RESULTSET + errorDesc + ".");
+				LOGGER.error(e);
+			}
+
 			try {
 				if (st != null) {
 					st.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close statement when listing programs.");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_STATEMENT + errorDesc + ".");
+				LOGGER.error(e);
 			}
 
 			try {
@@ -286,8 +338,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close connection when listing programs.");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_CONNECTION + errorDesc + ".");
+				LOGGER.error(e);
 			}
 		}
 
@@ -296,8 +348,10 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 	}
 
 	public ObservableList<Service> getServices() {
+		String errorDesc = "listing services";
 		Connection conn = null;
 		Statement st = null;
+		ResultSet rs = null;
 
 		ObservableList<Service> services = FXCollections.observableArrayList();
 		services.clear();
@@ -306,7 +360,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 			conn = DriverManager.getConnection(databaseConnectionURL);
 			conn.setAutoCommit(false);
 			st = conn.createStatement();
-			ResultSet rs = st.executeQuery("SELECT * FROM services");
+			rs = st.executeQuery("SELECT * FROM services");
 
 			while (rs.next()) {
 				int serviceId = rs.getInt("serviceId");
@@ -321,16 +375,26 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 			conn.commit();
 		} catch (SQLException e) {
-			System.out.println("Failed to execute listing services.");
-			e.printStackTrace();
+			LOGGER.error(Labels.FAILED_TO_EXECUTE + errorDesc + ".");
+			LOGGER.error(e);
 		} finally {
+
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+			} catch (SQLException e) {
+				LOGGER.error(Labels.FAILED_TO_CLOSE_RESULTSET + errorDesc + ".");
+				LOGGER.error(e);
+			}
+
 			try {
 				if (st != null) {
 					st.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close statement when listing services.");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_STATEMENT + errorDesc + ".");
+				LOGGER.error(e);
 			}
 
 			try {
@@ -338,8 +402,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close connection when listing services.");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_CONNECTION + errorDesc + ".");
+				LOGGER.error(e);
 			}
 		}
 
@@ -353,7 +417,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 		boolean rvSucceeded = false;
 		Connection conn = null;
 		PreparedStatement pst = null;
-
+		ResultSet rs = null;
+		Statement st = null;
 		try {
 
 			conn = DriverManager.getConnection(databaseConnectionURL);
@@ -362,10 +427,9 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 			int index = 1;
 			pst.setString(index++, script.getName());
-			pst.setString(index++,
-					script.getDate() == null ? ""
-							: script.getDate().format(
-									DateTimeFormatter.ofPattern(DATEFORMAT_DATETIME_FOR_INSERT)));
+			pst.setString(index++, script.getDate() == null ? ""
+					: script.getDate().format(
+							DateTimeFormatter.ofPattern(Labels.DATEFORMAT_DATETIME_FOR_INSERT)));
 			pst.setString(index++, script.getComment());
 
 			int rowsAffected = pst.executeUpdate();
@@ -373,9 +437,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				rvSucceeded = true;
 			}
 
-			Statement st = null;
 			st = conn.createStatement();
-			ResultSet rs = st.executeQuery("SELECT last_insert_rowid() AS lastId");
+			rs = st.executeQuery("SELECT last_insert_rowid() AS lastId");
 
 			int rowId = -1;
 			while (rs.next()) {
@@ -384,17 +447,44 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 			script.setScriptId(rowId);
 
 		} catch (SQLException e) {
-			System.out.println("Failed to execute " + errorDesc + ".");
-			e.printStackTrace();
+			LOGGER.error(Labels.FAILED_TO_EXECUTE + errorDesc + ".");
+			LOGGER.error(e);
 		} finally {
+
+			try {
+				if (st != null) {
+					st.close();
+				}
+			} catch (SQLException e) {
+				System.out.println(Labels.FAILED_TO_CLOSE_STATEMENT + errorDesc + ".");
+				LOGGER.error(e);
+			}
+
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+			} catch (SQLException e) {
+				LOGGER.error(Labels.FAILED_TO_CLOSE_RESULTSET + errorDesc + ".");
+				LOGGER.error(e);
+			}
+
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+			} catch (SQLException e) {
+				LOGGER.error(Labels.FAILED_TO_CLOSE_RESULTSET + errorDesc + ".");
+				LOGGER.error(e);
+			}
 
 			try {
 				if (pst != null) {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close statement when " + errorDesc + ".");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_STATEMENT + errorDesc + ".");
+				LOGGER.error(e);
 			}
 
 			try {
@@ -402,8 +492,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close connection when " + errorDesc + ".");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_CONNECTION + errorDesc + ".");
+				LOGGER.error(e);
 			}
 		}
 
@@ -413,6 +503,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 	@Override
 	public boolean removeScript(Script script) {
 		boolean rvSucceeded = false;
+		String errorDesc = "removing script";
 		Connection conn = null;
 		PreparedStatement pst = null;
 
@@ -428,8 +519,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				rvSucceeded = true;
 			}
 		} catch (SQLException e) {
-			System.out.println("Failed to execute removing script.");
-			e.printStackTrace();
+			LOGGER.error(Labels.FAILED_TO_EXECUTE + errorDesc + ".");
+			LOGGER.error(e);
 		} finally {
 
 			try {
@@ -437,8 +528,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close statement when removing script.");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_STATEMENT + errorDesc + ".");
+				LOGGER.error(e);
 			}
 
 			try {
@@ -446,8 +537,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close connection when removing script.");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_CONNECTION + errorDesc + ".");
+				LOGGER.error(e);
 			}
 		}
 
@@ -458,6 +549,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 	public ObservableList<Program> getProgramsOfScript(Script script) {
 		Connection conn = null;
 		PreparedStatement pst = null;
+		ResultSet rs = null;
 		String errorDesc = "listing programs of script";
 
 		ObservableList<Program> programs = FXCollections.observableArrayList();
@@ -472,7 +564,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 			pst.setInt(1, script.getScriptId());
 
 			conn.setAutoCommit(false);
-			ResultSet rs = pst.executeQuery();
+			rs = pst.executeQuery();
 
 			while (rs.next()) {
 				int progId = rs.getInt("progId");
@@ -494,16 +586,26 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 			conn.commit();
 		} catch (SQLException e) {
-			System.out.println("Failed to execute " + errorDesc + ".");
-			e.printStackTrace();
+			LOGGER.error(Labels.FAILED_TO_EXECUTE + errorDesc + ".");
+			LOGGER.error(e);
 		} finally {
+
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+			} catch (SQLException e) {
+				LOGGER.error(Labels.FAILED_TO_CLOSE_RESULTSET + errorDesc + ".");
+				LOGGER.error(e);
+			}
+
 			try {
 				if (pst != null) {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close statement when " + errorDesc + ".");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_STATEMENT + errorDesc + ".");
+				LOGGER.error(e);
 			}
 
 			try {
@@ -511,8 +613,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close connection when " + errorDesc + ".");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_CONNECTION + errorDesc + ".");
+				LOGGER.error(e);
 			}
 		}
 
@@ -523,6 +625,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 	public ObservableList<Program> getProgramsNotInScript(Script script) {
 		Connection conn = null;
 		PreparedStatement pst = null;
+		ResultSet rs = null;
 		String errorDesc = "listing reverse programs of script";
 
 		ObservableList<Program> programs = FXCollections.observableArrayList();
@@ -538,7 +641,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 			pst.setInt(1, script.getScriptId());
 
 			conn.setAutoCommit(false);
-			ResultSet rs = pst.executeQuery();
+			rs = pst.executeQuery();
 
 			while (rs.next()) {
 				int progId = rs.getInt("progId");
@@ -558,16 +661,26 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 			conn.commit();
 		} catch (SQLException e) {
-			System.out.println("Failed to execute " + errorDesc + ".");
-			e.printStackTrace();
+			LOGGER.error(Labels.FAILED_TO_EXECUTE + errorDesc + ".");
+			LOGGER.error(e);
 		} finally {
+
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+			} catch (SQLException e) {
+				LOGGER.error(Labels.FAILED_TO_CLOSE_RESULTSET + errorDesc + ".");
+				LOGGER.error(e);
+			}
+
 			try {
 				if (pst != null) {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close statement when " + errorDesc + ".");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_STATEMENT + errorDesc + ".");
+				LOGGER.error(e);
 			}
 
 			try {
@@ -575,8 +688,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close connection when " + errorDesc + ".");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_CONNECTION + errorDesc + ".");
+				LOGGER.error(e);
 			}
 		}
 
@@ -603,7 +716,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 			int day = (program.getDefaultTime().getDayOfMonth() - 1) * 24 * 60 * 60;
 			int hour = program.getDefaultTime().getHour() * 60 * 60;
 			int min = program.getDefaultTime().getMinute() * 60;
-			Long seconds = 1000 * new Long(day + hour + min);
+			Long seconds = 1000 * new Long((long) day + hour + min);
 			pst.setLong(index++, program.getTime() == null ? 0 : seconds);
 
 			int rowsAffected = pst.executeUpdate();
@@ -611,8 +724,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				rvSucceeded = true;
 			}
 		} catch (SQLException e) {
-			System.out.println("Failed to execute " + errorName + ".");
-			e.printStackTrace();
+			LOGGER.error(Labels.FAILED_TO_EXECUTE + errorName + ".");
+			LOGGER.error(e);
 		} finally {
 
 			try {
@@ -620,8 +733,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close statement when " + errorName + ".");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_STATEMENT + errorName + ".");
+				LOGGER.error(e);
 			}
 
 			try {
@@ -629,8 +742,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close connection when " + errorName + ".");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_CONNECTION + errorName + ".");
+				LOGGER.error(e);
 			}
 		}
 
@@ -642,6 +755,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 		String errorDesc = "getting program attributes";
 		Connection conn = null;
 		PreparedStatement pst = null;
+		ResultSet rs = null;
 
 		List<Attribute> attributes = new ArrayList<Attribute>();
 		attributes.clear();
@@ -655,7 +769,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 			int index = 1;
 			pst.setInt(index++, program.getProgId());
 			conn.setAutoCommit(false);
-			ResultSet rs = pst.executeQuery();
+			rs = pst.executeQuery();
 
 			while (rs.next()) {
 				int attrId = rs.getInt("attributeId");
@@ -671,17 +785,26 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 			conn.commit();
 
 		} catch (SQLException e) {
-			System.out.println("Failed to execute " + errorDesc + ".");
-			e.printStackTrace();
+			LOGGER.error(Labels.FAILED_TO_EXECUTE + errorDesc + ".");
+			LOGGER.error(e);
 		} finally {
+
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+			} catch (SQLException e) {
+				LOGGER.error(Labels.FAILED_TO_CLOSE_RESULTSET + errorDesc + ".");
+				LOGGER.error(e);
+			}
 
 			try {
 				if (pst != null) {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close statement when " + errorDesc + ".");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_STATEMENT + errorDesc + ".");
+				LOGGER.error(e);
 			}
 
 			try {
@@ -689,8 +812,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close connection when " + errorDesc + ".");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_CONNECTION + errorDesc + ".");
+				LOGGER.error(e);
 			}
 		}
 		return attributes;
@@ -699,6 +822,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 	@Override
 	public boolean removeProgram(Program program) {
 		boolean rvSucceeded = false;
+		String errorDesc = "removing program";
 		Connection conn = null;
 		PreparedStatement pst = null;
 
@@ -714,8 +838,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				rvSucceeded = true;
 			}
 		} catch (SQLException e) {
-			System.out.println("Failed to execute removing program.");
-			e.printStackTrace();
+			LOGGER.error(Labels.FAILED_TO_EXECUTE + errorDesc + ".");
+			LOGGER.error(e);
 		} finally {
 
 			try {
@@ -723,8 +847,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close statement when removing program.");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_STATEMENT + errorDesc + ".");
+				LOGGER.error(e);
 			}
 
 			try {
@@ -732,8 +856,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close connection when removing program.");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_CONNECTION + errorDesc + ".");
+				LOGGER.error(e);
 			}
 		}
 
@@ -742,8 +866,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 	@Override
 	public boolean addProgram(Program program) {
-		String errorName = "program";
-		String errorType = "adding";
+		String errorDesc = "adding program";
 		boolean rvSucceeded = false;
 		Connection conn = null;
 		PreparedStatement pst = null;
@@ -751,14 +874,15 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 		try {
 
 			conn = DriverManager.getConnection(databaseConnectionURL);
-			pst = conn.prepareStatement("INSERT INTO programs(name, defaultTime, defaultProgram) VALUES (?, ?, ?)");
+			pst = conn.prepareStatement(
+					"INSERT INTO programs(name, defaultTime, defaultProgram) VALUES (?, ?, ?)");
 
 			int index = 1;
 			pst.setString(index++, program.getName());
 			int defDay = (program.getDefaultTime().getDayOfMonth() - 1) * 24 * 60 * 60;
 			int defHour = program.getDefaultTime().getHour() * 60 * 60;
 			int defMin = program.getDefaultTime().getMinute() * 60;
-			Long defaultSeconds = 1000 * new Long(defDay + defHour + defMin);
+			Long defaultSeconds = 1000 * new Long((long) defDay + defHour + defMin);
 			pst.setLong(index++, program.getDefaultTime() == null ? 0 : defaultSeconds);
 			pst.setInt(index++, program.isDefaultProgram() ? 1 : 0);
 
@@ -767,8 +891,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				rvSucceeded = true;
 			}
 		} catch (SQLException e) {
-			System.out.println("Failed to execute " + errorType + " " + errorName + ".");
-			e.printStackTrace();
+			LOGGER.error(Labels.FAILED_TO_EXECUTE + errorDesc + ".");
+			LOGGER.error(e);
 		} finally {
 
 			try {
@@ -776,9 +900,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				System.out.println(
-						"Failed to close statement when " + errorType + " " + errorName + ".");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_STATEMENT + errorDesc + ".");
+				LOGGER.error(e);
 			}
 
 			try {
@@ -786,9 +909,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				System.out.println(
-						"Failed to close connection when " + errorType + " " + errorName + ".");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_CONNECTION + errorDesc + ".");
+				LOGGER.error(e);
 			}
 		}
 
@@ -813,7 +935,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 			int defDay = (program.getDefaultTime().getDayOfMonth() - 1) * 24 * 60 * 60;
 			int defHour = program.getDefaultTime().getHour() * 60 * 60;
 			int defMin = program.getDefaultTime().getMinute() * 60;
-			Long defaultSeconds = 1000 * new Long(defDay + defHour + defMin);
+			Long defaultSeconds = 1000 * new Long((long) defDay + defHour + defMin);
 			pst.setLong(index++, program.getDefaultTime() == null ? 0 : defaultSeconds);
 			pst.setInt(index++, program.isDefaultProgram() ? 1 : 0);
 			pst.setInt(index++, program.getProgId());
@@ -823,8 +945,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				rvSucceeded = true;
 			}
 		} catch (SQLException e) {
-			System.out.println("Failed to execute " + errorDesc + ".");
-			e.printStackTrace();
+			LOGGER.error(Labels.FAILED_TO_EXECUTE + errorDesc + ".");
+			LOGGER.error(e);
 		} finally {
 
 			try {
@@ -832,8 +954,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close statement when " + errorDesc + ".");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_STATEMENT + errorDesc + ".");
+				LOGGER.error(e);
 			}
 
 			try {
@@ -841,8 +963,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close connection when " + errorDesc + ".");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_CONNECTION + errorDesc + ".");
+				LOGGER.error(e);
 			}
 		}
 
@@ -851,8 +973,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 	@Override
 	public boolean removeAttribute(Attribute attribute) {
-		String errorName = "attribute";
-		String errorType = "removing";
+		String errorDesc = "removing attribute";
 		boolean rvSucceeded = false;
 		Connection conn = null;
 		PreparedStatement pst = null;
@@ -869,8 +990,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				rvSucceeded = true;
 			}
 		} catch (SQLException e) {
-			System.out.println("Failed to execute " + errorType + " " + errorName + ".");
-			e.printStackTrace();
+			LOGGER.error(Labels.FAILED_TO_EXECUTE + errorDesc + ".");
+			LOGGER.error(e);
 		} finally {
 
 			try {
@@ -878,9 +999,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				System.out.println(
-						"Failed to close statement when " + errorType + " " + errorName + ".");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_STATEMENT + errorDesc + ".");
+				LOGGER.error(e);
 			}
 
 			try {
@@ -888,9 +1008,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				System.out.println(
-						"Failed to close connection when " + errorType + " " + errorName + ".");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_CONNECTION + errorDesc + ".");
+				LOGGER.error(e);
 			}
 		}
 
@@ -900,8 +1019,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 	@Override
 	public boolean addAttribute(Attribute attribute) {
 
-		String errorName = "attribute";
-		String errorType = "adding";
+		String errorDesc = "adding attribute";
 		boolean rvSucceeded = false;
 		Connection conn = null;
 		PreparedStatement pst = null;
@@ -925,8 +1043,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				rvSucceeded = true;
 			}
 		} catch (SQLException e) {
-			System.out.println("Failed to execute " + errorType + " " + errorName + ".");
-			e.printStackTrace();
+			LOGGER.error(Labels.FAILED_TO_EXECUTE + errorDesc + ".");
+			LOGGER.error(e);
 		} finally {
 
 			try {
@@ -934,9 +1052,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				System.out.println(
-						"Failed to close statement when " + errorType + " " + errorName + ".");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_STATEMENT + errorDesc + ".");
+				LOGGER.error(e);
 			}
 
 			try {
@@ -944,9 +1061,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				System.out.println(
-						"Failed to close connection when " + errorType + " " + errorName + ".");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_CONNECTION + errorDesc + ".");
+				LOGGER.error(e);
 			}
 		}
 
@@ -958,6 +1074,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 	public ObservableList<Attribute> getAttributesOfScript(Script script) {
 		Connection conn = null;
 		PreparedStatement pst = null;
+		ResultSet rs = null;
 		String errorDesc = "listing script's attributes";
 		ObservableList<Attribute> scriptAttrList = FXCollections.observableArrayList();
 
@@ -972,7 +1089,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 			pst.setInt(index++, script.getScriptId());
 			pst.setInt(index++, script.getScriptId());
 			conn.setAutoCommit(false);
-			ResultSet rs = pst.executeQuery();
+			rs = pst.executeQuery();
 
 			while (rs.next()) {
 				int attrId = rs.getInt("attributeId");
@@ -993,17 +1110,26 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 			conn.commit();
 		} catch (SQLException e) {
-			System.out.println("Failed to execute " + errorDesc + ".");
-			e.printStackTrace();
+			LOGGER.error(Labels.FAILED_TO_EXECUTE + errorDesc + ".");
+			LOGGER.error(e);
 		} finally {
+
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+			} catch (SQLException e) {
+				LOGGER.error(Labels.FAILED_TO_CLOSE_RESULTSET + errorDesc + ".");
+				LOGGER.error(e);
+			}
 
 			try {
 				if (pst != null) {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close statement when " + errorDesc + ".");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_STATEMENT + errorDesc + ".");
+				LOGGER.error(e);
 			}
 
 			try {
@@ -1011,8 +1137,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close connection when " + errorDesc + ".");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_CONNECTION + errorDesc + ".");
+				LOGGER.error(e);
 			}
 		}
 
@@ -1024,6 +1150,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 	public ObservableList<Attribute> getAttributesNotInScript(Script script) {
 		Connection conn = null;
 		PreparedStatement pst = null;
+		ResultSet rs = null;
 		String errorDesc = "reverse listing script's attributes";
 		ObservableList<Attribute> scriptAttrList = FXCollections.observableArrayList();
 
@@ -1039,7 +1166,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 			pst.setInt(index++, script.getScriptId());
 
 			conn.setAutoCommit(false);
-			ResultSet rs = pst.executeQuery();
+			rs = pst.executeQuery();
 
 			while (rs.next()) {
 				int attrId = rs.getInt("attributeId");
@@ -1060,17 +1187,26 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 			conn.commit();
 		} catch (SQLException e) {
-			System.out.println("Failed to execute " + errorDesc + ".");
-			e.printStackTrace();
+			LOGGER.error(Labels.FAILED_TO_EXECUTE + errorDesc + ".");
+			LOGGER.error(e);
 		} finally {
+
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+			} catch (SQLException e) {
+				LOGGER.error(Labels.FAILED_TO_CLOSE_RESULTSET + errorDesc + ".");
+				LOGGER.error(e);
+			}
 
 			try {
 				if (pst != null) {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close statement when " + errorDesc + ".");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_STATEMENT + errorDesc + ".");
+				LOGGER.error(e);
 			}
 
 			try {
@@ -1078,8 +1214,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close connection when " + errorDesc + ".");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_CONNECTION + errorDesc + ".");
+				LOGGER.error(e);
 			}
 		}
 
@@ -1112,8 +1248,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				rvSucceeded = true;
 			}
 		} catch (SQLException e) {
-			System.out.println("Failed to execute " + errorDesc + ".");
-			e.printStackTrace();
+			LOGGER.error(Labels.FAILED_TO_EXECUTE + errorDesc + ".");
+			LOGGER.error(e);
 		} finally {
 
 			try {
@@ -1121,8 +1257,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close statement when " + errorDesc + ".");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_STATEMENT + errorDesc + ".");
+				LOGGER.error(e);
 			}
 
 			try {
@@ -1130,8 +1266,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close connection when " + errorDesc + ".");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_CONNECTION + errorDesc + ".");
+				LOGGER.error(e);
 			}
 		}
 
@@ -1142,6 +1278,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 	public List<Service> getServicesOfScript(Script script) {
 		Connection conn = null;
 		PreparedStatement pst = null;
+		ResultSet rs = null;
 		String errorDesc = "listing services of script";
 
 		ObservableList<Service> services = FXCollections.observableArrayList();
@@ -1156,7 +1293,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 			pst.setInt(1, script.getScriptId());
 
 			conn.setAutoCommit(false);
-			ResultSet rs = pst.executeQuery();
+			rs = pst.executeQuery();
 
 			while (rs.next()) {
 				int serviceId = rs.getInt("serviceId");
@@ -1171,16 +1308,26 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 			conn.commit();
 		} catch (SQLException e) {
-			System.out.println("Failed to execute " + errorDesc + ".");
-			e.printStackTrace();
+			LOGGER.error(Labels.FAILED_TO_EXECUTE + errorDesc + ".");
+			LOGGER.error(e);
 		} finally {
+
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+			} catch (SQLException e) {
+				LOGGER.error(Labels.FAILED_TO_CLOSE_RESULTSET + errorDesc + ".");
+				LOGGER.error(e);
+			}
+
 			try {
 				if (pst != null) {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close statement when " + errorDesc + ".");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_STATEMENT + errorDesc + ".");
+				LOGGER.error(e);
 			}
 
 			try {
@@ -1188,8 +1335,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close connection when " + errorDesc + ".");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_CONNECTION + errorDesc + ".");
+				LOGGER.error(e);
 			}
 		}
 
@@ -1218,8 +1365,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				rvSucceeded = true;
 			}
 		} catch (SQLException e) {
-			System.out.println("Failed to execute " + errorName + ".");
-			e.printStackTrace();
+			LOGGER.error(Labels.FAILED_TO_EXECUTE + errorName + ".");
+			LOGGER.error(e);
 		} finally {
 
 			try {
@@ -1227,8 +1374,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close statement when " + errorName + ".");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_STATEMENT + errorName + ".");
+				LOGGER.error(e);
 			}
 
 			try {
@@ -1236,8 +1383,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close connection when " + errorName + ".");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_CONNECTION + errorName + ".");
+				LOGGER.error(e);
 			}
 		}
 
@@ -1248,6 +1395,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 	public List<Service> getServicesNotInScript(Script script) {
 		Connection conn = null;
 		PreparedStatement pst = null;
+		ResultSet rs = null;
 		String errorDesc = "listing reverse services of script";
 
 		ObservableList<Service> services = FXCollections.observableArrayList();
@@ -1263,7 +1411,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 			pst.setInt(1, script.getScriptId());
 
 			conn.setAutoCommit(false);
-			ResultSet rs = pst.executeQuery();
+			rs = pst.executeQuery();
 
 			while (rs.next()) {
 				int serviceId = rs.getInt("serviceId");
@@ -1278,16 +1426,26 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 			conn.commit();
 		} catch (SQLException e) {
-			System.out.println("Failed to execute " + errorDesc + ".");
-			e.printStackTrace();
+			LOGGER.error(Labels.FAILED_TO_EXECUTE + errorDesc + ".");
+			LOGGER.error(e);
 		} finally {
+
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+			} catch (SQLException e) {
+				LOGGER.error(Labels.FAILED_TO_CLOSE_RESULTSET + errorDesc + ".");
+				LOGGER.error(e);
+			}
+
 			try {
 				if (pst != null) {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close statement when " + errorDesc + ".");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_STATEMENT + errorDesc + ".");
+				LOGGER.error(e);
 			}
 
 			try {
@@ -1295,8 +1453,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close connection when " + errorDesc + ".");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_CONNECTION + errorDesc + ".");
+				LOGGER.error(e);
 			}
 		}
 
@@ -1307,6 +1465,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 	public List<Attribute> getAttributesNotInProgram(Program program) {
 		Connection conn = null;
 		PreparedStatement pst = null;
+		ResultSet rs = null;
 		String errorDesc = "reverse listing program's attributes";
 		List<Attribute> programAttrList = new ArrayList<Attribute>();
 
@@ -1322,7 +1481,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 			pst.setInt(index++, program.getProgId());
 
 			conn.setAutoCommit(false);
-			ResultSet rs = pst.executeQuery();
+			rs = pst.executeQuery();
 
 			while (rs.next()) {
 				int attrId = rs.getInt("attributeId");
@@ -1343,17 +1502,26 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 			conn.commit();
 		} catch (SQLException e) {
-			System.out.println("Failed to execute " + errorDesc + ".");
-			e.printStackTrace();
+			LOGGER.error(Labels.FAILED_TO_EXECUTE + errorDesc + ".");
+			LOGGER.error(e);
 		} finally {
+
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+			} catch (SQLException e) {
+				LOGGER.error(Labels.FAILED_TO_CLOSE_RESULTSET + errorDesc + ".");
+				LOGGER.error(e);
+			}
 
 			try {
 				if (pst != null) {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close statement when " + errorDesc + ".");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_STATEMENT + errorDesc + ".");
+				LOGGER.error(e);
 			}
 
 			try {
@@ -1361,8 +1529,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close connection when " + errorDesc + ".");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_CONNECTION + errorDesc + ".");
+				LOGGER.error(e);
 			}
 		}
 
@@ -1394,8 +1562,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				rvSucceeded = true;
 			}
 		} catch (SQLException e) {
-			System.out.println("Failed to execute " + errorDesc + ".");
-			e.printStackTrace();
+			LOGGER.error(Labels.FAILED_TO_EXECUTE + errorDesc + ".");
+			LOGGER.error(e);
 		} finally {
 
 			try {
@@ -1403,8 +1571,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close statement when " + errorDesc + ".");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_STATEMENT + errorDesc + ".");
+				LOGGER.error(e);
 			}
 
 			try {
@@ -1412,8 +1580,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close connection when " + errorDesc + ".");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_CONNECTION + errorDesc + ".");
+				LOGGER.error(e);
 			}
 		}
 
@@ -1444,8 +1612,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				rvSucceeded = true;
 			}
 		} catch (SQLException e) {
-			System.out.println("Failed to execute " + errorDesc + ".");
-			e.printStackTrace();
+			LOGGER.error(Labels.FAILED_TO_EXECUTE + errorDesc + ".");
+			LOGGER.error(e);
 		} finally {
 
 			try {
@@ -1453,8 +1621,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close statement when " + errorDesc + ".");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_STATEMENT + errorDesc + ".");
+				LOGGER.error(e);
 			}
 
 			try {
@@ -1462,8 +1630,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close connection when " + errorDesc + ".");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_CONNECTION + errorDesc + ".");
+				LOGGER.error(e);
 			}
 		}
 
@@ -1488,7 +1656,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 			int day = (newTime.getDayOfMonth() - 1) * 24 * 60 * 60;
 			int hour = newTime.getHour() * 60 * 60;
 			int min = newTime.getMinute() * 60;
-			Long newTimeSeconds = 1000 * new Long((long)day + hour + min);
+			Long newTimeSeconds = 1000 * new Long((long) day + hour + min);
 
 			pst.setLong(index++, newTimeSeconds);
 			pst.setInt(index++, script.getScriptId());
@@ -1499,8 +1667,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				rvSucceeded = true;
 			}
 		} catch (SQLException e) {
-			System.out.println("Failed to execute " + errorDesc + ".");
-			e.printStackTrace();
+			LOGGER.error(Labels.FAILED_TO_EXECUTE + errorDesc + ".");
+			LOGGER.error(e);
 		} finally {
 
 			try {
@@ -1508,8 +1676,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close statement when " + errorDesc + ".");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_STATEMENT + errorDesc + ".");
+				LOGGER.error(e);
 			}
 
 			try {
@@ -1517,8 +1685,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close connection when " + errorDesc + ".");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_CONNECTION + errorDesc + ".");
+				LOGGER.error(e);
 			}
 		}
 
@@ -1548,8 +1716,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				rvSucceeded = true;
 			}
 		} catch (SQLException e) {
-			System.out.println("Failed to execute " + errorDesc + ".");
-			e.printStackTrace();
+			LOGGER.error(Labels.FAILED_TO_EXECUTE + errorDesc + ".");
+			LOGGER.error(e);
 		} finally {
 
 			try {
@@ -1557,8 +1725,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close statement when " + errorDesc + ".");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_STATEMENT + errorDesc + ".");
+				LOGGER.error(e);
 			}
 
 			try {
@@ -1566,8 +1734,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close connection when " + errorDesc + ".");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_CONNECTION + errorDesc + ".");
+				LOGGER.error(e);
 			}
 		}
 
@@ -1602,8 +1770,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				rvSucceeded = true;
 			}
 		} catch (SQLException e) {
-			System.out.println("Failed to execute " + errorDesc + ".");
-			e.printStackTrace();
+			LOGGER.error(Labels.FAILED_TO_EXECUTE + errorDesc + ".");
+			LOGGER.error(e);
 		} finally {
 
 			try {
@@ -1611,8 +1779,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close statement when " + errorDesc + ".");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_STATEMENT + errorDesc + ".");
+				LOGGER.error(e);
 			}
 
 			try {
@@ -1620,8 +1788,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close connection when " + errorDesc + ".");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_CONNECTION + errorDesc + ".");
+				LOGGER.error(e);
 			}
 		}
 
@@ -1643,10 +1811,9 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 			int index = 1;
 			pst.setString(index++, script.getName());
-			pst.setString(index++,
-					script.getDate() == null ? ""
-							: script.getDate().format(
-									DateTimeFormatter.ofPattern(DATEFORMAT_DATETIME_FOR_INSERT)));
+			pst.setString(index++, script.getDate() == null ? ""
+					: script.getDate().format(
+							DateTimeFormatter.ofPattern(Labels.DATEFORMAT_DATETIME_FOR_INSERT)));
 			pst.setString(index++, script.getComment());
 			pst.setInt(index++, script.getScriptId());
 
@@ -1655,8 +1822,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				rvSucceeded = true;
 			}
 		} catch (SQLException e) {
-			System.out.println("Failed to execute " + errorDesc + ".");
-			e.printStackTrace();
+			LOGGER.error(Labels.FAILED_TO_EXECUTE + errorDesc + ".");
+			LOGGER.error(e);
 		} finally {
 
 			try {
@@ -1664,8 +1831,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close statement when " + errorDesc + ".");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_STATEMENT + errorDesc + ".");
+				LOGGER.error(e);
 			}
 
 			try {
@@ -1673,8 +1840,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close connection when " + errorDesc + ".");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_CONNECTION + errorDesc + ".");
+				LOGGER.error(e);
 			}
 		}
 
@@ -1704,8 +1871,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				rvSucceeded = true;
 			}
 		} catch (SQLException e) {
-			System.out.println("Failed to execute " + errorDesc + ".");
-			e.printStackTrace();
+			LOGGER.error(Labels.FAILED_TO_EXECUTE + errorDesc + ".");
+			LOGGER.error(e);
 		} finally {
 
 			try {
@@ -1713,8 +1880,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close statement when " + errorDesc + ".");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_STATEMENT + errorDesc + ".");
+				LOGGER.error(e);
 			}
 
 			try {
@@ -1722,8 +1889,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close connection when " + errorDesc + ".");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_CONNECTION + errorDesc + ".");
+				LOGGER.error(e);
 			}
 		}
 
@@ -1734,6 +1901,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 	public ObservableList<Attribute> getAttributesOfScriptProgram(Script script, Program program) {
 		Connection conn = null;
 		PreparedStatement pst = null;
+		ResultSet rs = null;
 		String errorDesc = "listing script's program's attributes";
 		ObservableList<Attribute> scriptAttrList = FXCollections.observableArrayList();
 
@@ -1748,7 +1916,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 			pst.setInt(index++, script.getScriptId());
 			pst.setInt(index++, program.getProgId());
 			conn.setAutoCommit(false);
-			ResultSet rs = pst.executeQuery();
+			rs = pst.executeQuery();
 
 			while (rs.next()) {
 				int attrId = rs.getInt("attributeId");
@@ -1769,17 +1937,26 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 			conn.commit();
 		} catch (SQLException e) {
-			System.out.println("Failed to execute " + errorDesc + ".");
-			e.printStackTrace();
+			LOGGER.error(Labels.FAILED_TO_EXECUTE + errorDesc + ".");
+			LOGGER.error(e);
 		} finally {
+
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+			} catch (SQLException e) {
+				LOGGER.error(Labels.FAILED_TO_CLOSE_RESULTSET + errorDesc + ".");
+				LOGGER.error(e);
+			}
 
 			try {
 				if (pst != null) {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close statement when " + errorDesc + ".");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_STATEMENT + errorDesc + ".");
+				LOGGER.error(e);
 			}
 
 			try {
@@ -1787,8 +1964,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close connection when " + errorDesc + ".");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_CONNECTION + errorDesc + ".");
+				LOGGER.error(e);
 			}
 		}
 
@@ -1801,6 +1978,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 			Program program) {
 		Connection conn = null;
 		PreparedStatement pst = null;
+		ResultSet rs = null;
 		String errorDesc = "listing script's program's attributes";
 		ObservableList<Attribute> scriptAttrList = FXCollections.observableArrayList();
 
@@ -1818,7 +1996,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 			pst.setInt(index++, script.getScriptId());
 			pst.setInt(index++, program.getProgId());
 			conn.setAutoCommit(false);
-			ResultSet rs = pst.executeQuery();
+			rs = pst.executeQuery();
 
 			while (rs.next()) {
 				int attrId = rs.getInt("attributeId");
@@ -1839,17 +2017,26 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 			conn.commit();
 		} catch (SQLException e) {
-			System.out.println("Failed to execute " + errorDesc + ".");
-			e.printStackTrace();
+			LOGGER.error(Labels.FAILED_TO_EXECUTE + errorDesc + ".");
+			LOGGER.error(e);
 		} finally {
+
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+			} catch (SQLException e) {
+				LOGGER.error(Labels.FAILED_TO_CLOSE_RESULTSET + errorDesc + ".");
+				LOGGER.error(e);
+			}
 
 			try {
 				if (pst != null) {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close statement when " + errorDesc + ".");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_STATEMENT + errorDesc + ".");
+				LOGGER.error(e);
 			}
 
 			try {
@@ -1857,8 +2044,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close connection when " + errorDesc + ".");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_CONNECTION + errorDesc + ".");
+				LOGGER.error(e);
 			}
 		}
 
@@ -1891,8 +2078,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				rvSucceeded = true;
 			}
 		} catch (SQLException e) {
-			System.out.println("Failed to execute " + errorDesc + ".");
-			e.printStackTrace();
+			LOGGER.error(Labels.FAILED_TO_EXECUTE + errorDesc + ".");
+			LOGGER.error(e);
 		} finally {
 
 			try {
@@ -1900,8 +2087,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close statement when " + errorDesc + ".");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_STATEMENT + errorDesc + ".");
+				LOGGER.error(e);
 			}
 
 			try {
@@ -1909,8 +2096,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close connection when " + errorDesc + ".");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_CONNECTION + errorDesc + ".");
+				LOGGER.error(e);
 			}
 		}
 
@@ -1943,8 +2130,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				rvSucceeded = true;
 			}
 		} catch (SQLException e) {
-			System.out.println("Failed to execute " + errorDesc + ".");
-			e.printStackTrace();
+			LOGGER.error(Labels.FAILED_TO_EXECUTE + errorDesc + ".");
+			LOGGER.error(e);
 		} finally {
 
 			try {
@@ -1952,8 +2139,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close statement when " + errorDesc + ".");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_STATEMENT + errorDesc + ".");
+				LOGGER.error(e);
 			}
 
 			try {
@@ -1961,8 +2148,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close connection when " + errorDesc + ".");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_CONNECTION + errorDesc + ".");
+				LOGGER.error(e);
 			}
 		}
 
@@ -1994,8 +2181,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				rvSucceeded = true;
 			}
 		} catch (SQLException e) {
-			System.out.println("Failed to execute " + errorDesc + ".");
-			e.printStackTrace();
+			LOGGER.error(Labels.FAILED_TO_EXECUTE + errorDesc + ".");
+			LOGGER.error(e);
 		} finally {
 
 			try {
@@ -2003,8 +2190,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close statement when " + errorDesc + ".");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_STATEMENT + errorDesc + ".");
+				LOGGER.error(e);
 			}
 
 			try {
@@ -2012,8 +2199,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close connection when " + errorDesc + ".");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_CONNECTION + errorDesc + ".");
+				LOGGER.error(e);
 			}
 		}
 
@@ -2039,8 +2226,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				rvSucceeded = true;
 			}
 		} catch (SQLException e) {
-			System.out.println("Failed to execute " + errorDesc + ".");
-			e.printStackTrace();
+			LOGGER.error(Labels.FAILED_TO_EXECUTE + errorDesc + ".");
+			LOGGER.error(e);
 		} finally {
 
 			try {
@@ -2048,8 +2235,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close statement when " + errorDesc + ".");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_STATEMENT + errorDesc + ".");
+				LOGGER.error(e);
 			}
 
 			try {
@@ -2057,8 +2244,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close connection when " + errorDesc + ".");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_CONNECTION + errorDesc + ".");
+				LOGGER.error(e);
 			}
 		}
 
@@ -2086,8 +2273,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				rvSucceeded = true;
 			}
 		} catch (SQLException e) {
-			System.out.println("Failed to execute " + errorDesc + ".");
-			e.printStackTrace();
+			LOGGER.error(Labels.FAILED_TO_EXECUTE + errorDesc + ".");
+			LOGGER.error(e);
 		} finally {
 
 			try {
@@ -2095,8 +2282,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close statement when " + errorDesc + ".");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_STATEMENT + errorDesc + ".");
+				LOGGER.error(e);
 			}
 
 			try {
@@ -2104,8 +2291,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close connection when " + errorDesc + ".");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_CONNECTION + errorDesc + ".");
+				LOGGER.error(e);
 			}
 		}
 
@@ -2114,6 +2301,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 	@Override
 	public boolean removeService(Service service) {
+		String errorDesc = "removing service";
 		boolean rvSucceeded = false;
 		Connection conn = null;
 		PreparedStatement pst = null;
@@ -2130,8 +2318,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				rvSucceeded = true;
 			}
 		} catch (SQLException e) {
-			System.out.println("Failed to execute removing script.");
-			e.printStackTrace();
+			LOGGER.error(Labels.FAILED_TO_EXECUTE + errorDesc + ".");
+			LOGGER.error(e);
 		} finally {
 
 			try {
@@ -2139,8 +2327,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close statement when removing script.");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_STATEMENT + errorDesc + ".");
+				LOGGER.error(e);
 			}
 
 			try {
@@ -2148,8 +2336,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close connection when removing script.");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_CONNECTION + errorDesc + ".");
+				LOGGER.error(e);
 			}
 		}
 
@@ -2158,8 +2346,10 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 	@Override
 	public List<Program> getDefaultPrograms() {
+		String errorDesc = "listing default programs";
 		Connection conn = null;
 		Statement st = null;
+		ResultSet rs = null;
 
 		ObservableList<Program> programs = FXCollections.observableArrayList();
 		programs.clear();
@@ -2168,7 +2358,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 			conn = DriverManager.getConnection(databaseConnectionURL);
 			conn.setAutoCommit(false);
 			st = conn.createStatement();
-			ResultSet rs = st.executeQuery("SELECT * FROM programs WHERE defaultProgram = 1");
+			rs = st.executeQuery("SELECT * FROM programs WHERE defaultProgram = 1");
 
 			while (rs.next()) {
 				int progId = rs.getInt("progId");
@@ -2188,16 +2378,26 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 			conn.commit();
 		} catch (SQLException e) {
-			System.out.println("Failed to execute listing programs.");
-			e.printStackTrace();
+			LOGGER.error(Labels.FAILED_TO_EXECUTE + errorDesc + ".");
+			LOGGER.error(e);
 		} finally {
+
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+			} catch (SQLException e) {
+				LOGGER.error(Labels.FAILED_TO_CLOSE_RESULTSET + errorDesc + ".");
+				LOGGER.error(e);
+			}
+
 			try {
 				if (st != null) {
 					st.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close statement when listing programs.");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_STATEMENT + errorDesc + ".");
+				LOGGER.error(e);
 			}
 
 			try {
@@ -2205,8 +2405,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				System.out.println("Failed to close connection when listing programs.");
-				e.printStackTrace();
+				LOGGER.error(Labels.FAILED_TO_CLOSE_CONNECTION + errorDesc + ".");
+				LOGGER.error(e);
 			}
 		}
 

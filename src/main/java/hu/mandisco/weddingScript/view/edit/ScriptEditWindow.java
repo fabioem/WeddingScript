@@ -12,6 +12,7 @@ import hu.mandisco.weddingScript.model.bean.Attribute;
 import hu.mandisco.weddingScript.model.bean.Program;
 import hu.mandisco.weddingScript.model.bean.Script;
 import hu.mandisco.weddingScript.model.bean.Service;
+import hu.mandisco.weddingScript.view.Labels;
 import hu.mandisco.weddingScript.view.TableList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -331,7 +332,7 @@ public class ScriptEditWindow {
 						setText(null);
 					} else {
 						setText(item.format(DateTimeFormatter
-								.ofPattern(weddingScriptController.DATEFORMAT_TIME)));
+								.ofPattern(Labels.DATEFORMAT_TIME)));
 					}
 				}
 			};

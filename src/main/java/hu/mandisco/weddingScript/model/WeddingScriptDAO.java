@@ -12,10 +12,6 @@ import javafx.collections.ObservableList;
 
 public interface WeddingScriptDAO {
 
-	public final String DATEFORMAT_DATETIME = "yyyy.MM.dd HH:mm:ss";
-	public final String DATEFORMAT_TIME = "HH:mm";
-	public final String DATEFORMAT_DATE = "yyyy.MM.dd";
-
 	public ObservableList<Program> getPrograms();
 
 	public ObservableList<Script> getScripts();
