@@ -1,4 +1,4 @@
-package hu.mandisco.weddingScript.model.bean;
+package hu.mandisco.weddingscript.model.bean;
 
 import javafx.collections.ObservableList;
 

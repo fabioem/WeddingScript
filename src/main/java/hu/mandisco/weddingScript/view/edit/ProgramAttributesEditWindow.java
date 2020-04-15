@@ -1,10 +1,10 @@
-package hu.mandisco.weddingScript.view.edit;
+package hu.mandisco.weddingscript.view.edit;
 
 import java.util.List;
 
-import hu.mandisco.weddingScript.controller.WeddingScriptController;
-import hu.mandisco.weddingScript.model.bean.Attribute;
-import hu.mandisco.weddingScript.model.bean.Program;
+import hu.mandisco.weddingscript.controller.WeddingScriptController;
+import hu.mandisco.weddingscript.model.bean.Attribute;
+import hu.mandisco.weddingscript.model.bean.Program;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
@@ -52,14 +52,14 @@ public class ProgramAttributesEditWindow {
 		GridPane.setConstraints(tableGrid, 0, rowCount++);
 
 		// Program Attributes
-		TableView<Attribute> programAttributesTable = new TableView<Attribute>();
+		TableView<Attribute> programAttributesTable = new TableView<>();
 
 		programAttributesTable.setEditable(true);
 
-		TableColumn<Attribute, String> nameCol = new TableColumn<Attribute, String>("Név");
+		TableColumn<Attribute, String> nameCol = new TableColumn<>("Név");
 		nameCol.setCellValueFactory(new PropertyValueFactory<Attribute, String>("name"));
 
-		TableColumn<Attribute, String> attrCol = new TableColumn<Attribute, String>("Érték");
+		TableColumn<Attribute, String> attrCol = new TableColumn<>("Érték");
 		attrCol.setCellValueFactory(new PropertyValueFactory<Attribute, String>("value"));
 
 		programAttributesTable.getColumns().add(nameCol);
@@ -71,13 +71,13 @@ public class ProgramAttributesEditWindow {
 		GridPane.setConstraints(programAttributesTable, 0, 0);
 		GridPane.setHgrow(programAttributesTable, Priority.ALWAYS);
 
-		TableView<Attribute> programAntiAttributesTable = new TableView<Attribute>();
+		TableView<Attribute> programAntiAttributesTable = new TableView<>();
 		programAntiAttributesTable.setEditable(true);
 
-		TableColumn<Attribute, String> programAttrAntiNameCol = new TableColumn<Attribute, String>("Név");
+		TableColumn<Attribute, String> programAttrAntiNameCol = new TableColumn<>("Név");
 		programAttrAntiNameCol.setCellValueFactory(new PropertyValueFactory<Attribute, String>("name"));
 
-		TableColumn<Attribute, String> programAttrAntiValueCol = new TableColumn<Attribute, String>("Alap érték");
+		TableColumn<Attribute, String> programAttrAntiValueCol = new TableColumn<>("Alap érték");
 		programAttrAntiValueCol.setCellValueFactory(new PropertyValueFactory<Attribute, String>("defaultValue"));
 
 		programAntiAttributesTable.getColumns().add(programAttrAntiNameCol);

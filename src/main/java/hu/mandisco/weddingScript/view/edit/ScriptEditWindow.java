@@ -1,4 +1,4 @@
-package hu.mandisco.weddingScript.view.edit;
+package hu.mandisco.weddingscript.view.edit;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -7,13 +7,13 @@ import java.time.temporal.ChronoField;
 import java.util.List;
 import java.util.Locale;
 
-import hu.mandisco.weddingScript.controller.WeddingScriptController;
-import hu.mandisco.weddingScript.model.bean.Attribute;
-import hu.mandisco.weddingScript.model.bean.Program;
-import hu.mandisco.weddingScript.model.bean.Script;
-import hu.mandisco.weddingScript.model.bean.Service;
-import hu.mandisco.weddingScript.view.Labels;
-import hu.mandisco.weddingScript.view.TableList;
+import hu.mandisco.weddingscript.controller.WeddingScriptController;
+import hu.mandisco.weddingscript.model.bean.Attribute;
+import hu.mandisco.weddingscript.model.bean.Program;
+import hu.mandisco.weddingscript.model.bean.Script;
+import hu.mandisco.weddingscript.model.bean.Service;
+import hu.mandisco.weddingscript.view.Labels;
+import hu.mandisco.weddingscript.view.TableList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
@@ -120,8 +120,8 @@ public class ScriptEditWindow {
 		 * ATTRIBUTES
 		 *
 		 */
-		TableView<Attribute> attributesTable = new TableView<Attribute>();
-		TableView<Attribute> attributeAntiTable = new TableView<Attribute>();
+		TableView<Attribute> attributesTable = new TableView<>();
+		TableView<Attribute> attributeAntiTable = new TableView<>();
 
 		attributesTable.setEditable(true);
 
@@ -227,7 +227,7 @@ public class ScriptEditWindow {
 		 *
 		 */
 
-		TableView<Program> programsTable = new TableView<Program>();
+		TableView<Program> programsTable = new TableView<>();
 
 		programsTable.setEditable(true);
 
@@ -292,7 +292,7 @@ public class ScriptEditWindow {
 		programsTable.setEditable(true);
 
 		// 3. Service
-		TableView<Service> servicesTable = new TableView<Service>();
+		TableView<Service> servicesTable = new TableView<>();
 		servicesTable.setEditable(true);
 
 		TableColumn<Service, String> scriptsNameCol = new TableColumn<Service, String>(
@@ -312,7 +312,7 @@ public class ScriptEditWindow {
 		/*
 		 * ANTI PROGRAM
 		 */
-		TableView<Program> programAntiTable = new TableView<Program>();
+		TableView<Program> programAntiTable = new TableView<>();
 
 		programAntiTable.setEditable(true);
 

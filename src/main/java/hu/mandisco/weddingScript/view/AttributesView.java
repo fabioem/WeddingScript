@@ -1,9 +1,9 @@
-package hu.mandisco.weddingScript.view;
+package hu.mandisco.weddingscript.view;
 
-import hu.mandisco.weddingScript.controller.WeddingScriptController;
-import hu.mandisco.weddingScript.model.bean.Attribute;
-import hu.mandisco.weddingScript.view.create.AttributeCreateWindow;
-import hu.mandisco.weddingScript.view.edit.AttributeEditWindow;
+import hu.mandisco.weddingscript.controller.WeddingScriptController;
+import hu.mandisco.weddingscript.model.bean.Attribute;
+import hu.mandisco.weddingscript.view.create.AttributeCreateWindow;
+import hu.mandisco.weddingscript.view.edit.AttributeEditWindow;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableView;

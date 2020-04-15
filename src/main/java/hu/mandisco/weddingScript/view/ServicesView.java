@@ -1,9 +1,9 @@
-package hu.mandisco.weddingScript.view;
+package hu.mandisco.weddingscript.view;
 
-import hu.mandisco.weddingScript.controller.WeddingScriptController;
-import hu.mandisco.weddingScript.model.bean.Service;
-import hu.mandisco.weddingScript.view.create.ServiceCreateWindow;
-import hu.mandisco.weddingScript.view.edit.ServiceEditWindow;
+import hu.mandisco.weddingscript.controller.WeddingScriptController;
+import hu.mandisco.weddingscript.model.bean.Service;
+import hu.mandisco.weddingscript.view.create.ServiceCreateWindow;
+import hu.mandisco.weddingscript.view.edit.ServiceEditWindow;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
@@ -60,7 +60,7 @@ public class ServicesView extends BorderPane {
 		toolBar.getItems().addAll(newButton, deleteButton, editButton);
 		topMenu.getChildren().add(toolBar);
 
-		serviceTable = new TableView<Service>();
+		serviceTable = new TableView<>();
 		serviceTable.setEditable(true);
 		serviceTable.setRowFactory(tv -> {
 			TableRow<Service> row = new TableRow<>();

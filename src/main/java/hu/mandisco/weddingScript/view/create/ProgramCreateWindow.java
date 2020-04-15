@@ -1,9 +1,9 @@
-package hu.mandisco.weddingScript.view.create;
+package hu.mandisco.weddingscript.view.create;
 
 import java.time.LocalDateTime;
 
-import hu.mandisco.weddingScript.controller.WeddingScriptController;
-import hu.mandisco.weddingScript.model.bean.Program;
+import hu.mandisco.weddingscript.controller.WeddingScriptController;
+import hu.mandisco.weddingscript.model.bean.Program;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;

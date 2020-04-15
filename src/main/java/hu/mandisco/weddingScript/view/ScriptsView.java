@@ -1,8 +1,8 @@
-package hu.mandisco.weddingScript.view;
+package hu.mandisco.weddingscript.view;
 
-import hu.mandisco.weddingScript.controller.WeddingScriptController;
-import hu.mandisco.weddingScript.model.bean.Script;
-import hu.mandisco.weddingScript.view.create.ScriptCreateWindow;
+import hu.mandisco.weddingscript.controller.WeddingScriptController;
+import hu.mandisco.weddingscript.model.bean.Script;
+import hu.mandisco.weddingscript.view.create.ScriptCreateWindow;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableView;

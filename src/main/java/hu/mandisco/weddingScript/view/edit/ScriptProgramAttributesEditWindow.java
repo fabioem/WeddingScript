@@ -1,11 +1,11 @@
-package hu.mandisco.weddingScript.view.edit;
+package hu.mandisco.weddingscript.view.edit;
 
 import java.util.List;
 
-import hu.mandisco.weddingScript.controller.WeddingScriptController;
-import hu.mandisco.weddingScript.model.bean.Attribute;
-import hu.mandisco.weddingScript.model.bean.Program;
-import hu.mandisco.weddingScript.model.bean.Script;
+import hu.mandisco.weddingscript.controller.WeddingScriptController;
+import hu.mandisco.weddingscript.model.bean.Attribute;
+import hu.mandisco.weddingscript.model.bean.Program;
+import hu.mandisco.weddingscript.model.bean.Script;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
@@ -43,20 +43,18 @@ public class ScriptProgramAttributesEditWindow {
 		grid.setVgap(8);
 		grid.setHgap(10);
 
-		int rowCount = 0;
-
 		// Row 1 - name
 		Label nameLabel = new Label(program.getName());
-		GridPane.setConstraints(nameLabel, 0, rowCount++);
+		GridPane.setConstraints(nameLabel, 0, 0);
 		GridPane.setHalignment(nameLabel, HPos.CENTER);
 		GridPane.setHgrow(nameLabel, Priority.ALWAYS);
 
 		// Row 2 - table
 		GridPane tableGrid = new GridPane();
-		GridPane.setConstraints(tableGrid, 0, rowCount++);
+		GridPane.setConstraints(tableGrid, 0, 1);
 
 		// Program Attributes
-		TableView<Attribute> programAttributesTable = new TableView<Attribute>();
+		TableView<Attribute> programAttributesTable = new TableView<>();
 
 		programAttributesTable.setEditable(true);
 
@@ -88,7 +86,7 @@ public class ScriptProgramAttributesEditWindow {
 		GridPane.setConstraints(programAttributesTable, 0, 0);
 		GridPane.setHgrow(programAttributesTable, Priority.ALWAYS);
 
-		TableView<Attribute> programAntiAttributesTable = new TableView<Attribute>();
+		TableView<Attribute> programAntiAttributesTable = new TableView<>();
 		programAntiAttributesTable.setEditable(true);
 
 		TableColumn<Attribute, String> programAttrAntiNameCol = new TableColumn<Attribute, String>(
@@ -180,7 +178,7 @@ public class ScriptProgramAttributesEditWindow {
 		// Row 3 - button
 		Button okButton = new Button("OK");
 		okButton.setOnAction(e -> window.close());
-		GridPane.setConstraints(okButton, 0, rowCount++);
+		GridPane.setConstraints(okButton, 0, 2);
 		GridPane.setHalignment(okButton, HPos.CENTER);
 		GridPane.setHgrow(okButton, Priority.ALWAYS);
 

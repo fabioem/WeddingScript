@@ -1,9 +1,9 @@
-package hu.mandisco.weddingScript.view.create;
+package hu.mandisco.weddingscript.view.create;
 
-import hu.mandisco.weddingScript.controller.WeddingScriptController;
-import hu.mandisco.weddingScript.model.bean.Attribute;
-import hu.mandisco.weddingScript.model.bean.AttributeType;
-import hu.mandisco.weddingScript.model.bean.Service;
+import hu.mandisco.weddingscript.controller.WeddingScriptController;
+import hu.mandisco.weddingscript.model.bean.Attribute;
+import hu.mandisco.weddingscript.model.bean.AttributeType;
+import hu.mandisco.weddingscript.model.bean.Service;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -70,7 +70,7 @@ public class AttributeCreateWindow {
 
 		// Attribute Type ComboBox
 		ObservableList<AttributeType> attrTypeOptions = weddingScriptController.getAttributeTypes();
-		ComboBox<AttributeType> attrTypeComboBox = new ComboBox<AttributeType>(attrTypeOptions);
+		ComboBox<AttributeType> attrTypeComboBox = new ComboBox<>(attrTypeOptions);
 		attrTypeComboBox.setValue(attrTypeOptions.get(0));
 		GridPane.setConstraints(attrTypeComboBox, 1, 2);
 
@@ -89,7 +89,7 @@ public class AttributeCreateWindow {
 
 		// Service ComboBox
 		ObservableList<Service> serviceOptions = weddingScriptController.getServices();
-		ComboBox<Service> serviceComboBox = new ComboBox<Service>(serviceOptions);
+		ComboBox<Service> serviceComboBox = new ComboBox<>(serviceOptions);
 		GridPane.setConstraints(serviceComboBox, 1, 4);
 		serviceComboBox.setDisable(true);
 		serviceComboBox.setValue(serviceOptions.get(0));

@@ -1,10 +1,10 @@
-package hu.mandisco.weddingScript.view;
+package hu.mandisco.weddingscript.view;
 
-import hu.mandisco.weddingScript.controller.WeddingScriptController;
-import hu.mandisco.weddingScript.model.bean.Program;
-import hu.mandisco.weddingScript.view.create.ProgramCreateWindow;
-import hu.mandisco.weddingScript.view.edit.ProgramAttributesEditWindow;
-import hu.mandisco.weddingScript.view.edit.ProgramEditWindow;
+import hu.mandisco.weddingscript.controller.WeddingScriptController;
+import hu.mandisco.weddingscript.model.bean.Program;
+import hu.mandisco.weddingscript.view.create.ProgramCreateWindow;
+import hu.mandisco.weddingscript.view.edit.ProgramAttributesEditWindow;
+import hu.mandisco.weddingscript.view.edit.ProgramEditWindow;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;

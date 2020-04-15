@@ -1,4 +1,4 @@
-package hu.mandisco.weddingScript.view;
+package hu.mandisco.weddingscript.view;
 
 import javafx.application.Application;
 import javafx.scene.Scene;

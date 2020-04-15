@@ -1,17 +1,17 @@
-package hu.mandisco.weddingScript.view;
+package hu.mandisco.weddingscript.view;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-import hu.mandisco.weddingScript.controller.WeddingScriptController;
-import hu.mandisco.weddingScript.model.bean.Attribute;
-import hu.mandisco.weddingScript.model.bean.Program;
-import hu.mandisco.weddingScript.model.bean.Script;
-import hu.mandisco.weddingScript.model.bean.Service;
-import hu.mandisco.weddingScript.view.edit.AttributeEditWindow;
-import hu.mandisco.weddingScript.view.edit.ProgramEditWindow;
-import hu.mandisco.weddingScript.view.edit.ScriptEditWindow;
+import hu.mandisco.weddingscript.controller.WeddingScriptController;
+import hu.mandisco.weddingscript.model.bean.Attribute;
+import hu.mandisco.weddingscript.model.bean.Program;
+import hu.mandisco.weddingscript.model.bean.Script;
+import hu.mandisco.weddingscript.model.bean.Service;
+import hu.mandisco.weddingscript.view.edit.AttributeEditWindow;
+import hu.mandisco.weddingscript.view.edit.ProgramEditWindow;
+import hu.mandisco.weddingscript.view.edit.ScriptEditWindow;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
@@ -30,7 +30,7 @@ public class TableList {
 
 	public TableView<Program> getProgramList() {
 
-		TableView<Program> programListTable = new TableView<Program>();
+		TableView<Program> programListTable = new TableView<>();
 
 		programListTable.setEditable(true);
 
@@ -60,27 +60,24 @@ public class TableList {
 			return row;
 		});
 
-		TableColumn<Program, String> nameCol = new TableColumn<Program, String>("Név");
+		TableColumn<Program, String> nameCol = new TableColumn<>("Név");
 		nameCol.setCellValueFactory(new PropertyValueFactory<Program, String>("name"));
 
-		TableColumn<Program, LocalDateTime> defaultTimeCol = new TableColumn<Program, LocalDateTime>(
-				"Idő");
+		TableColumn<Program, LocalDateTime> defaultTimeCol = new TableColumn<>("Idő");
 		defaultTimeCol.setCellValueFactory(
 				new PropertyValueFactory<Program, LocalDateTime>("defaultTime"));
-		defaultTimeCol.setCellFactory(column -> {
+		defaultTimeCol.setCellFactory(column ->
 
-			return new TableCell<Program, LocalDateTime>() {
-				@Override
-				protected void updateItem(LocalDateTime item, boolean empty) {
-					super.updateItem(item, empty);
-					if (item == null || empty) {
-						setText(null);
-					} else {
-						setText(item.format(DateTimeFormatter
-								.ofPattern(Labels.DATEFORMAT_TIME)));
-					}
+		new TableCell<Program, LocalDateTime>() {
+			@Override
+			protected void updateItem(LocalDateTime item, boolean empty) {
+				super.updateItem(item, empty);
+				if (item == null || empty) {
+					setText(null);
+				} else {
+					setText(item.format(DateTimeFormatter.ofPattern(Labels.DATEFORMAT_TIME)));
 				}
-			};
+			}
 		});
 
 		programListTable.getColumns().add(nameCol);
@@ -101,7 +98,7 @@ public class TableList {
 
 	public TableView<Script> getScriptList() {
 
-		TableView<Script> scriptListTable = new TableView<Script>();
+		TableView<Script> scriptListTable = new TableView<>();
 
 		scriptListTable.setEditable(true);
 
@@ -131,71 +128,54 @@ public class TableList {
 			return row;
 		});
 
-		TableColumn<Script, String> nameCol = new TableColumn<Script, String>("Név");
+		TableColumn<Script, String> nameCol = new TableColumn<>("Név");
 		nameCol.setCellValueFactory(new PropertyValueFactory<Script, String>("name"));
 
-		TableColumn<Script, LocalDateTime> dateCol = new TableColumn<Script, LocalDateTime>(
-				"Dátum");
+		TableColumn<Script, LocalDateTime> dateCol = new TableColumn<>("Dátum");
 		dateCol.setCellValueFactory(new PropertyValueFactory<Script, LocalDateTime>("date"));
-		dateCol.setCellFactory(column -> {
-
-			return new TableCell<Script, LocalDateTime>() {
-				@Override
-				protected void updateItem(LocalDateTime item, boolean empty) {
-					super.updateItem(item, empty);
-					if (item == null || empty) {
-						setText(null);
-					} else {
-						setText(item.format(DateTimeFormatter
-								.ofPattern(Labels.DATEFORMAT_DATE)));
-					}
+		dateCol.setCellFactory(column -> new TableCell<Script, LocalDateTime>() {
+			@Override
+			protected void updateItem(LocalDateTime item, boolean empty) {
+				super.updateItem(item, empty);
+				if (item == null || empty) {
+					setText(null);
+				} else {
+					setText(item.format(DateTimeFormatter.ofPattern(Labels.DATEFORMAT_DATE)));
 				}
-			};
+			}
 		});
 
-		TableColumn<Script, String> commentCol = new TableColumn<Script, String>("Komment");
+		TableColumn<Script, String> commentCol = new TableColumn<>("Komment");
 		commentCol.setCellValueFactory(new PropertyValueFactory<Script, String>("comment"));
 
-		TableColumn<Script, LocalDateTime> lastEditedCol = new TableColumn<Script, LocalDateTime>(
-				"Utolsó módosítás");
+		TableColumn<Script, LocalDateTime> lastEditedCol = new TableColumn<>("Utolsó módosítás");
 		lastEditedCol
 				.setCellValueFactory(new PropertyValueFactory<Script, LocalDateTime>("lastEdited"));
-		lastEditedCol.setCellFactory(column -> {
-			TableCell<Script, LocalDateTime> cell = new TableCell<Script, LocalDateTime>() {
-				@Override
-				protected void updateItem(LocalDateTime item, boolean empty) {
-					super.updateItem(item, empty);
-					if (item == null || empty) {
-						setText(null);
-					} else {
-						setText(item.format(DateTimeFormatter
-								.ofPattern(Labels.DATEFORMAT_DATETIME)));
-					}
+		lastEditedCol.setCellFactory(column -> new TableCell<Script, LocalDateTime>() {
+			@Override
+			protected void updateItem(LocalDateTime item, boolean empty) {
+				super.updateItem(item, empty);
+				if (item == null || empty) {
+					setText(null);
+				} else {
+					setText(item.format(DateTimeFormatter.ofPattern(Labels.DATEFORMAT_DATETIME)));
 				}
-			};
-
-			return cell;
+			}
 		});
 
-		TableColumn<Script, LocalDateTime> createdCol = new TableColumn<Script, LocalDateTime>(
-				"Létrehozva");
+		TableColumn<Script, LocalDateTime> createdCol = new TableColumn<>("Létrehozva");
 		createdCol.setCellValueFactory(new PropertyValueFactory<Script, LocalDateTime>("created"));
-		createdCol.setCellFactory(column -> {
-			TableCell<Script, LocalDateTime> cell = new TableCell<Script, LocalDateTime>() {
+		createdCol.setCellFactory(column -> new TableCell<Script, LocalDateTime>() {
 
-				@Override
-				protected void updateItem(LocalDateTime item, boolean empty) {
-					super.updateItem(item, empty);
-					if (item == null || empty) {
-						setText(null);
-					} else {
-						setText(item.format(DateTimeFormatter
-								.ofPattern(Labels.DATEFORMAT_DATETIME)));
-					}
+			@Override
+			protected void updateItem(LocalDateTime item, boolean empty) {
+				super.updateItem(item, empty);
+				if (item == null || empty) {
+					setText(null);
+				} else {
+					setText(item.format(DateTimeFormatter.ofPattern(Labels.DATEFORMAT_DATETIME)));
 				}
-			};
-
-			return cell;
+			}
 		});
 
 		scriptListTable.getColumns().add(nameCol);
@@ -212,7 +192,7 @@ public class TableList {
 
 	public TableView<Attribute> getAttributeList() {
 
-		TableView<Attribute> attributeListTable = new TableView<Attribute>();
+		TableView<Attribute> attributeListTable = new TableView<>();
 
 		attributeListTable.setEditable(true);
 
@@ -228,16 +208,14 @@ public class TableList {
 			return row;
 		});
 
-		TableColumn<Attribute, String> nameCol = new TableColumn<Attribute, String>("Név");
+		TableColumn<Attribute, String> nameCol = new TableColumn<>("Név");
 		nameCol.setCellValueFactory(new PropertyValueFactory<Attribute, String>("name"));
 
-		TableColumn<Attribute, String> defValueCol = new TableColumn<Attribute, String>(
-				"Alapértelmezett érték");
+		TableColumn<Attribute, String> defValueCol = new TableColumn<>("Alapértelmezett érték");
 		defValueCol
 				.setCellValueFactory(new PropertyValueFactory<Attribute, String>("defaultValue"));
 
-		TableColumn<Attribute, Boolean> isMandatoryCol = new TableColumn<Attribute, Boolean>(
-				"Kötelező");
+		TableColumn<Attribute, Boolean> isMandatoryCol = new TableColumn<>("Kötelező");
 		isMandatoryCol
 				.setCellValueFactory(new PropertyValueFactory<Attribute, Boolean>("mandatory"));
 		isMandatoryCol.setCellFactory(tc -> new TableCell<Attribute, Boolean>() {
@@ -248,8 +226,7 @@ public class TableList {
 			}
 		});
 
-		TableColumn<Attribute, String> attrTypeCol = new TableColumn<Attribute, String>(
-				"Attribútum típus");
+		TableColumn<Attribute, String> attrTypeCol = new TableColumn<>("Attribútum típus");
 		attrTypeCol.setCellValueFactory(new PropertyValueFactory<Attribute, String>("attrType"));
 
 		attributeListTable.getColumns().add(nameCol);
@@ -265,11 +242,11 @@ public class TableList {
 
 	public TableView<Service> getServiceListNotInScript(Script script,
 			TableView<Service> servicesTable) {
-		TableView<Service> table = new TableView<Service>();
+		TableView<Service> table = new TableView<>();
 
 		table.setEditable(true);
 
-		TableColumn<Service, String> nameCol = new TableColumn<Service, String>("Szolgáltatás");
+		TableColumn<Service, String> nameCol = new TableColumn<>("Szolgáltatás");
 		nameCol.setCellValueFactory(new PropertyValueFactory<Service, String>("name"));
 
 		table.getColumns().add(nameCol);

@@ -1,13 +1,13 @@
-package hu.mandisco.weddingScript.model;
+package hu.mandisco.weddingscript.model;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-import hu.mandisco.weddingScript.model.bean.Attribute;
-import hu.mandisco.weddingScript.model.bean.AttributeType;
-import hu.mandisco.weddingScript.model.bean.Program;
-import hu.mandisco.weddingScript.model.bean.Script;
-import hu.mandisco.weddingScript.model.bean.Service;
+import hu.mandisco.weddingscript.model.bean.Attribute;
+import hu.mandisco.weddingscript.model.bean.AttributeType;
+import hu.mandisco.weddingscript.model.bean.Program;
+import hu.mandisco.weddingscript.model.bean.Script;
+import hu.mandisco.weddingscript.model.bean.Service;
 import javafx.collections.ObservableList;
 
 public interface WeddingScriptDAO {
