@@ -6,7 +6,6 @@ public class Attribute {
 	private String value;
 	private String defaultValue;
 	private AttributeType attrType;
-	private int serviceId;
 	private boolean mandatory;
 
 	public Attribute() {
@@ -51,14 +50,6 @@ public class Attribute {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public int getServiceId() {
-		return serviceId;
-	}
-
-	public void setServiceId(int serviceId) {
-		this.serviceId = serviceId;
 	}
 
 	public boolean isMandatory() {

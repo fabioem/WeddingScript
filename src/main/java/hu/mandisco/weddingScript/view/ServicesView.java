@@ -3,6 +3,7 @@ package hu.mandisco.weddingscript.view;
 import hu.mandisco.weddingscript.controller.WeddingScriptController;
 import hu.mandisco.weddingscript.model.bean.Service;
 import hu.mandisco.weddingscript.view.create.ServiceCreateWindow;
+import hu.mandisco.weddingscript.view.edit.ServiceAttributesEditWindow;
 import hu.mandisco.weddingscript.view.edit.ServiceEditWindow;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
@@ -38,8 +39,7 @@ public class ServicesView extends BorderPane {
 		// TOOLBAR
 		Button newButton = new Button("Új");
 		newButton.setOnAction(e -> {
-			ObservableList<Service> serviceItems = serviceTable.getItems();
-			ServiceCreateWindow window = new ServiceCreateWindow(serviceItems);
+			ServiceCreateWindow window = new ServiceCreateWindow(services);
 			window.display();
 		});
 
@@ -62,7 +62,19 @@ public class ServicesView extends BorderPane {
 			}
 		});
 
-		toolBar.getItems().addAll(newButton, deleteButton, editButton);
+		Button attributesButton = new Button("Attribútumok");
+		attributesButton.setOnAction(e -> {
+
+			Stage stage = new Stage();
+
+			Service selectedItem = serviceTable.getSelectionModel().getSelectedItem();
+			if (selectedItem != null) {
+				ServiceAttributesEditWindow window = new ServiceAttributesEditWindow();
+				window.display(stage, selectedItem);
+			}
+		});
+
+		toolBar.getItems().addAll(newButton, deleteButton, editButton, attributesButton);
 		topMenu.getChildren().add(toolBar);
 
 		serviceTable.setRowFactory(tv -> {
@@ -74,7 +86,6 @@ public class ServicesView extends BorderPane {
 
 					@Override
 					public void handle(WindowEvent paramT) {
-						services.addAll(weddingScriptController.getServices());
 
 						serviceTable.setItems(sortedData);
 					}

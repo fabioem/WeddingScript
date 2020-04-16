@@ -17,6 +17,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -1083,14 +1084,13 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 			conn = DriverManager.getConnection(databaseConnectionURL);
 			pst = conn.prepareStatement(
-					"INSERT INTO attributes(name, defaultValue, attrTypeId, serviceId, mandatory) VALUES (?, ?, ?, ?, ?)");
+					"INSERT INTO attributes(name, defaultValue, attrTypeId, mandatory) VALUES (?, ?, ?, ?)");
 
 			int index = 1;
 
 			pst.setString(index++, attribute.getName());
 			pst.setString(index++, attribute.getDefaultValue());
 			pst.setInt(index++, attribute.getAttrType().getAttrTypeId());
-			pst.setInt(index++, attribute.getServiceId());
 			pst.setInt(index++, attribute.isMandatory() ? 1 : 0);
 
 			int rowsAffected = pst.executeUpdate();
@@ -1845,7 +1845,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 			conn = DriverManager.getConnection(databaseConnectionURL);
 			pst = conn.prepareStatement(
-					"UPDATE attributes SET name = ?, defaultValue = ?, attrTypeId = ?, serviceId = ?, mandatory = ?  "
+					"UPDATE attributes SET name = ?, defaultValue = ?, attrTypeId = ?, mandatory = ?  "
 							+ "WHERE attributeId = ?;");
 
 			int index = 1;
@@ -1853,7 +1853,6 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 			pst.setString(index++, attribute.getName());
 			pst.setString(index++, attribute.getDefaultValue());
 			pst.setInt(index++, attribute.getAttrType().getAttrTypeId());
-			pst.setInt(index++, attribute.getServiceId());
 			pst.setInt(index++, attribute.isMandatory() ? 1 : 0);
 			pst.setInt(index++, attribute.getAttrId());
 
@@ -2542,6 +2541,323 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 		}
 
 		return programs;
+	}
+
+	@Override
+	public boolean addAttributeToService(Service service, Attribute attribute) {
+
+		String errorDesc = "adding attribute to service";
+		boolean rvSucceeded = false;
+		Connection conn = null;
+		PreparedStatement pst = null;
+
+		try {
+
+			conn = DriverManager.getConnection(databaseConnectionURL);
+			pst = conn.prepareStatement(
+					"INSERT INTO serviceAttr(serviceId, attrId, value) VALUES (?, ?, ?)");
+
+			int index = 1;
+
+			pst.setInt(index++, service.getServiceId());
+			pst.setInt(index++, attribute.getAttrId());
+			pst.setString(index++, attribute.getDefaultValue());
+
+			int rowsAffected = pst.executeUpdate();
+			if (rowsAffected == 1) {
+				rvSucceeded = true;
+			}
+		} catch (SQLException e) {
+			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE,
+					errorDesc));
+			LOGGER.error(e);
+		} finally {
+
+			try {
+				if (pst != null) {
+					pst.close();
+				}
+			} catch (SQLException e) {
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
+						Labels.FAILED_TO_CLOSE_STATEMENT, errorDesc));
+				LOGGER.error(e);
+			}
+
+			try {
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
+						Labels.FAILED_TO_CLOSE_CONNECTION, errorDesc));
+				LOGGER.error(e);
+			}
+		}
+
+		return rvSucceeded;
+	}
+
+	@Override
+	public boolean removeAttributeFromService(Service service, Attribute attribute) {
+
+		String errorDesc = "removing attribute from service";
+		boolean rvSucceeded = false;
+		Connection conn = null;
+		PreparedStatement pst = null;
+
+		try {
+
+			conn = DriverManager.getConnection(databaseConnectionURL);
+			pst = conn
+					.prepareStatement("DELETE FROM serviceAttr WHERE serviceId = ? AND attrId = ?");
+
+			int index = 1;
+
+			pst.setInt(index++, service.getServiceId());
+			pst.setInt(index++, attribute.getAttrId());
+
+			int rowsAffected = pst.executeUpdate();
+			if (rowsAffected == 1) {
+				rvSucceeded = true;
+			}
+		} catch (SQLException e) {
+			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE,
+					errorDesc));
+			LOGGER.error(e);
+		} finally {
+
+			try {
+				if (pst != null) {
+					pst.close();
+				}
+			} catch (SQLException e) {
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
+						Labels.FAILED_TO_CLOSE_STATEMENT, errorDesc));
+				LOGGER.error(e);
+			}
+
+			try {
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
+						Labels.FAILED_TO_CLOSE_CONNECTION, errorDesc));
+				LOGGER.error(e);
+			}
+		}
+
+		return rvSucceeded;
+	}
+
+	@Override
+	public List<Attribute> getAttributesNotInService(Service service) {
+		Connection conn = null;
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		String errorDesc = "reverse listing service's attributes";
+		ObservableList<Attribute> serviceAttrList = FXCollections.observableArrayList();
+
+		try {
+
+			conn = DriverManager.getConnection(databaseConnectionURL);
+			String sql = "SELECT * FROM attributes WHERE "
+					+ "attrTypeId = (SELECT attrTypeId FROM attributeTypes WHERE name = \"Service\") "
+					+ "AND attributeId NOT IN (SELECT attrId FROM serviceAttr WHERE serviceId = ?) ";
+			pst = conn.prepareStatement(sql);
+
+			int index = 1;
+			pst.setInt(index++, service.getServiceId());
+
+			conn.setAutoCommit(false);
+			rs = pst.executeQuery();
+
+			while (rs.next()) {
+				int attrId = rs.getInt(Labels.DB_ATTRIBUTE_ATTRIBUTEID);
+				String name = rs.getString(Labels.DB_ATTRIBUTE_NAME);
+				String defValue = rs.getString(Labels.DB_ATTRIBUTE_DEFAULT_VALUE);
+				Boolean mandatory = rs.getInt(Labels.DB_ATTRIBUTE_MANDATORY) != 0;
+
+				Attribute attribute = new Attribute();
+				attribute.setName(name);
+				attribute.setAttrId(attrId);
+				attribute.setDefaultValue(defValue);
+				attribute.setMandatory(mandatory);
+
+				serviceAttrList.add(attribute);
+			}
+
+			conn.commit();
+		} catch (SQLException e) {
+			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE,
+					errorDesc));
+			LOGGER.error(e);
+		} finally {
+
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+			} catch (SQLException e) {
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
+						Labels.FAILED_TO_CLOSE_RESULTSET, errorDesc));
+				LOGGER.error(e);
+			}
+
+			try {
+				if (pst != null) {
+					pst.close();
+				}
+			} catch (SQLException e) {
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
+						Labels.FAILED_TO_CLOSE_STATEMENT, errorDesc));
+				LOGGER.error(e);
+			}
+
+			try {
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
+						Labels.FAILED_TO_CLOSE_CONNECTION, errorDesc));
+				LOGGER.error(e);
+			}
+		}
+
+		return serviceAttrList;
+	}
+
+	@Override
+	public List<Attribute> getAttributesOfService(Service service) {
+		Connection conn = null;
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		String errorDesc = "listing service's attributes";
+		ObservableList<Attribute> serviceAttrList = FXCollections.observableArrayList();
+
+		try {
+
+			conn = DriverManager.getConnection(databaseConnectionURL);
+			pst = conn.prepareStatement("SELECT * FROM attributes, serviceAttr WHERE serviceId = ? "
+					+ "AND attributes.attributeId = serviceAttr.attrId "
+					+ "AND attributeId IN (SELECT attrId FROM serviceAttr WHERE serviceId = ?)");
+
+			int index = 1;
+			pst.setInt(index++, service.getServiceId());
+			pst.setInt(index++, service.getServiceId());
+			conn.setAutoCommit(false);
+			rs = pst.executeQuery();
+
+			while (rs.next()) {
+				int attrId = rs.getInt(Labels.DB_ATTRIBUTE_ATTRIBUTEID);
+				String name = rs.getString(Labels.DB_ATTRIBUTE_NAME);
+				String defValue = rs.getString(Labels.DB_ATTRIBUTE_DEFAULT_VALUE);
+				String value = rs.getString(Labels.DB_ATTRIBUTE_VALUE);
+				Boolean mandatory = rs.getInt(Labels.DB_ATTRIBUTE_MANDATORY) != 0;
+
+				Attribute attribute = new Attribute();
+				attribute.setName(name);
+				attribute.setAttrId(attrId);
+				attribute.setDefaultValue(defValue);
+				attribute.setValue(value);
+				attribute.setMandatory(mandatory);
+
+				serviceAttrList.add(attribute);
+			}
+
+			conn.commit();
+		} catch (SQLException e) {
+			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE,
+					errorDesc));
+			LOGGER.error(e);
+		} finally {
+
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+			} catch (SQLException e) {
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
+						Labels.FAILED_TO_CLOSE_RESULTSET, errorDesc));
+				LOGGER.error(e);
+			}
+
+			try {
+				if (pst != null) {
+					pst.close();
+				}
+			} catch (SQLException e) {
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
+						Labels.FAILED_TO_CLOSE_STATEMENT, errorDesc));
+				LOGGER.error(e);
+			}
+
+			try {
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
+						Labels.FAILED_TO_CLOSE_CONNECTION, errorDesc));
+				LOGGER.error(e);
+			}
+		}
+
+		return serviceAttrList;
+	}
+
+	@Override
+	public boolean setServiceAttributeValue(Service service, Attribute attribute,
+			String newAttributeValue) {
+		String errorDesc = "editing value of service attribute";
+		boolean rvSucceeded = false;
+		Connection conn = null;
+		PreparedStatement pst = null;
+
+		try {
+
+			conn = DriverManager.getConnection(databaseConnectionURL);
+			pst = conn.prepareStatement(
+					"UPDATE serviceAttr SET value = ? WHERE serviceId = ? AND attrId = ?;");
+
+			int index = 1;
+			pst.setString(index++, newAttributeValue);
+			pst.setInt(index++, service.getServiceId());
+			pst.setInt(index++, attribute.getAttrId());
+
+			int rowsAffected = pst.executeUpdate();
+			if (rowsAffected == 1) {
+				rvSucceeded = true;
+			}
+		} catch (SQLException e) {
+			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE,
+					errorDesc));
+			LOGGER.error(e);
+		} finally {
+
+			try {
+				if (pst != null) {
+					pst.close();
+				}
+			} catch (SQLException e) {
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
+						Labels.FAILED_TO_CLOSE_STATEMENT, errorDesc));
+				LOGGER.error(e);
+			}
+
+			try {
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
+						Labels.FAILED_TO_CLOSE_CONNECTION, errorDesc));
+				LOGGER.error(e);
+			}
+		}
+
+		return rvSucceeded;
 	}
 
 }

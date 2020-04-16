@@ -47,10 +47,8 @@ CREATE TABLE attributes(
 	name varchar(255) NOT NULL,
 	defaultValue varchar(255),
 	attrTypeId int NOT NULL,
-	serviceId int,
 	mandatory boolean,
-	FOREIGN KEY (attrTypeId) REFERENCES attributeTypes(attrTypeId) ON DELETE CASCADE,
-	FOREIGN KEY (serviceId) REFERENCES services(serviceId) ON DELETE CASCADE
+	FOREIGN KEY (attrTypeId) REFERENCES attributeTypes(attrTypeId) ON DELETE CASCADE
 );
 
 CREATE TABLE attributeTypes(
@@ -86,6 +84,14 @@ CREATE TABLE scriptService(
 	FOREIGN KEY (scriptId) REFERENCES scripts(scriptId) ON DELETE CASCADE
 );
 
+CREATE TABLE serviceAttr(
+	serviceId int NOT NULL,
+	attrId int NOT NULL,
+	value varchar(255),
+	FOREIGN KEY (serviceId) REFERENCES services(serviceId) ON DELETE CASCADE,
+	FOREIGN KEY (attrId) REFERENCES attributes(attrId) ON DELETE CASCADE
+);
+
 -- Insert demo values
 INSERT INTO programs VALUES(0, "Vacsora", 68400000, 1);
 INSERT INTO programs VALUES(1, "Nyitótánc", 75600000, 1);
@@ -104,10 +110,10 @@ INSERT INTO attributeTypes VALUES(1, "Program");
 INSERT INTO attributeTypes VALUES(2, "Service");
 INSERT INTO scriptProg VALUES(0, 1, 75900000); --21:00 Nyitótánc
 INSERT INTO scriptProg VALUES(0, 2, 86400000); --24:00 Újasszony tánc
-INSERT INTO attributes VALUES(0, "Zene", "", 1, null, 1);
-INSERT INTO attributes VALUES(1, "Beszéd", "vőlegény", 1, null, 1);
-INSERT INTO attributes VALUES(2, "Himnusz", "nem", 1, null, 1);
-INSERT INTO attributes VALUES(3, "Szolgáltatói asztal", "igen", 0, null, 0);
+INSERT INTO attributes VALUES(0, "Zene", "", 1, 1);
+INSERT INTO attributes VALUES(1, "Beszéd", "vőlegény", 1, 1);
+INSERT INTO attributes VALUES(2, "Himnusz", "nem", 1, 1);
+INSERT INTO attributes VALUES(3, "Szolgáltatói asztal", "igen", 0, 0);
 INSERT INTO progAttr VALUES(1, 0, ""); /* nyitótánchoz zene */
 INSERT INTO progAttr VALUES(0, 0, "Váradi Roma Café + Jazz-Lounge világsláger feldolgozások"); /* vacsorához zene */
 INSERT INTO progAttr VALUES(0, 1, "Vőlegény"); /* vacsorához beszéd */

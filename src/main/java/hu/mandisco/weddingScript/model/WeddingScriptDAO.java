@@ -93,4 +93,15 @@ public interface WeddingScriptDAO {
 
 	public List<Program> getDefaultPrograms();
 
+	public boolean addAttributeToService(Service service, Attribute attribute);
+
+	public boolean removeAttributeFromService(Service service, Attribute attribute);
+
+	public List<Attribute> getAttributesNotInService(Service service);
+
+	public List<Attribute> getAttributesOfService(Service service);
+
+	public boolean setServiceAttributeValue(Service service, Attribute attribute,
+			String newAttributeValue);
+
 }

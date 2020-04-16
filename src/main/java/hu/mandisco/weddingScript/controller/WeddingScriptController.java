@@ -188,4 +188,25 @@ public class WeddingScriptController {
 	public boolean removeService(Service service) {
 		return dao.removeService(service);
 	}
+
+	public boolean addAttributeToService(Service service, Attribute attribute) {
+		return dao.addAttributeToService(service, attribute);
+	}
+
+	public boolean removeAttributeFromService(Service service, Attribute attribute) {
+		return dao.removeAttributeFromService(service, attribute);
+	}
+
+	public List<Attribute> getAttributesNotInService(Service service) {
+		return dao.getAttributesNotInService(service);
+	}
+
+	public List<Attribute> getAttributesOfService(Service service) {
+		return dao.getAttributesOfService(service);
+	}
+
+	public boolean setServiceAttributeValue(Service service, Attribute attribute,
+			String newAttributeValue) {
+		return dao.setServiceAttributeValue(service, attribute, newAttributeValue);
+	}
 }
