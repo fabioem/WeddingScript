@@ -58,10 +58,10 @@ public class ScriptProgramAttributesEditWindow {
 
 		programAttributesTable.setEditable(true);
 
-		TableColumn<Attribute, String> nameCol = new TableColumn<Attribute, String>("Név");
+		TableColumn<Attribute, String> nameCol = new TableColumn<>("Név");
 		nameCol.setCellValueFactory(new PropertyValueFactory<Attribute, String>("name"));
 
-		TableColumn<Attribute, String> attrCol = new TableColumn<Attribute, String>("Érték");
+		TableColumn<Attribute, String> attrCol = new TableColumn<>("Érték");
 		attrCol.setCellValueFactory(new PropertyValueFactory<Attribute, String>("value"));
 		attrCol.setCellFactory(TextFieldTableCell.<Attribute>forTableColumn());
 		attrCol.setOnEditCommit(new EventHandler<CellEditEvent<Attribute, String>>() {
@@ -89,12 +89,12 @@ public class ScriptProgramAttributesEditWindow {
 		TableView<Attribute> programAntiAttributesTable = new TableView<>();
 		programAntiAttributesTable.setEditable(true);
 
-		TableColumn<Attribute, String> programAttrAntiNameCol = new TableColumn<Attribute, String>(
+		TableColumn<Attribute, String> programAttrAntiNameCol = new TableColumn<>(
 				"Név");
 		programAttrAntiNameCol
 				.setCellValueFactory(new PropertyValueFactory<Attribute, String>("name"));
 
-		TableColumn<Attribute, String> programAttrAntiValueCol = new TableColumn<Attribute, String>(
+		TableColumn<Attribute, String> programAttrAntiValueCol = new TableColumn<>(
 				"Alap érték");
 		programAttrAntiValueCol
 				.setCellValueFactory(new PropertyValueFactory<Attribute, String>("defaultValue"));

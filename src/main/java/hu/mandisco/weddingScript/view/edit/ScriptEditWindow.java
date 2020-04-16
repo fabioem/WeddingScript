@@ -177,8 +177,7 @@ public class ScriptEditWindow {
 		TableColumn<Attribute, String> nameAntiCol = new TableColumn<>("Név");
 		nameAntiCol.setCellValueFactory(new PropertyValueFactory<Attribute, String>("name"));
 
-		TableColumn<Attribute, String> valueAntiCol = new TableColumn<>(
-				"Alap érték");
+		TableColumn<Attribute, String> valueAntiCol = new TableColumn<>("Alap érték");
 		valueAntiCol
 				.setCellValueFactory(new PropertyValueFactory<Attribute, String>("defaultValue"));
 
@@ -246,10 +245,10 @@ public class ScriptEditWindow {
 			return row;
 		});
 
-		TableColumn<Program, String> programNameCol = new TableColumn<Program, String>("Név");
+		TableColumn<Program, String> programNameCol = new TableColumn<>("Név");
 		programNameCol.setCellValueFactory(new PropertyValueFactory<Program, String>("name"));
 
-		TableColumn<Program, LocalDateTime> programTimeCol = new TableColumn<Program, LocalDateTime>(
+		TableColumn<Program, LocalDateTime> programTimeCol = new TableColumn<>(
 				"Idő");
 		programTimeCol.setEditable(true);
 		programTimeCol
@@ -294,8 +293,7 @@ public class ScriptEditWindow {
 		TableView<Service> servicesTable = new TableView<>();
 		servicesTable.setEditable(true);
 
-		TableColumn<Service, String> scriptsNameCol = new TableColumn<>(
-				"Szolgáltatás");
+		TableColumn<Service, String> scriptsNameCol = new TableColumn<>("Szolgáltatás");
 		scriptsNameCol.setCellValueFactory(new PropertyValueFactory<Service, String>("name"));
 
 		servicesTable.getColumns().add(scriptsNameCol);
@@ -315,29 +313,26 @@ public class ScriptEditWindow {
 
 		programAntiTable.setEditable(true);
 
-		TableColumn<Program, String> programAntiNameCol = new TableColumn<Program, String>("Név");
+		TableColumn<Program, String> programAntiNameCol = new TableColumn<>("Név");
 		programAntiNameCol.setCellValueFactory(new PropertyValueFactory<Program, String>("name"));
 
-		TableColumn<Program, LocalDateTime> programAntiDefaultTimeCol = new TableColumn<Program, LocalDateTime>(
+		TableColumn<Program, LocalDateTime> programAntiDefaultTimeCol = new TableColumn<>(
 				"Alapértelmezett időpont");
 		programAntiDefaultTimeCol.setCellValueFactory(
 				new PropertyValueFactory<Program, LocalDateTime>("defaultTime"));
-		programAntiDefaultTimeCol.setCellFactory(column -> {
-			TableCell<Program, LocalDateTime> cell = new TableCell<Program, LocalDateTime>() {
-				@Override
-				protected void updateItem(LocalDateTime item, boolean empty) {
-					super.updateItem(item, empty);
-					if (item == null || empty) {
-						setText(null);
-					} else {
-						setText(item.format(DateTimeFormatter
-								.ofPattern(Labels.DATEFORMAT_TIME)));
-					}
+		programAntiDefaultTimeCol.setCellFactory(column -> new TableCell<Program, LocalDateTime>() {
+			@Override
+			protected void updateItem(LocalDateTime item, boolean empty) {
+				super.updateItem(item, empty);
+				if (item == null || empty) {
+					setText(null);
+				} else {
+					setText(item.format(DateTimeFormatter.ofPattern(Labels.DATEFORMAT_TIME)));
 				}
-			};
+			}
+		}
 
-			return cell;
-		});
+		);
 
 		programAntiTable.getColumns().add(programAntiNameCol);
 		programAntiTable.getColumns().add(programAntiDefaultTimeCol);

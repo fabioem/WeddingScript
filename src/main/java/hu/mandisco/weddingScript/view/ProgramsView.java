@@ -34,7 +34,12 @@ public class ProgramsView extends BorderPane {
 	public ProgramsView() {
 		super();
 
+		programTable = new TableView<>();
+		programTable.setEditable(true);
+
 		ObservableList<Program> programs = weddingScriptController.getPrograms();
+		SortedList<Program> sortedData = new SortedList<>(programs);
+		sortedData.comparatorProperty().bind(programTable.comparatorProperty());
 
 		// TOOLBAR
 		Button newButton = new Button("Új");
@@ -46,8 +51,7 @@ public class ProgramsView extends BorderPane {
 				public void handle(WindowEvent paramT) {
 					programs.clear();
 					programs.addAll(weddingScriptController.getPrograms());
-					SortedList<Program> sortedData = new SortedList<>(programs);
-					sortedData.comparatorProperty().bind(programTable.comparatorProperty());
+
 					programTable.setItems(sortedData);
 				}
 			});
@@ -60,8 +64,6 @@ public class ProgramsView extends BorderPane {
 		deleteButton.setOnAction(e -> {
 			Program selectedItem = programTable.getSelectionModel().getSelectedItem();
 			if (selectedItem != null) {
-				SortedList<Program> sortedData = new SortedList<>(programs);
-				sortedData.comparatorProperty().bind(programTable.comparatorProperty());
 				programs.remove(selectedItem);
 				programTable.setItems(sortedData);
 				weddingScriptController.removeProgram(selectedItem);
@@ -78,8 +80,7 @@ public class ProgramsView extends BorderPane {
 				public void handle(WindowEvent paramT) {
 					programs.clear();
 					programs.addAll(weddingScriptController.getPrograms());
-					SortedList<Program> sortedData = new SortedList<>(programs);
-					sortedData.comparatorProperty().bind(programTable.comparatorProperty());
+
 					programTable.setItems(sortedData);
 				}
 			});
@@ -106,9 +107,6 @@ public class ProgramsView extends BorderPane {
 		toolBar.getItems().addAll(newButton, deleteButton, editButton, attributesButton);
 		topMenu.getChildren().add(toolBar);
 
-		programTable = new TableView<>();
-		programTable.setEditable(true);
-
 		programTable.setRowFactory(tv -> {
 			TableRow<Program> row = new TableRow<>();
 			row.setOnMouseClicked(event -> {
@@ -119,8 +117,7 @@ public class ProgramsView extends BorderPane {
 					@Override
 					public void handle(WindowEvent paramT) {
 						programs.addAll(weddingScriptController.getPrograms());
-						SortedList<Program> sortedData = new SortedList<>(programs);
-						sortedData.comparatorProperty().bind(programTable.comparatorProperty());
+
 						programTable.setItems(sortedData);
 					}
 				});
@@ -158,8 +155,6 @@ public class ProgramsView extends BorderPane {
 		programTable.getColumns().add(defaultTimeCol);
 
 		// Sort by time
-		SortedList<Program> sortedData = new SortedList<>(programs);
-		sortedData.comparatorProperty().bind(programTable.comparatorProperty());
 		programTable.setItems(sortedData);
 		programTable.getSortOrder().add(defaultTimeCol);
 

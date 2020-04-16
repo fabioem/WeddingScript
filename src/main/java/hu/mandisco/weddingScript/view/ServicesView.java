@@ -29,7 +29,11 @@ public class ServicesView extends BorderPane {
 	public ServicesView() {
 		super();
 
+		serviceTable = new TableView<>();
+		serviceTable.setEditable(true);
 		ObservableList<Service> services = weddingScriptController.getServices();
+		SortedList<Service> sortedData = new SortedList<>(services);
+		sortedData.comparatorProperty().bind(serviceTable.comparatorProperty());
 
 		// TOOLBAR
 		Button newButton = new Button("Új");
@@ -61,8 +65,6 @@ public class ServicesView extends BorderPane {
 		toolBar.getItems().addAll(newButton, deleteButton, editButton);
 		topMenu.getChildren().add(toolBar);
 
-		serviceTable = new TableView<>();
-		serviceTable.setEditable(true);
 		serviceTable.setRowFactory(tv -> {
 			TableRow<Service> row = new TableRow<>();
 			row.setOnMouseClicked(event -> {
@@ -73,8 +75,7 @@ public class ServicesView extends BorderPane {
 					@Override
 					public void handle(WindowEvent paramT) {
 						services.addAll(weddingScriptController.getServices());
-						SortedList<Service> sortedData = new SortedList<>(services);
-						sortedData.comparatorProperty().bind(serviceTable.comparatorProperty());
+
 						serviceTable.setItems(sortedData);
 					}
 				});
@@ -94,6 +95,7 @@ public class ServicesView extends BorderPane {
 		serviceTable.getColumns().add(nameCol);
 
 		serviceTable.setItems(services);
+		serviceTable.getSortOrder().add(nameCol);
 
 		this.setTop(topMenu);
 
