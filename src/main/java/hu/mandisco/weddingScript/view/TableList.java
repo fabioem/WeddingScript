@@ -6,11 +6,9 @@ import java.util.List;
 
 import hu.mandisco.weddingscript.controller.WeddingScriptController;
 import hu.mandisco.weddingscript.model.bean.Attribute;
-import hu.mandisco.weddingscript.model.bean.Program;
 import hu.mandisco.weddingscript.model.bean.Script;
 import hu.mandisco.weddingscript.model.bean.Service;
 import hu.mandisco.weddingscript.view.edit.AttributeEditWindow;
-import hu.mandisco.weddingscript.view.edit.ProgramEditWindow;
 import hu.mandisco.weddingscript.view.edit.ScriptEditWindow;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -28,77 +26,10 @@ public class TableList {
 
 	private WeddingScriptController weddingScriptController = new WeddingScriptController();
 
-	public TableView<Program> getProgramList() {
-
-		TableView<Program> programListTable = new TableView<>();
-
-		programListTable.setEditable(true);
-
-		programListTable.setRowFactory(tv -> {
-			TableRow<Program> row = new TableRow<>();
-			row.setOnMouseClicked(event -> {
-
-				Stage stage = new Stage();
-				stage.setOnHiding(new EventHandler<WindowEvent>() {
-
-					@Override
-					public void handle(WindowEvent paramT) {
-						ObservableList<Program> data = FXCollections.observableArrayList();
-						data.addAll(weddingScriptController.getPrograms());
-						SortedList<Program> sortedData = new SortedList<>(data);
-						sortedData.comparatorProperty().bind(programListTable.comparatorProperty());
-						programListTable.setItems(sortedData);
-					}
-				});
-
-				if (event.getClickCount() == 2 && (!row.isEmpty())) {
-					Program selectedProgram = row.getItem();
-					ProgramEditWindow window = new ProgramEditWindow();
-					window.display(stage, selectedProgram);
-				}
-			});
-			return row;
-		});
-
-		TableColumn<Program, String> nameCol = new TableColumn<>("Név");
-		nameCol.setCellValueFactory(new PropertyValueFactory<Program, String>("name"));
-
-		TableColumn<Program, LocalDateTime> defaultTimeCol = new TableColumn<>("Idő");
-		defaultTimeCol.setCellValueFactory(
-				new PropertyValueFactory<Program, LocalDateTime>("defaultTime"));
-		defaultTimeCol.setCellFactory(column ->
-
-		new TableCell<Program, LocalDateTime>() {
-			@Override
-			protected void updateItem(LocalDateTime item, boolean empty) {
-				super.updateItem(item, empty);
-				if (item == null || empty) {
-					setText(null);
-				} else {
-					setText(item.format(DateTimeFormatter.ofPattern(Labels.DATEFORMAT_TIME)));
-				}
-			}
-		});
-
-		programListTable.getColumns().add(nameCol);
-		programListTable.getColumns().add(defaultTimeCol);
-
-		List<Program> programs = weddingScriptController.getPrograms();
-
-		// Sort by time
-		ObservableList<Program> data = FXCollections.observableArrayList();
-		SortedList<Program> sortedData = new SortedList<>(data);
-		sortedData.comparatorProperty().bind(programListTable.comparatorProperty());
-		programListTable.setItems(sortedData);
-		programListTable.getSortOrder().add(defaultTimeCol);
-		data.addAll(programs);
-
-		return programListTable;
-	}
-
 	public TableView<Script> getScriptList() {
 
 		TableView<Script> scriptListTable = new TableView<>();
+		ObservableList<Script> scripts = weddingScriptController.getScripts();
 
 		scriptListTable.setEditable(true);
 
@@ -111,9 +42,8 @@ public class TableList {
 
 					@Override
 					public void handle(WindowEvent paramT) {
-						ObservableList<Script> data = FXCollections.observableArrayList();
-						data.addAll(weddingScriptController.getScripts());
-						SortedList<Script> sortedData = new SortedList<>(data);
+						scripts.addAll(weddingScriptController.getScripts());
+						SortedList<Script> sortedData = new SortedList<>(scripts);
 						sortedData.comparatorProperty().bind(scriptListTable.comparatorProperty());
 						scriptListTable.setItems(sortedData);
 					}
@@ -184,7 +114,6 @@ public class TableList {
 		scriptListTable.getColumns().add(lastEditedCol);
 		scriptListTable.getColumns().add(createdCol);
 
-		ObservableList<Script> scripts = weddingScriptController.getScripts();
 		scriptListTable.getItems().addAll(scripts);
 
 		return scriptListTable;
@@ -222,7 +151,14 @@ public class TableList {
 			@Override
 			protected void updateItem(Boolean item, boolean empty) {
 				super.updateItem(item, empty);
-				setText(empty ? null : item.booleanValue() ? "igen" : "nem");
+				if (!empty) {
+					if (item.booleanValue()) {
+						setText("igen");
+					} else {
+						setText("nem");
+					}
+				}
+
 			}
 		});
 
@@ -242,7 +178,9 @@ public class TableList {
 
 	public TableView<Service> getServiceListNotInScript(Script script,
 			TableView<Service> servicesTable) {
+
 		TableView<Service> table = new TableView<>();
+		ObservableList<Service> services = weddingScriptController.getServicesNotInScript(script);
 
 		table.setEditable(true);
 
@@ -250,8 +188,6 @@ public class TableList {
 		nameCol.setCellValueFactory(new PropertyValueFactory<Service, String>("name"));
 
 		table.getColumns().add(nameCol);
-
-		List<Service> services = weddingScriptController.getServicesNotInScript(script);
 
 		table.setRowFactory(tv -> {
 			TableRow<Service> row = new TableRow<>();
@@ -261,11 +197,9 @@ public class TableList {
 					services.remove(rowData);
 
 					// Handle SortedList
-					ObservableList<Service> serviceData = FXCollections.observableArrayList();
-					SortedList<Service> sortedData = new SortedList<>(serviceData);
+					SortedList<Service> sortedData = new SortedList<>(services);
 					sortedData.comparatorProperty().bind(table.comparatorProperty());
 					table.setItems(sortedData);
-					serviceData.addAll(services);
 
 					weddingScriptController.addServiceToScript(script, rowData);
 					servicesTable.getItems().clear();

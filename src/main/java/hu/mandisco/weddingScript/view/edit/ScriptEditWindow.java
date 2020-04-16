@@ -143,10 +143,10 @@ public class ScriptEditWindow {
 			return row;
 		});
 
-		TableColumn<Attribute, String> nameCol = new TableColumn<Attribute, String>("Név");
+		TableColumn<Attribute, String> nameCol = new TableColumn<>("Név");
 		nameCol.setCellValueFactory(new PropertyValueFactory<Attribute, String>("name"));
 
-		TableColumn<Attribute, String> valueCol = new TableColumn<Attribute, String>("Érték");
+		TableColumn<Attribute, String> valueCol = new TableColumn<>("Érték");
 		valueCol.setCellValueFactory(new PropertyValueFactory<Attribute, String>("value"));
 		valueCol.setCellFactory(TextFieldTableCell.<Attribute>forTableColumn());
 		valueCol.setOnEditCommit(new EventHandler<CellEditEvent<Attribute, String>>() {
@@ -174,10 +174,10 @@ public class ScriptEditWindow {
 
 		attributeAntiTable.setEditable(true);
 
-		TableColumn<Attribute, String> nameAntiCol = new TableColumn<Attribute, String>("Név");
+		TableColumn<Attribute, String> nameAntiCol = new TableColumn<>("Név");
 		nameAntiCol.setCellValueFactory(new PropertyValueFactory<Attribute, String>("name"));
 
-		TableColumn<Attribute, String> valueAntiCol = new TableColumn<Attribute, String>(
+		TableColumn<Attribute, String> valueAntiCol = new TableColumn<>(
 				"Alap érték");
 		valueAntiCol
 				.setCellValueFactory(new PropertyValueFactory<Attribute, String>("defaultValue"));
@@ -209,12 +209,11 @@ public class ScriptEditWindow {
 		attributeAntiTable.getItems().addAll(antiAttributes);
 
 		// Sort by default time
-		ObservableList<Attribute> data = FXCollections.observableArrayList();
-		SortedList<Attribute> sortedData = new SortedList<>(data);
+		SortedList<Attribute> sortedData = new SortedList<>(antiAttributes);
 		sortedData.comparatorProperty().bind(attributeAntiTable.comparatorProperty());
 		attributeAntiTable.setItems(sortedData);
 		attributeAntiTable.getSortOrder().add(nameAntiCol);
-		data.addAll(antiAttributes);
+		antiAttributes.addAll(antiAttributes);
 
 		GridPane.setConstraints(attributesTable, 0, 0);
 		GridPane.setHgrow(attributesTable, Priority.ALWAYS);
@@ -295,7 +294,7 @@ public class ScriptEditWindow {
 		TableView<Service> servicesTable = new TableView<>();
 		servicesTable.setEditable(true);
 
-		TableColumn<Service, String> scriptsNameCol = new TableColumn<Service, String>(
+		TableColumn<Service, String> scriptsNameCol = new TableColumn<>(
 				"Szolgáltatás");
 		scriptsNameCol.setCellValueFactory(new PropertyValueFactory<Service, String>("name"));
 
@@ -398,7 +397,6 @@ public class ScriptEditWindow {
 		programsCenterGrid.getChildren().addAll(programsTable, programAntiTable);
 		programsTab.setContent(programsCenterGrid);
 
-		// TODO services tab
 		servicesCenterGrid.getChildren().addAll(servicesTable, servicesAntiTable);
 		servicesTab.setContent(servicesCenterGrid);
 

@@ -54,7 +54,7 @@ public interface WeddingScriptDAO {
 
 	public boolean addServiceToScript(Script script, Service rowData);
 
-	public List<Service> getServicesNotInScript(Script script);
+	public ObservableList<Service> getServicesNotInScript(Script script);
 
 	public List<Attribute> getAttributesNotInProgram(Program program);
 

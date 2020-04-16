@@ -114,7 +114,7 @@ public class WeddingScriptController {
 		return dao.addServiceToScript(script, rowData);
 	}
 
-	public List<Service> getServicesNotInScript(Script script) {
+	public ObservableList<Service> getServicesNotInScript(Script script) {
 		return dao.getServicesNotInScript(script);
 	}
 

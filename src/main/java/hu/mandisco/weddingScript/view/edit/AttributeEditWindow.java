@@ -91,7 +91,7 @@ public class AttributeEditWindow {
 		serviceComboBox.setValue(serviceOptions.get(attribute.getServiceId()));
 
 		// Event handling
-		attrTypeComboBox.setOnAction((e) -> {
+		attrTypeComboBox.setOnAction(e -> {
 			programAttrTypeSelected = (attrTypeComboBox.getValue().getName().equals("Program"));
 			serviceLabel.setDisable(!programAttrTypeSelected);
 			serviceComboBox.setDisable(!programAttrTypeSelected);

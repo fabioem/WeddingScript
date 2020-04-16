@@ -95,7 +95,7 @@ public class AttributeCreateWindow {
 		serviceComboBox.setValue(serviceOptions.get(0));
 
 		// Event handling
-		attrTypeComboBox.setOnAction((e) -> {
+		attrTypeComboBox.setOnAction(e -> {
 			serviceAttrTypeSelected = attrTypeComboBox.getValue().getName().equals("Service");
 			serviceLabel.setDisable(!serviceAttrTypeSelected);
 			serviceComboBox.setDisable(!serviceAttrTypeSelected);
@@ -133,12 +133,12 @@ public class AttributeCreateWindow {
 		closeButton.setOnAction(e -> window.close());
 		GridPane.setConstraints(closeButton, 1, 5);
 
-		//ESC button
+		// ESC button
 		window.addEventHandler(KeyEvent.KEY_RELEASED, (KeyEvent event) -> {
-	        if (KeyCode.ESCAPE == event.getCode()) {
-	        	window.close();
-	        }
-	    });
+			if (KeyCode.ESCAPE == event.getCode()) {
+				window.close();
+			}
+		});
 
 		// Add everything to grid
 		grid.getChildren().addAll(nameLabel, nameInput, defValueLabel, defValueInput, serviceLabel,

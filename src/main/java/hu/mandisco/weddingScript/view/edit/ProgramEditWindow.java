@@ -62,7 +62,7 @@ public class ProgramEditWindow {
 
 		// Day
 		Label dayLabel = new Label("Nap: ");
-		Spinner<Integer> daySpinner = new Spinner<Integer>();
+		Spinner<Integer> daySpinner = new Spinner<>();
 		daySpinner.setEditable(true);
 		SpinnerValueFactory<Integer> daySpinnerFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 1, 0);
 		daySpinner.setValueFactory(daySpinnerFactory);
@@ -75,7 +75,7 @@ public class ProgramEditWindow {
 
 		// Hour
 		Label hourLabel = new Label("Óra: ");
-		Spinner<Integer> hourSpinner = new Spinner<Integer>();
+		Spinner<Integer> hourSpinner = new Spinner<>();
 		hourSpinner.setEditable(true);
 		SpinnerValueFactory<Integer> hourSpinnerFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 0);
 		hourSpinner.setValueFactory(hourSpinnerFactory);
@@ -88,7 +88,7 @@ public class ProgramEditWindow {
 
 		// Minute
 		Label minLabel = new Label("Perc: ");
-		Spinner<Integer> minSpinner = new Spinner<Integer>();
+		Spinner<Integer> minSpinner = new Spinner<>();
 		minSpinner.setEditable(true);
 		SpinnerValueFactory<Integer> minuteSpinnerFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 59,
 				0);

@@ -4,7 +4,6 @@ import hu.mandisco.weddingscript.controller.WeddingScriptController;
 import hu.mandisco.weddingscript.model.bean.Service;
 import hu.mandisco.weddingscript.view.create.ServiceCreateWindow;
 import hu.mandisco.weddingscript.view.edit.ServiceEditWindow;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.EventHandler;
@@ -29,6 +28,8 @@ public class ServicesView extends BorderPane {
 
 	public ServicesView() {
 		super();
+
+		ObservableList<Service> services = weddingScriptController.getServices();
 
 		// TOOLBAR
 		Button newButton = new Button("Új");
@@ -71,9 +72,8 @@ public class ServicesView extends BorderPane {
 
 					@Override
 					public void handle(WindowEvent paramT) {
-						ObservableList<Service> data = FXCollections.observableArrayList();
-						data.addAll(weddingScriptController.getServices());
-						SortedList<Service> sortedData = new SortedList<>(data);
+						services.addAll(weddingScriptController.getServices());
+						SortedList<Service> sortedData = new SortedList<>(services);
 						sortedData.comparatorProperty().bind(serviceTable.comparatorProperty());
 						serviceTable.setItems(sortedData);
 					}
@@ -88,12 +88,10 @@ public class ServicesView extends BorderPane {
 			return row;
 		});
 
-		TableColumn<Service, String> nameCol = new TableColumn<Service, String>("Név");
+		TableColumn<Service, String> nameCol = new TableColumn<>("Név");
 		nameCol.setCellValueFactory(new PropertyValueFactory<Service, String>("name"));
 
 		serviceTable.getColumns().add(nameCol);
-
-		ObservableList<Service> services = weddingScriptController.getServices();
 
 		serviceTable.setItems(services);
 

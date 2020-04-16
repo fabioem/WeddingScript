@@ -1466,7 +1466,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 	}
 
 	@Override
-	public List<Service> getServicesNotInScript(Script script) {
+	public ObservableList<Service> getServicesNotInScript(Script script) {
 		Connection conn = null;
 		PreparedStatement pst = null;
 		ResultSet rs = null;

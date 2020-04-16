@@ -1,17 +1,23 @@
 package hu.mandisco.weddingscript.view;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import hu.mandisco.weddingscript.controller.WeddingScriptController;
 import hu.mandisco.weddingscript.model.bean.Program;
 import hu.mandisco.weddingscript.view.create.ProgramCreateWindow;
 import hu.mandisco.weddingscript.view.edit.ProgramAttributesEditWindow;
 import hu.mandisco.weddingscript.view.edit.ProgramEditWindow;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.ToolBar;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -28,6 +34,8 @@ public class ProgramsView extends BorderPane {
 	public ProgramsView() {
 		super();
 
+		ObservableList<Program> programs = weddingScriptController.getPrograms();
+
 		// TOOLBAR
 		Button newButton = new Button("Új");
 		newButton.setOnAction(e -> {
@@ -36,9 +44,9 @@ public class ProgramsView extends BorderPane {
 
 				@Override
 				public void handle(WindowEvent paramT) {
-					ObservableList<Program> data = FXCollections.observableArrayList();
-					data.addAll(weddingScriptController.getPrograms());
-					SortedList<Program> sortedData = new SortedList<>(data);
+					programs.clear();
+					programs.addAll(weddingScriptController.getPrograms());
+					SortedList<Program> sortedData = new SortedList<>(programs);
 					sortedData.comparatorProperty().bind(programTable.comparatorProperty());
 					programTable.setItems(sortedData);
 				}
@@ -52,11 +60,9 @@ public class ProgramsView extends BorderPane {
 		deleteButton.setOnAction(e -> {
 			Program selectedItem = programTable.getSelectionModel().getSelectedItem();
 			if (selectedItem != null) {
-				ObservableList<Program> data = FXCollections.observableArrayList();
-				SortedList<Program> sortedData = new SortedList<>(data);
+				SortedList<Program> sortedData = new SortedList<>(programs);
 				sortedData.comparatorProperty().bind(programTable.comparatorProperty());
-				data.addAll(programTable.getItems());
-				data.remove(selectedItem);
+				programs.remove(selectedItem);
 				programTable.setItems(sortedData);
 				weddingScriptController.removeProgram(selectedItem);
 			}
@@ -70,9 +76,9 @@ public class ProgramsView extends BorderPane {
 
 				@Override
 				public void handle(WindowEvent paramT) {
-					ObservableList<Program> data = FXCollections.observableArrayList();
-					data.addAll(weddingScriptController.getPrograms());
-					SortedList<Program> sortedData = new SortedList<>(data);
+					programs.clear();
+					programs.addAll(weddingScriptController.getPrograms());
+					SortedList<Program> sortedData = new SortedList<>(programs);
 					sortedData.comparatorProperty().bind(programTable.comparatorProperty());
 					programTable.setItems(sortedData);
 				}
@@ -100,8 +106,62 @@ public class ProgramsView extends BorderPane {
 		toolBar.getItems().addAll(newButton, deleteButton, editButton, attributesButton);
 		topMenu.getChildren().add(toolBar);
 
-		TableList tableList = new TableList();
-		programTable = tableList.getProgramList();
+		programTable = new TableView<>();
+		programTable.setEditable(true);
+
+		programTable.setRowFactory(tv -> {
+			TableRow<Program> row = new TableRow<>();
+			row.setOnMouseClicked(event -> {
+
+				Stage stage = new Stage();
+				stage.setOnHiding(new EventHandler<WindowEvent>() {
+
+					@Override
+					public void handle(WindowEvent paramT) {
+						programs.addAll(weddingScriptController.getPrograms());
+						SortedList<Program> sortedData = new SortedList<>(programs);
+						sortedData.comparatorProperty().bind(programTable.comparatorProperty());
+						programTable.setItems(sortedData);
+					}
+				});
+
+				if (event.getClickCount() == 2 && (!row.isEmpty())) {
+					Program selectedProgram = row.getItem();
+					ProgramEditWindow window = new ProgramEditWindow();
+					window.display(stage, selectedProgram);
+				}
+			});
+			return row;
+		});
+
+		TableColumn<Program, String> nameCol = new TableColumn<>("Név");
+		nameCol.setCellValueFactory(new PropertyValueFactory<Program, String>("name"));
+
+		TableColumn<Program, LocalDateTime> defaultTimeCol = new TableColumn<>("Idő");
+		defaultTimeCol.setCellValueFactory(
+				new PropertyValueFactory<Program, LocalDateTime>("defaultTime"));
+		defaultTimeCol.setCellFactory(column ->
+
+		new TableCell<Program, LocalDateTime>() {
+			@Override
+			protected void updateItem(LocalDateTime item, boolean empty) {
+				super.updateItem(item, empty);
+				if (item == null || empty) {
+					setText(null);
+				} else {
+					setText(item.format(DateTimeFormatter.ofPattern(Labels.DATEFORMAT_TIME)));
+				}
+			}
+		});
+
+		programTable.getColumns().add(nameCol);
+		programTable.getColumns().add(defaultTimeCol);
+
+		// Sort by time
+		SortedList<Program> sortedData = new SortedList<>(programs);
+		sortedData.comparatorProperty().bind(programTable.comparatorProperty());
+		programTable.setItems(sortedData);
+		programTable.getSortOrder().add(defaultTimeCol);
 
 		this.setTop(topMenu);
 

@@ -39,17 +39,15 @@ public class ProgramAttributesEditWindow {
 		grid.setVgap(8);
 		grid.setHgap(10);
 
-		int rowCount = 0;
-
 		// Row 1 - name
 		Label nameLabel = new Label(program.getName());
-		GridPane.setConstraints(nameLabel, 0, rowCount++);
+		GridPane.setConstraints(nameLabel, 0, 0);
 		GridPane.setHalignment(nameLabel, HPos.CENTER);
 		GridPane.setHgrow(nameLabel, Priority.ALWAYS);
 
 		// Row 2 - table
 		GridPane tableGrid = new GridPane();
-		GridPane.setConstraints(tableGrid, 0, rowCount++);
+		GridPane.setConstraints(tableGrid, 0, 1);
 
 		// Program Attributes
 		TableView<Attribute> programAttributesTable = new TableView<>();
@@ -75,10 +73,12 @@ public class ProgramAttributesEditWindow {
 		programAntiAttributesTable.setEditable(true);
 
 		TableColumn<Attribute, String> programAttrAntiNameCol = new TableColumn<>("Név");
-		programAttrAntiNameCol.setCellValueFactory(new PropertyValueFactory<Attribute, String>("name"));
+		programAttrAntiNameCol
+				.setCellValueFactory(new PropertyValueFactory<Attribute, String>("name"));
 
 		TableColumn<Attribute, String> programAttrAntiValueCol = new TableColumn<>("Alap érték");
-		programAttrAntiValueCol.setCellValueFactory(new PropertyValueFactory<Attribute, String>("defaultValue"));
+		programAttrAntiValueCol
+				.setCellValueFactory(new PropertyValueFactory<Attribute, String>("defaultValue"));
 
 		programAntiAttributesTable.getColumns().add(programAttrAntiNameCol);
 		programAntiAttributesTable.getColumns().add(programAttrAntiValueCol);
@@ -90,7 +90,8 @@ public class ProgramAttributesEditWindow {
 		// Sort by default time
 		ObservableList<Attribute> programAttrAntiData = FXCollections.observableArrayList();
 		SortedList<Attribute> sortedProgramAttrAntiData = new SortedList<>(programAttrAntiData);
-		sortedProgramAttrAntiData.comparatorProperty().bind(programAntiAttributesTable.comparatorProperty());
+		sortedProgramAttrAntiData.comparatorProperty()
+				.bind(programAntiAttributesTable.comparatorProperty());
 		programAntiAttributesTable.setItems(sortedProgramAttrAntiData);
 		programAntiAttributesTable.getSortOrder().add(programAttrAntiNameCol);
 		programAttrAntiData.addAll(antiAttributes);
@@ -101,11 +102,14 @@ public class ProgramAttributesEditWindow {
 		// Handling double clicks
 		ObservableList<Attribute> programAttributeData = FXCollections.observableArrayList();
 		SortedList<Attribute> sortedProgramAttributeData = new SortedList<>(programAttributeData);
-		sortedProgramAttributeData.comparatorProperty().bind(programAttributesTable.comparatorProperty());
+		sortedProgramAttributeData.comparatorProperty()
+				.bind(programAttributesTable.comparatorProperty());
 
 		ObservableList<Attribute> programAntiAttributeData = FXCollections.observableArrayList();
-		SortedList<Attribute> sortedProgramAntiAttributeData = new SortedList<>(programAntiAttributeData);
-		sortedProgramAntiAttributeData.comparatorProperty().bind(programAntiAttributesTable.comparatorProperty());
+		SortedList<Attribute> sortedProgramAntiAttributeData = new SortedList<>(
+				programAntiAttributeData);
+		sortedProgramAntiAttributeData.comparatorProperty()
+				.bind(programAntiAttributesTable.comparatorProperty());
 
 		programAttributesTable.setRowFactory(tv -> {
 			TableRow<Attribute> row = new TableRow<>();
@@ -152,18 +156,18 @@ public class ProgramAttributesEditWindow {
 		// Row 3 - button
 		Button okButton = new Button("OK");
 		okButton.setOnAction(e -> window.close());
-		GridPane.setConstraints(okButton, 0, rowCount++);
+		GridPane.setConstraints(okButton, 0, 2);
 		GridPane.setHalignment(okButton, HPos.CENTER);
 		GridPane.setHgrow(okButton, Priority.ALWAYS);
 
 		grid.getChildren().addAll(nameLabel, tableGrid, okButton);
 
-		//ESC button
+		// ESC button
 		window.addEventHandler(KeyEvent.KEY_RELEASED, (KeyEvent event) -> {
-	        if (KeyCode.ESCAPE == event.getCode()) {
-	        	window.close();
-	        }
-	    });
+			if (KeyCode.ESCAPE == event.getCode()) {
+				window.close();
+			}
+		});
 
 		Scene scene = new Scene(grid);
 		window.setScene(scene);
