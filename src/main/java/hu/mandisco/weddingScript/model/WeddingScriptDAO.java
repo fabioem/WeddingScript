@@ -50,7 +50,7 @@ public interface WeddingScriptDAO {
 
 	public boolean addAttributeToScript(Script script, Attribute attribute);
 
-	public List<Service> getServicesOfScript(Script script);
+	public ObservableList<Service> getServicesOfScript(Script script);
 
 	public boolean addServiceToScript(Script script, Service rowData);
 
@@ -106,5 +106,7 @@ public interface WeddingScriptDAO {
 
 	public boolean setProgramAttributeValue(Program program, Attribute attribute,
 			String newAttributeValue);
+
+	public boolean removeServiceFromScript(Script script, Service service);
 
 }

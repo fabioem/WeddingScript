@@ -106,12 +106,16 @@ public class WeddingScriptController {
 		return dao.addAttributeToScript(script, attribute);
 	}
 
-	public List<Service> getServicesOfScript(Script script) {
+	public ObservableList<Service> getServicesOfScript(Script script) {
 		return dao.getServicesOfScript(script);
 	}
 
-	public boolean addServiceToScript(Script script, Service rowData) {
-		return dao.addServiceToScript(script, rowData);
+	public boolean addServiceToScript(Script script, Service service) {
+		List<Attribute> attributesOfService = dao.getAttributesOfService(service);
+		for (Attribute attribute : attributesOfService) {
+			dao.addAttributeToScript(script, attribute);
+		}
+		return dao.addServiceToScript(script, service);
 	}
 
 	public ObservableList<Service> getServicesNotInScript(Script script) {
@@ -174,7 +178,6 @@ public class WeddingScriptController {
 	public boolean setScriptProgramAttributeValue(Script script, Program program,
 			Attribute attribute, String newAttributeValue) {
 		return dao.setScriptProgramAttributeValue(script, program, attribute, newAttributeValue);
-
 	}
 
 	public boolean addService(Service service) {
@@ -213,5 +216,9 @@ public class WeddingScriptController {
 	public boolean setProgramAttributeValue(Program program, Attribute attribute,
 			String newAttributeValue) {
 		return dao.setProgramAttributeValue(program, attribute, newAttributeValue);
+	}
+
+	public boolean removeServiceFromScript(Script script, Service service) {
+		return dao.removeServiceFromScript(script, service);
 	}
 }

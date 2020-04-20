@@ -137,6 +137,7 @@ public class ScriptProgramAttributesEditWindow {
 				if (event.getClickCount() == 2 && (!row.isEmpty())) {
 					Attribute attributeRowData = row.getItem();
 					attributes.remove(attributeRowData);
+					attributeRowData.setValue(attributeRowData.getDefaultValue());
 
 					// Handle SortedList
 					programAttributeData.setAll(attributes);

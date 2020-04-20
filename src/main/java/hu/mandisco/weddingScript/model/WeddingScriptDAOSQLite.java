@@ -1342,7 +1342,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 	}
 
 	@Override
-	public List<Service> getServicesOfScript(Script script) {
+	public ObservableList<Service> getServicesOfScript(Script script) {
 		Connection conn = null;
 		PreparedStatement pst = null;
 		ResultSet rs = null;
@@ -2913,6 +2913,57 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 		return rvSucceeded;
 
+	}
+
+	@Override
+	public boolean removeServiceFromScript(Script script, Service service) {
+		String errorDesc = "removing service from script";
+		boolean rvSucceeded = false;
+		Connection conn = null;
+		PreparedStatement pst = null;
+
+		try {
+
+			conn = DriverManager.getConnection(databaseConnectionURL);
+			pst = conn.prepareStatement("DELETE FROM scriptService WHERE scriptId = ? AND serviceId = ?");
+
+			int index = 1;
+
+			pst.setInt(index++, script.getScriptId());
+			pst.setInt(index++, service.getServiceId());
+
+			int rowsAffected = pst.executeUpdate();
+			if (rowsAffected == 1) {
+				rvSucceeded = true;
+			}
+		} catch (SQLException e) {
+			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE,
+					errorDesc));
+			LOGGER.error(e);
+		} finally {
+
+			try {
+				if (pst != null) {
+					pst.close();
+				}
+			} catch (SQLException e) {
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
+						Labels.FAILED_TO_CLOSE_STATEMENT, errorDesc));
+				LOGGER.error(e);
+			}
+
+			try {
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
+						Labels.FAILED_TO_CLOSE_CONNECTION, errorDesc));
+				LOGGER.error(e);
+			}
+		}
+
+		return rvSucceeded;
 	}
 
 }
