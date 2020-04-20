@@ -51,7 +51,6 @@ public class ProgramsView extends BorderPane {
 				public void handle(WindowEvent paramT) {
 					programs.clear();
 					programs.addAll(weddingScriptController.getPrograms());
-
 					programTable.setItems(sortedData);
 				}
 			});
@@ -80,7 +79,6 @@ public class ProgramsView extends BorderPane {
 				public void handle(WindowEvent paramT) {
 					programs.clear();
 					programs.addAll(weddingScriptController.getPrograms());
-
 					programTable.setItems(sortedData);
 				}
 			});
@@ -94,9 +92,7 @@ public class ProgramsView extends BorderPane {
 
 		Button attributesButton = new Button("Attribútumok");
 		attributesButton.setOnAction(e -> {
-
 			Stage stage = new Stage();
-
 			Program selectedItem = programTable.getSelectionModel().getSelectedItem();
 			if (selectedItem != null) {
 				ProgramAttributesEditWindow window = new ProgramAttributesEditWindow();
@@ -110,14 +106,13 @@ public class ProgramsView extends BorderPane {
 		programTable.setRowFactory(tv -> {
 			TableRow<Program> row = new TableRow<>();
 			row.setOnMouseClicked(event -> {
-
 				Stage stage = new Stage();
 				stage.setOnHiding(new EventHandler<WindowEvent>() {
 
 					@Override
 					public void handle(WindowEvent paramT) {
+						programs.clear();
 						programs.addAll(weddingScriptController.getPrograms());
-
 						programTable.setItems(sortedData);
 					}
 				});

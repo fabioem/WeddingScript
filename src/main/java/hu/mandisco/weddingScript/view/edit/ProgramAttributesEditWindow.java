@@ -8,6 +8,7 @@ import hu.mandisco.weddingscript.model.bean.Program;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
+import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -16,7 +17,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
@@ -59,6 +62,18 @@ public class ProgramAttributesEditWindow {
 
 		TableColumn<Attribute, String> attrCol = new TableColumn<>("Érték");
 		attrCol.setCellValueFactory(new PropertyValueFactory<Attribute, String>("value"));
+		attrCol.setCellFactory(TextFieldTableCell.<Attribute>forTableColumn());
+		attrCol.setOnEditCommit(new EventHandler<CellEditEvent<Attribute, String>>() {
+			@Override
+			public void handle(CellEditEvent<Attribute, String> t) {
+				((Attribute) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.setValue(t.getNewValue());
+				Attribute attribute = t.getRowValue();
+				String newAttributeValue = t.getNewValue();
+				weddingScriptController.setProgramAttributeValue(program, attribute,
+						newAttributeValue);
+			}
+		});
 
 		programAttributesTable.getColumns().add(nameCol);
 		programAttributesTable.getColumns().add(attrCol);
@@ -117,6 +132,7 @@ public class ProgramAttributesEditWindow {
 				if (event.getClickCount() == 2 && (!row.isEmpty())) {
 					Attribute attributeRowData = row.getItem();
 					attributes.remove(attributeRowData);
+					attributeRowData.setValue(attributeRowData.getDefaultValue());
 
 					// Handle SortedList
 					programAttributeData.setAll(attributes);

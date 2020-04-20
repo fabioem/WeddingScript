@@ -2682,6 +2682,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				attribute.setName(name);
 				attribute.setAttrId(attrId);
 				attribute.setDefaultValue(defValue);
+				attribute.setValue(defValue);
 				attribute.setMandatory(mandatory);
 
 				serviceAttrList.add(attribute);
@@ -2858,6 +2859,60 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 		}
 
 		return rvSucceeded;
+	}
+
+	@Override
+	public boolean setProgramAttributeValue(Program program, Attribute attribute,
+			String newAttributeValue) {
+		String errorDesc = "editing value of program attribute";
+		boolean rvSucceeded = false;
+		Connection conn = null;
+		PreparedStatement pst = null;
+
+		try {
+
+			conn = DriverManager.getConnection(databaseConnectionURL);
+			pst = conn.prepareStatement(
+					"UPDATE progAttr SET value = ? WHERE progId = ? AND attrId = ?;");
+
+			int index = 1;
+			pst.setString(index++, newAttributeValue);
+			pst.setInt(index++, program.getProgId());
+			pst.setInt(index++, attribute.getAttrId());
+
+			int rowsAffected = pst.executeUpdate();
+			if (rowsAffected == 1) {
+				rvSucceeded = true;
+			}
+		} catch (SQLException e) {
+			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE,
+					errorDesc));
+			LOGGER.error(e);
+		} finally {
+
+			try {
+				if (pst != null) {
+					pst.close();
+				}
+			} catch (SQLException e) {
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
+						Labels.FAILED_TO_CLOSE_STATEMENT, errorDesc));
+				LOGGER.error(e);
+			}
+
+			try {
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
+						Labels.FAILED_TO_CLOSE_CONNECTION, errorDesc));
+				LOGGER.error(e);
+			}
+		}
+
+		return rvSucceeded;
+
 	}
 
 }

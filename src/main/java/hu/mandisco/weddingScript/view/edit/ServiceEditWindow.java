@@ -22,7 +22,7 @@ public class ServiceEditWindow {
 	public void display(Stage window, Service service) {
 		// Block events to other windows
 		window.initModality(Modality.APPLICATION_MODAL);
-		window.setTitle("Program szerkesztése");
+		window.setTitle("Szolgáltatás szerkesztése");
 		window.setMinWidth(250);
 
 		// GridPane with 10px padding around edge
@@ -46,29 +46,27 @@ public class ServiceEditWindow {
 		GridPane.setConstraints(saveButton, 0, 2);
 		saveButton.setDefaultButton(true);
 		saveButton.setOnAction(e -> {
-			service.setName(nameInput.getText());
 			if (nameInput.getText().isEmpty()) {
 				Alert alert = new Alert(AlertType.ERROR, "A név nem lehet üres!", ButtonType.OK);
 				alert.setHeaderText("Üres név");
 				alert.showAndWait();
 			} else {
+				service.setName(nameInput.getText());
 				weddingScriptController.setService(service);
 				window.close();
 			}
-
 		});
 
 		Button closeButton = new Button("Mégsem");
 		closeButton.setOnAction(e -> window.close());
 		GridPane.setConstraints(closeButton, 1, 2);
 
-		//ESC button
+		// ESC button
 		window.addEventHandler(KeyEvent.KEY_RELEASED, (KeyEvent event) -> {
-	        if (KeyCode.ESCAPE == event.getCode()) {
-	        	window.close();
-	        }
-	    });
-
+			if (KeyCode.ESCAPE == event.getCode()) {
+				window.close();
+			}
+		});
 
 		// Add everything to grid
 		grid.getChildren().addAll(nameLabel, nameInput, saveButton, closeButton);

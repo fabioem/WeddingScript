@@ -47,7 +47,8 @@ public class ServicesView extends BorderPane {
 		deleteButton.setOnAction(e -> {
 			Service selectedItem = serviceTable.getSelectionModel().getSelectedItem();
 			if (selectedItem != null) {
-				serviceTable.getItems().remove(selectedItem);
+				services.remove(selectedItem);
+				serviceTable.setItems(sortedData);
 				weddingScriptController.removeService(selectedItem);
 			}
 		});
@@ -58,15 +59,21 @@ public class ServicesView extends BorderPane {
 			if (selectedItem != null) {
 				ServiceEditWindow window = new ServiceEditWindow();
 				Stage stage = new Stage();
+				stage.setOnHiding(new EventHandler<WindowEvent>() {
+					@Override
+					public void handle(WindowEvent paramT) {
+						services.clear();
+						services.addAll(weddingScriptController.getServices());
+						serviceTable.setItems(sortedData);
+					}
+				});
 				window.display(stage, selectedItem);
 			}
 		});
 
 		Button attributesButton = new Button("Attribútumok");
 		attributesButton.setOnAction(e -> {
-
 			Stage stage = new Stage();
-
 			Service selectedItem = serviceTable.getSelectionModel().getSelectedItem();
 			if (selectedItem != null) {
 				ServiceAttributesEditWindow window = new ServiceAttributesEditWindow();
@@ -80,13 +87,12 @@ public class ServicesView extends BorderPane {
 		serviceTable.setRowFactory(tv -> {
 			TableRow<Service> row = new TableRow<>();
 			row.setOnMouseClicked(event -> {
-
 				Stage stage = new Stage();
 				stage.setOnHiding(new EventHandler<WindowEvent>() {
-
 					@Override
 					public void handle(WindowEvent paramT) {
-
+						services.clear();
+						services.addAll(weddingScriptController.getServices());
 						serviceTable.setItems(sortedData);
 					}
 				});

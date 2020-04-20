@@ -104,4 +104,7 @@ public interface WeddingScriptDAO {
 	public boolean setServiceAttributeValue(Service service, Attribute attribute,
 			String newAttributeValue);
 
+	public boolean setProgramAttributeValue(Program program, Attribute attribute,
+			String newAttributeValue);
+
 }

@@ -209,4 +209,9 @@ public class WeddingScriptController {
 			String newAttributeValue) {
 		return dao.setServiceAttributeValue(service, attribute, newAttributeValue);
 	}
+
+	public boolean setProgramAttributeValue(Program program, Attribute attribute,
+			String newAttributeValue) {
+		return dao.setProgramAttributeValue(program, attribute, newAttributeValue);
+	}
 }

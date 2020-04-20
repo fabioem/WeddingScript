@@ -131,6 +131,7 @@ public class ServiceAttributesEditWindow {
 			row.setOnMouseClicked(event -> {
 				if (event.getClickCount() == 2 && (!row.isEmpty())) {
 					Attribute attributeRowData = row.getItem();
+					attributeRowData.setValue(attributeRowData.getDefaultValue());
 					attributes.remove(attributeRowData);
 
 					// Handle SortedList
