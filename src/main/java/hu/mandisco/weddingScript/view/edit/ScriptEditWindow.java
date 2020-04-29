@@ -120,16 +120,14 @@ public class ScriptEditWindow {
 		TableView<Attribute> antiAttributesTable = new TableView<>();
 
 		// Handling double clicks
-		ObservableList<Attribute> attributeData = FXCollections.observableArrayList();
-		SortedList<Attribute> sortedAttributeData = new SortedList<>(attributeData);
-		sortedAttributeData.comparatorProperty().bind(attributesTable.comparatorProperty());
-
-		ObservableList<Attribute> antiAttributeData = FXCollections.observableArrayList();
-		SortedList<Attribute> sortedAntiAttributeData = new SortedList<>(antiAttributeData);
-		sortedAntiAttributeData.comparatorProperty().bind(antiAttributesTable.comparatorProperty());
-
 		ObservableList<Attribute> attributes = weddingScriptController.getAttributesOfScript(script);
 		ObservableList<Attribute> antiAttributes = weddingScriptController.getAttributesNotInScript(script);
+
+		SortedList<Attribute> sortedAttributeData = new SortedList<>(attributes);
+		sortedAttributeData.comparatorProperty().bind(attributesTable.comparatorProperty());
+
+		SortedList<Attribute> sortedAntiAttributeData = new SortedList<>(antiAttributes);
+		sortedAntiAttributeData.comparatorProperty().bind(antiAttributesTable.comparatorProperty());
 
 		attributesTable.setRowFactory(tv -> {
 			TableRow<Attribute> row = new TableRow<>();
@@ -140,14 +138,11 @@ public class ScriptEditWindow {
 					attributes.remove(selectedAttribute);
 
 					weddingScriptController.removeAttributeFromScript(script, selectedAttribute);
-					attributeData.setAll(attributes);
 					attributesTable.setItems(sortedAttributeData);
 
 					antiAttributes.add(selectedAttribute);
 
-					antiAttributeData.setAll(antiAttributes);
 					antiAttributesTable.setItems(sortedAntiAttributeData);
-
 				}
 			});
 			return row;
@@ -195,12 +190,10 @@ public class ScriptEditWindow {
 					Attribute rowData = row.getItem();
 					antiAttributes.remove(rowData);
 
-					antiAttributeData.setAll(antiAttributes);
 					antiAttributesTable.setItems(sortedAntiAttributeData);
 
 					weddingScriptController.addAttributeToScript(script, rowData);
 					attributes.add(rowData);
-					attributeData.setAll(attributes);
 					attributesTable.setItems(sortedAttributeData);
 
 				}
@@ -208,13 +201,13 @@ public class ScriptEditWindow {
 			return row;
 		});
 
-		antiAttributesTable.getItems().addAll(antiAttributes);
+		// antiAttributesTable.getItems().addAll(antiAttributes);
 
 		// Sort by default time
-		SortedList<Attribute> sortedData = new SortedList<>(antiAttributes);
-		sortedData.comparatorProperty().bind(antiAttributesTable.comparatorProperty());
-		antiAttributesTable.setItems(sortedData);
+		antiAttributesTable.setItems(sortedAntiAttributeData);
 		antiAttributesTable.getSortOrder().add(nameAntiCol);
+		attributesTable.setItems(sortedAttributeData);
+		attributesTable.getSortOrder().add(nameCol);
 
 		GridPane.setConstraints(attributesTable, 0, 0);
 		GridPane.setHgrow(attributesTable, Priority.ALWAYS);
@@ -368,6 +361,7 @@ public class ScriptEditWindow {
 		serviceNameCol.setCellValueFactory(new PropertyValueFactory<Service, String>("name"));
 
 		servicesTable.getColumns().add(serviceNameCol);
+
 		ObservableList<Service> services = weddingScriptController.getServicesOfScript(script);
 		servicesTable.getItems().addAll(services);
 

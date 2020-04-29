@@ -96,26 +96,41 @@ CREATE TABLE serviceAttr(
 INSERT INTO programs VALUES(0, "Vacsora", 68400000, 1);
 INSERT INTO programs VALUES(1, "Nyitótánc", 75600000, 1);
 INSERT INTO programs VALUES(2, "Újasszony tánc", 86400000, 0);
-INSERT INTO scripts VALUES(0, "Judit és Dani", '2019-01-01 00:00:00.000', "Komment1", (DATETIME('now')), (DATETIME('now')));
-INSERT INTO scripts VALUES(1, "Juci és Béla", '2019-01-02 00:00:00.000', "Komi 2", (DATETIME('now')), (DATETIME('now')));
+INSERT INTO programs VALUES(3, "Torta", 79200000, 1); -- 22:00
+INSERT INTO programs VALUES(4, "Vendégvárás", 64800000, 1); -- 18:00
+INSERT INTO programs VALUES(5, "Gyertyafénykeringő", 84600000, 1); -- 23:30
+INSERT INTO programs VALUES(6, "Ifjú pár érkezik", 66600000, 1); -- 18:30
+INSERT INTO scripts VALUES(0, "Judit és Dani", '2021-07-01 00:00:00.000', "kalocsai mintás stílus", (DATETIME('now')), (DATETIME('now')));
+INSERT INTO scripts VALUES(1, "Evelin és László", '2021-08-02 00:00:00.000', "rock lagzi", (DATETIME('now')), (DATETIME('now')));
 INSERT INTO services VALUES(0, "Alap");
-INSERT INTO services VALUES(1, "Műsorvezetés");
+INSERT INTO services VALUES(1, "CM / Műsorvezetés");
 INSERT INTO services VALUES(2, "LED-es oldalfal világítás");
 INSERT INTO services VALUES(3, "Ceremónia hangosítás kis cs.");
 INSERT INTO services VALUES(4, "Ceremónia hangosítás nagy cs.");
 INSERT INTO services VALUES(5, "Felhőtánc");
+INSERT INTO services VALUES(6, "CM külső helyszínen");
+INSERT INTO services VALUES(7, "Extra hang- és fénytechnika");
 --INSERT INTO attributeTypes VALUES(2, "Basic");
 INSERT INTO attributeTypes VALUES(0, "Script");
 INSERT INTO attributeTypes VALUES(1, "Program");
 INSERT INTO attributeTypes VALUES(2, "Service");
-INSERT INTO scriptProg VALUES(0, 1, 75900000); --21:00 Nyitótánc
+INSERT INTO scriptProg VALUES(0, 1, 75900000); --21:05 Nyitótánc
 INSERT INTO scriptProg VALUES(0, 2, 86400000); --24:00 Újasszony tánc
 INSERT INTO attributes VALUES(0, "Zene", "", 1, 1);
 INSERT INTO attributes VALUES(1, "Beszéd", "vőlegény", 1, 1);
 INSERT INTO attributes VALUES(2, "Himnusz", "nem", 1, 1);
 INSERT INTO attributes VALUES(3, "Szolgáltatói asztal", "igen", 0, 0);
-INSERT INTO progAttr VALUES(1, 0, ""); /* nyitótánchoz zene */
-INSERT INTO progAttr VALUES(0, 0, "Váradi Roma Café + Jazz-Lounge világsláger feldolgozások"); /* vacsorához zene */
-INSERT INTO progAttr VALUES(0, 1, "Vőlegény"); /* vacsorához beszéd */
-INSERT INTO progAttr VALUES(0, 2, "Nem"); /* vacsorához himnusz */
-INSERT INTO scriptAttr VALUES(0, 3, "Külön teremben");
+INSERT INTO attributes VALUES(4, "Oldalfal LED-ek színe", "", 2, 0);
+INSERT INTO attributes VALUES(5, "Bevonuló zene", "", 1, 0);
+INSERT INTO attributes VALUES(6, "Molinónkat kitehetjük", "igen", 0, 0);
+INSERT INTO attributes VALUES(7, "Lakodalmas zene szólhat", "igen", 0, 0);
+INSERT INTO attributes VALUES(8, "Tánc jellege", "", 1, 1);
+INSERT INTO progAttr VALUES(2, 0, "Hagyományos lakodalmas"); -- újasszonytánchoz zene
+INSERT INTO progAttr VALUES(1, 0, ""); -- nyitótánchoz zene
+INSERT INTO progAttr VALUES(1, 8, "keringő / keringő, majd gyors / vicces"); -- nyitótánc jellege
+INSERT INTO progAttr VALUES(0, 0, "Váradi Roma Café + Jazz-Lounge világsláger feldolgozások"); -- vacsorához zene
+INSERT INTO progAttr VALUES(0, 1, "Vőlegény"); -- vacsorához beszéd
+INSERT INTO progAttr VALUES(0, 2, "Nem"); -- vacsorához himnusz
+INSERT INTO progAttr VALUES(6, 0, "Lakodalom van a..."); -- bevonuló zene
+INSERT INTO scriptAttr VALUES(0, 3, "Külön szolgáltatói asztal"); -- szolgáltatói asztal
+INSERT INTO serviceAttr VALUES(2, 4, "halvány rózsaszín"); -- oldalfal szolg. színe

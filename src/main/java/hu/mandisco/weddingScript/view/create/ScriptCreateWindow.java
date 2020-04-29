@@ -82,6 +82,7 @@ public class ScriptCreateWindow {
 				alert.showAndWait();
 			} else {
 				weddingScriptController.addScript(script);
+				// TODO: sometimes error when adding new script
 				scriptItems.clear();
 				scriptItems.addAll(weddingScriptController.getScripts());
 				window.close();
