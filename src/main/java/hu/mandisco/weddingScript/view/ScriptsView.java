@@ -8,7 +8,6 @@ import hu.mandisco.weddingscript.model.bean.Script;
 import hu.mandisco.weddingscript.view.create.ScriptCreateWindow;
 import hu.mandisco.weddingscript.view.edit.ScriptEditWindow;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -18,8 +17,6 @@ import javafx.scene.control.ToolBar;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 public class ScriptsView extends BorderPane {
 
@@ -58,21 +55,10 @@ public class ScriptsView extends BorderPane {
 			TableRow<Script> row = new TableRow<>();
 			row.setOnMouseClicked(event -> {
 
-				Stage stage = new Stage();
-				stage.setOnHiding(new EventHandler<WindowEvent>() {
-
-					@Override
-					public void handle(WindowEvent paramT) {
-						//TODO: maybe get item, then remove and readd it instead of clear and addall
-						scripts.clear();
-						scripts.addAll(weddingScriptController.getScripts());
-					}
-				});
-
 				if (event.getClickCount() == 2 && (!row.isEmpty())) {
 					Script selectedScript = row.getItem();
 					ScriptEditWindow window = new ScriptEditWindow();
-					window.display(stage, selectedScript);
+					window.display(scripts, selectedScript);
 				}
 			});
 			return row;

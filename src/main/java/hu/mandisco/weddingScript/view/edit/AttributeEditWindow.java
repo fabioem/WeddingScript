@@ -24,7 +24,7 @@ public class AttributeEditWindow {
 
 	private static WeddingScriptController weddingScriptController = new WeddingScriptController();
 
-	public void display(Attribute attribute) {
+	public void display(ObservableList<Attribute> attributes, Attribute attribute) {
 		Stage window = new Stage();
 
 		// Block events to other windows
@@ -84,7 +84,7 @@ public class AttributeEditWindow {
 			attribute.setName(nameInput.getText());
 			attribute.setDefaultValue(defValueInput.getText());
 			attribute.setAttrType(attrTypeComboBox.getValue());
-			attribute.setMandatory(isMandatoryInput.isPressed());
+			attribute.setMandatory(isMandatoryInput.isSelected());
 
 			if (nameInput.getText().isEmpty()) {
 				Alert alert = new Alert(AlertType.ERROR, "A név nem lehet üres!", ButtonType.OK);
@@ -92,6 +92,7 @@ public class AttributeEditWindow {
 				alert.showAndWait();
 			} else {
 				weddingScriptController.setAttribute(attribute);
+				attributes.set(attributes.indexOf(attribute), attribute);
 				window.close();
 			}
 

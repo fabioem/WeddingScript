@@ -89,7 +89,7 @@ public class WeddingScriptController {
 		return dao.addAttribute(attribute);
 	}
 
-	public List<Attribute> getAttributes() {
+	public ObservableList<Attribute> getAttributes() {
 		return dao.getAttributes();
 	}
 

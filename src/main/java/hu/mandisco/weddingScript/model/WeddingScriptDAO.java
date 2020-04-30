@@ -42,7 +42,7 @@ public interface WeddingScriptDAO {
 
 	public boolean addAttribute(Attribute attribute);
 
-	public List<Attribute> getAttributes();
+	public ObservableList<Attribute> getAttributes();
 
 	public ObservableList<Attribute> getAttributesOfScript(Script script);
 

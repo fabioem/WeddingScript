@@ -129,14 +129,14 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 	}
 
-	public List<Attribute> getAttributes() {
+	public ObservableList<Attribute> getAttributes() {
 		String errorDesc = "listing attributes";
 		Connection conn = null;
 		Statement st = null;
 		ResultSet rs = null;
 
 		ObservableList<AttributeType> attributeTypeList = getAttributeTypes();
-		List<Attribute> attributes = new ArrayList<>();
+		ObservableList<Attribute> attributes = FXCollections.observableArrayList();
 		attributes.clear();
 
 		try {

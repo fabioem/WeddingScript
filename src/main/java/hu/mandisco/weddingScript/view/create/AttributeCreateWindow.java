@@ -24,13 +24,7 @@ public class AttributeCreateWindow {
 
 	private static WeddingScriptController weddingScriptController = new WeddingScriptController();
 
-	private ObservableList<Attribute> attributeItems;
-
-	public AttributeCreateWindow(ObservableList<Attribute> attributeItems) {
-		this.attributeItems = attributeItems;
-	}
-
-	public void display() {
+	public void display(ObservableList<Attribute> attributes) {
 		Stage window = new Stage();
 
 		// Block events to other windows
@@ -92,15 +86,13 @@ public class AttributeCreateWindow {
 			attribute.setAttrType(attrTypeComboBox.getValue());
 			attribute.setMandatory(isMandatoryInput.isPressed());
 
-
 			if (nameInput.getText().isEmpty()) {
 				Alert alert = new Alert(AlertType.ERROR, "A név nem lehet üres!", ButtonType.OK);
 				alert.setHeaderText("Üres név");
 				alert.showAndWait();
 			} else {
 				weddingScriptController.addAttribute(attribute);
-				attributeItems.clear();
-				attributeItems.addAll(weddingScriptController.getAttributes());
+				attributes.add(attribute);
 				window.close();
 			}
 
@@ -118,8 +110,8 @@ public class AttributeCreateWindow {
 		});
 
 		// Add everything to grid
-		grid.getChildren().addAll(nameLabel, nameInput, defValueLabel, defValueInput, isMandatoryLabel, isMandatoryInput, attrTypeLabel,
-				attrTypeComboBox, saveButton, closeButton);
+		grid.getChildren().addAll(nameLabel, nameInput, defValueLabel, defValueInput, isMandatoryLabel,
+				isMandatoryInput, attrTypeLabel, attrTypeComboBox, saveButton, closeButton);
 
 		Scene scene = new Scene(grid);
 		window.setScene(scene);

@@ -50,7 +50,9 @@ public class ScriptEditWindow {
 
 	private BorderPane layout = new BorderPane();
 
-	public void display(Stage window, Script script) {
+	public void display(List<Script> scripts, Script script) {
+		Stage window = new Stage();
+
 		TabPane tabPane = new TabPane();
 
 		Tab attributesTab = new Tab("Forgatókönyv");
@@ -476,6 +478,7 @@ public class ScriptEditWindow {
 				}
 
 				weddingScriptController.setScript(script);
+				scripts.set(scripts.indexOf(script), script);
 				window.close();
 			}
 
