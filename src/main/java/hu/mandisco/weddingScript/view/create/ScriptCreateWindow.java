@@ -7,13 +7,13 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -22,13 +22,7 @@ public class ScriptCreateWindow {
 
 	private static WeddingScriptController weddingScriptController = new WeddingScriptController();
 
-	private ObservableList<Script> scriptItems;
-
-	public ScriptCreateWindow(ObservableList<Script> scriptItems) {
-		this.scriptItems = scriptItems;
-	}
-
-	public void display() {
+	public void display(ObservableList<Script> scripts) {
 		Stage window = new Stage();
 
 		// Block events to other windows
@@ -82,9 +76,7 @@ public class ScriptCreateWindow {
 				alert.showAndWait();
 			} else {
 				weddingScriptController.addScript(script);
-				// TODO: sometimes error when adding new script
-				scriptItems.clear();
-				scriptItems.addAll(weddingScriptController.getScripts());
+				scripts.add(script);
 				window.close();
 			}
 
@@ -94,16 +86,16 @@ public class ScriptCreateWindow {
 		closeButton.setOnAction(e -> window.close());
 		GridPane.setConstraints(closeButton, 1, 3);
 
-		//ESC button
+		// ESC button
 		window.addEventHandler(KeyEvent.KEY_RELEASED, (KeyEvent event) -> {
-	        if (KeyCode.ESCAPE == event.getCode()) {
-	        	window.close();
-	        }
-	    });
+			if (KeyCode.ESCAPE == event.getCode()) {
+				window.close();
+			}
+		});
 
 		// Add everything to grid
-		grid.getChildren().addAll(nameLabel, nameInput, commentLabel, commentInput, dateLabel,
-				dateInput, saveButton, closeButton);
+		grid.getChildren().addAll(nameLabel, nameInput, commentLabel, commentInput, dateLabel, dateInput,
+				saveButton, closeButton);
 
 		Scene scene = new Scene(grid, 300, 200);
 		window.setScene(scene);

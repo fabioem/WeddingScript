@@ -8,7 +8,6 @@ import hu.mandisco.weddingscript.model.bean.Script;
 import hu.mandisco.weddingscript.view.create.ScriptCreateWindow;
 import hu.mandisco.weddingscript.view.edit.ScriptEditWindow;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.SortedList;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
@@ -35,15 +34,12 @@ public class ScriptsView extends BorderPane {
 		TableView<Script> scriptTable = new TableView<>();
 		ObservableList<Script> scripts = weddingScriptController.getScripts();
 		scriptTable.setEditable(true);
-		SortedList<Script> sortedData = new SortedList<>(scripts);
-		sortedData.comparatorProperty().bind(scriptTable.comparatorProperty());
 
 		// TOOLBAR
 		Button newButton = new Button("Új");
 		newButton.setOnAction(e -> {
-			ObservableList<Script> scriptItems = scriptTable.getItems();
-			ScriptCreateWindow window = new ScriptCreateWindow(scriptItems);
-			window.display();
+			ScriptCreateWindow window = new ScriptCreateWindow();
+			window.display(scripts);
 		});
 
 		Button deleteButton = new Button("Törlés");
@@ -51,7 +47,6 @@ public class ScriptsView extends BorderPane {
 			Script selectedItem = scriptTable.getSelectionModel().getSelectedItem();
 			if (selectedItem != null) {
 				scripts.remove(selectedItem);
-				scriptTable.setItems(sortedData);
 				weddingScriptController.removeScript(selectedItem);
 			}
 		});
@@ -68,9 +63,9 @@ public class ScriptsView extends BorderPane {
 
 					@Override
 					public void handle(WindowEvent paramT) {
+						//TODO: maybe get item, then remove and readd it instead of clear and addall
 						scripts.clear();
 						scripts.addAll(weddingScriptController.getScripts());
-						scriptTable.setItems(sortedData);
 					}
 				});
 
@@ -104,8 +99,7 @@ public class ScriptsView extends BorderPane {
 		commentCol.setCellValueFactory(new PropertyValueFactory<Script, String>("comment"));
 
 		TableColumn<Script, LocalDateTime> lastEditedCol = new TableColumn<>("Utolsó módosítás");
-		lastEditedCol
-				.setCellValueFactory(new PropertyValueFactory<Script, LocalDateTime>("lastEdited"));
+		lastEditedCol.setCellValueFactory(new PropertyValueFactory<Script, LocalDateTime>("lastEdited"));
 		lastEditedCol.setCellFactory(column -> new TableCell<Script, LocalDateTime>() {
 			@Override
 			protected void updateItem(LocalDateTime item, boolean empty) {
@@ -139,7 +133,7 @@ public class ScriptsView extends BorderPane {
 		scriptTable.getColumns().add(lastEditedCol);
 		scriptTable.getColumns().add(createdCol);
 
-		scriptTable.getItems().addAll(scripts);
+		scriptTable.setItems(scripts);
 
 		this.setTop(topMenu);
 
