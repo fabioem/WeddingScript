@@ -232,10 +232,8 @@ public class ScriptEditWindow {
 				if (event.getClickCount() == 2 && (!row.isEmpty())) {
 					Program rowData = row.getItem();
 
-					Stage stage = new Stage();
-
 					ScriptProgramAttributesEditWindow editWindow = new ScriptProgramAttributesEditWindow();
-					editWindow.display(stage, rowData, script);
+					editWindow.display(rowData, script);
 
 				}
 			});

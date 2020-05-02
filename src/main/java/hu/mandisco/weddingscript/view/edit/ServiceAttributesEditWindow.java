@@ -31,7 +31,9 @@ public class ServiceAttributesEditWindow {
 
 	private WeddingScriptController weddingScriptController = new WeddingScriptController();
 
-	public void display(Stage window, Service service) {
+	public void display(Service service) {
+		Stage window = new Stage();
+
 		// Block events to other windows
 		window.initModality(Modality.APPLICATION_MODAL);
 		window.setTitle("Szolgáltatás attribútumok szerkesztése");

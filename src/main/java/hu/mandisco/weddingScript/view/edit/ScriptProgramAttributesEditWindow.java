@@ -32,7 +32,9 @@ public class ScriptProgramAttributesEditWindow {
 
 	private WeddingScriptController weddingScriptController = new WeddingScriptController();
 
-	public void display(Stage window, Program program, Script script) {
+	public void display(Program program, Script script) {
+		Stage window = new Stage();
+
 		// Block events to other windows
 		window.initModality(Modality.APPLICATION_MODAL);
 		window.setTitle("Program attribútumok szerkesztése");

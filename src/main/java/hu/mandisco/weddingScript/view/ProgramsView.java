@@ -10,7 +10,6 @@ import hu.mandisco.weddingscript.view.edit.ProgramAttributesEditWindow;
 import hu.mandisco.weddingscript.view.edit.ProgramEditWindow;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
-import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -20,8 +19,6 @@ import javafx.scene.control.ToolBar;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 public class ProgramsView extends BorderPane {
 
@@ -44,19 +41,8 @@ public class ProgramsView extends BorderPane {
 		// TOOLBAR
 		Button newButton = new Button("Új");
 		newButton.setOnAction(e -> {
-			Stage stage = new Stage();
-			stage.setOnHiding(new EventHandler<WindowEvent>() {
-
-				@Override
-				public void handle(WindowEvent paramT) {
-					programs.clear();
-					programs.addAll(weddingScriptController.getPrograms());
-					programTable.setItems(sortedData);
-				}
-			});
 			ProgramCreateWindow window = new ProgramCreateWindow();
-			window.display(stage);
-
+			window.display(programs);
 		});
 
 		Button deleteButton = new Button("Törlés");
@@ -64,39 +50,25 @@ public class ProgramsView extends BorderPane {
 			Program selectedItem = programTable.getSelectionModel().getSelectedItem();
 			if (selectedItem != null) {
 				programs.remove(selectedItem);
-				programTable.setItems(sortedData);
 				weddingScriptController.removeProgram(selectedItem);
 			}
 		});
 
 		Button editButton = new Button("Szerkesztés");
 		editButton.setOnAction(e -> {
-
-			Stage stage = new Stage();
-			stage.setOnHiding(new EventHandler<WindowEvent>() {
-
-				@Override
-				public void handle(WindowEvent paramT) {
-					programs.clear();
-					programs.addAll(weddingScriptController.getPrograms());
-					programTable.setItems(sortedData);
-				}
-			});
-
 			Program selectedItem = programTable.getSelectionModel().getSelectedItem();
 			if (selectedItem != null) {
 				ProgramEditWindow window = new ProgramEditWindow();
-				window.display(stage, selectedItem);
+				window.display(programs, selectedItem);
 			}
 		});
 
 		Button attributesButton = new Button("Attribútumok");
 		attributesButton.setOnAction(e -> {
-			Stage stage = new Stage();
 			Program selectedItem = programTable.getSelectionModel().getSelectedItem();
 			if (selectedItem != null) {
 				ProgramAttributesEditWindow window = new ProgramAttributesEditWindow();
-				window.display(stage, selectedItem);
+				window.display(selectedItem);
 			}
 		});
 
@@ -106,21 +78,10 @@ public class ProgramsView extends BorderPane {
 		programTable.setRowFactory(tv -> {
 			TableRow<Program> row = new TableRow<>();
 			row.setOnMouseClicked(event -> {
-				Stage stage = new Stage();
-				stage.setOnHiding(new EventHandler<WindowEvent>() {
-
-					@Override
-					public void handle(WindowEvent paramT) {
-						programs.clear();
-						programs.addAll(weddingScriptController.getPrograms());
-						programTable.setItems(sortedData);
-					}
-				});
-
 				if (event.getClickCount() == 2 && (!row.isEmpty())) {
 					Program selectedProgram = row.getItem();
 					ProgramEditWindow window = new ProgramEditWindow();
-					window.display(stage, selectedProgram);
+					window.display(programs, selectedProgram);
 				}
 			});
 			return row;
@@ -130,8 +91,7 @@ public class ProgramsView extends BorderPane {
 		nameCol.setCellValueFactory(new PropertyValueFactory<Program, String>("name"));
 
 		TableColumn<Program, LocalDateTime> defaultTimeCol = new TableColumn<>("Idő");
-		defaultTimeCol.setCellValueFactory(
-				new PropertyValueFactory<Program, LocalDateTime>("defaultTime"));
+		defaultTimeCol.setCellValueFactory(new PropertyValueFactory<Program, LocalDateTime>("defaultTime"));
 		defaultTimeCol.setCellFactory(column ->
 
 		new TableCell<Program, LocalDateTime>() {

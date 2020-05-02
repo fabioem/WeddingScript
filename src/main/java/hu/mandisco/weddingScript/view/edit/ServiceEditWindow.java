@@ -2,6 +2,7 @@ package hu.mandisco.weddingscript.view.edit;
 
 import hu.mandisco.weddingscript.controller.WeddingScriptController;
 import hu.mandisco.weddingscript.model.bean.Service;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -19,7 +20,9 @@ import javafx.stage.Stage;
 public class ServiceEditWindow {
 	private static WeddingScriptController weddingScriptController = new WeddingScriptController();
 
-	public void display(Stage window, Service service) {
+	public void display(ObservableList<Service> services, Service service) {
+		Stage window = new Stage();
+
 		// Block events to other windows
 		window.initModality(Modality.APPLICATION_MODAL);
 		window.setTitle("Szolgáltatás szerkesztése");
@@ -53,6 +56,7 @@ public class ServiceEditWindow {
 			} else {
 				service.setName(nameInput.getText());
 				weddingScriptController.setService(service);
+				services.set(services.indexOf(service), service);
 				window.close();
 			}
 		});

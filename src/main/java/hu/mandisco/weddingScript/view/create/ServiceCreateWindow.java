@@ -21,13 +21,7 @@ public class ServiceCreateWindow {
 
 	private static WeddingScriptController weddingScriptController = new WeddingScriptController();
 
-	private ObservableList<Service> serviceItems;
-
-	public ServiceCreateWindow(ObservableList<Service> serviceItems) {
-		this.serviceItems = serviceItems;
-	}
-
-	public void display() {
+	public void display(ObservableList<Service> serviceItems) {
 		Stage window = new Stage();
 
 		// Block events to other windows
@@ -62,8 +56,7 @@ public class ServiceCreateWindow {
 				alert.showAndWait();
 			} else {
 				weddingScriptController.addService(service);
-				serviceItems.clear();
-				serviceItems.addAll(weddingScriptController.getServices());
+				serviceItems.add(service);
 				window.close();
 			}
 
@@ -73,12 +66,12 @@ public class ServiceCreateWindow {
 		closeButton.setOnAction(e -> window.close());
 		GridPane.setConstraints(closeButton, 1, 2);
 
-		//ESC button
+		// ESC button
 		window.addEventHandler(KeyEvent.KEY_RELEASED, (KeyEvent event) -> {
-	        if (KeyCode.ESCAPE == event.getCode()) {
-	        	window.close();
-	        }
-	    });
+			if (KeyCode.ESCAPE == event.getCode()) {
+				window.close();
+			}
+		});
 
 		// Add everything to grid
 		grid.getChildren().addAll(nameLabel, nameInput, saveButton, closeButton);

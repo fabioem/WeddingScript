@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import hu.mandisco.weddingscript.controller.WeddingScriptController;
 import hu.mandisco.weddingscript.model.bean.Program;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -27,7 +28,9 @@ public class ProgramEditWindow {
 
 	private static WeddingScriptController weddingScriptController = new WeddingScriptController();
 
-	public void display(Stage window, Program program) {
+	public void display(ObservableList<Program> programs, Program program) {
+		Stage window = new Stage();
+
 		// Block events to other windows
 		window.initModality(Modality.APPLICATION_MODAL);
 		window.setTitle("Program szerkesztése");
@@ -64,7 +67,8 @@ public class ProgramEditWindow {
 		Label dayLabel = new Label("Nap: ");
 		Spinner<Integer> daySpinner = new Spinner<>();
 		daySpinner.setEditable(true);
-		SpinnerValueFactory<Integer> daySpinnerFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 1, 0);
+		SpinnerValueFactory<Integer> daySpinnerFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0,
+				1, 0);
 		daySpinner.setValueFactory(daySpinnerFactory);
 		daySpinner.getValueFactory().setValue(program.getDefaultTime().getDayOfMonth() - 1);
 		daySpinner.focusedProperty().addListener((observable, oldValue, newValue) -> {
@@ -77,7 +81,8 @@ public class ProgramEditWindow {
 		Label hourLabel = new Label("Óra: ");
 		Spinner<Integer> hourSpinner = new Spinner<>();
 		hourSpinner.setEditable(true);
-		SpinnerValueFactory<Integer> hourSpinnerFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 23, 0);
+		SpinnerValueFactory<Integer> hourSpinnerFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(
+				0, 23, 0);
 		hourSpinner.setValueFactory(hourSpinnerFactory);
 		hourSpinner.getValueFactory().setValue(program.getDefaultTime().getHour());
 		hourSpinner.focusedProperty().addListener((observable, oldValue, newValue) -> {
@@ -90,8 +95,8 @@ public class ProgramEditWindow {
 		Label minLabel = new Label("Perc: ");
 		Spinner<Integer> minSpinner = new Spinner<>();
 		minSpinner.setEditable(true);
-		SpinnerValueFactory<Integer> minuteSpinnerFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 59,
-				0);
+		SpinnerValueFactory<Integer> minuteSpinnerFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(
+				0, 59, 0);
 		minSpinner.setValueFactory(minuteSpinnerFactory);
 		minSpinner.getValueFactory().setValue(program.getDefaultTime().getMinute());
 		minSpinner.focusedProperty().addListener((observable, oldValue, newValue) -> {
@@ -100,7 +105,8 @@ public class ProgramEditWindow {
 			}
 		});
 
-		defaultTimeHBox.getChildren().addAll(dayLabel, daySpinner, hourLabel, hourSpinner, minLabel, minSpinner);
+		defaultTimeHBox.getChildren().addAll(dayLabel, daySpinner, hourLabel, hourSpinner, minLabel,
+				minSpinner);
 		GridPane.setConstraints(defaultTimeHBox, 1, 1);
 
 		// IsDefault Label
@@ -118,8 +124,8 @@ public class ProgramEditWindow {
 		saveButton.setDefaultButton(true);
 		saveButton.setOnAction(e -> {
 			program.setName(nameInput.getText());
-			LocalDateTime defaultTime = LocalDateTime.of(0, 1, daySpinner.getValue() + 1, hourSpinner.getValue(),
-					minSpinner.getValue(), 0);
+			LocalDateTime defaultTime = LocalDateTime.of(0, 1, daySpinner.getValue() + 1,
+					hourSpinner.getValue(), minSpinner.getValue(), 0);
 			program.setDefaultTime(defaultTime);
 			program.setDefaultProgram(isDefaultBox.isSelected());
 			if (nameInput.getText().isEmpty()) {
@@ -128,6 +134,7 @@ public class ProgramEditWindow {
 				alert.showAndWait();
 			} else {
 				weddingScriptController.setProgram(program);
+				programs.set(programs.indexOf(program), program);
 				window.close();
 			}
 
@@ -137,16 +144,16 @@ public class ProgramEditWindow {
 		closeButton.setOnAction(e -> window.close());
 		GridPane.setConstraints(closeButton, 1, 3);
 
-		//ESC button
+		// ESC button
 		window.addEventHandler(KeyEvent.KEY_RELEASED, (KeyEvent event) -> {
-	        if (KeyCode.ESCAPE == event.getCode()) {
-	        	window.close();
-	        }
-	    });
+			if (KeyCode.ESCAPE == event.getCode()) {
+				window.close();
+			}
+		});
 
 		// Add everything to grid
-		grid.getChildren().addAll(nameLabel, nameInput, defaultTimeLabel, defaultTimeHBox, isDefaultLabel, isDefaultBox,
-				saveButton, closeButton);
+		grid.getChildren().addAll(nameLabel, nameInput, defaultTimeLabel, defaultTimeHBox, isDefaultLabel,
+				isDefaultBox, saveButton, closeButton);
 
 		Scene scene = new Scene(grid);
 		window.setScene(scene);

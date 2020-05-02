@@ -31,7 +31,9 @@ public class ProgramAttributesEditWindow {
 
 	private WeddingScriptController weddingScriptController = new WeddingScriptController();
 
-	public void display(Stage window, Program program) {
+	public void display(Program program) {
+		Stage window = new Stage();
+
 		// Block events to other windows
 		window.initModality(Modality.APPLICATION_MODAL);
 		window.setTitle("Program attribútumok szerkesztése");
