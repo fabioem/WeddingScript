@@ -38,8 +38,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 	Path currentWorkingFolder = Paths.get("").toAbsolutePath();
 	Path pathToTheDatabaseFile = currentWorkingFolder.resolve(DATABASE_FILE);
-	String databaseConnectionURL = JDBC_CONNECTION_PREFIX
-			+ pathToTheDatabaseFile.toUri().toString();
+	String databaseConnectionURL = JDBC_CONNECTION_PREFIX + pathToTheDatabaseFile.toUri().toString();
 
 	public WeddingScriptDAOSQLite() {
 		super();
@@ -80,8 +79,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				Program program = new Program();
 				program.setName(name);
 				program.setProgId(progId);
-				program.setDefaultTime(LocalDateTime.ofInstant(Instant.ofEpochMilli(defaultTime),
-						ZoneId.of("+0")));
+				program.setDefaultTime(
+						LocalDateTime.ofInstant(Instant.ofEpochMilli(defaultTime), ZoneId.of("+0")));
 				program.setDefaultProgram(defaultProgram);
 
 				programs.add(program);
@@ -89,8 +88,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 			conn.commit();
 		} catch (SQLException e) {
-			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE,
-					errorDesc));
+			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE, errorDesc));
 			LOGGER.error(e);
 		} finally {
 
@@ -99,8 +97,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					rs.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_RESULTSET, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_RESULTSET,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -109,8 +107,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					st.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_STATEMENT, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_STATEMENT,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -119,8 +117,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_CONNECTION, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_CONNECTION,
+						errorDesc));
 				LOGGER.error(e);
 			}
 		}
@@ -166,8 +164,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 			conn.commit();
 		} catch (SQLException e) {
-			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE,
-					errorDesc));
+			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE, errorDesc));
 			LOGGER.error(e);
 		} finally {
 
@@ -176,8 +173,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					rs.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_RESULTSET, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_RESULTSET,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -186,8 +183,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					st.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_STATEMENT, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_STATEMENT,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -196,8 +193,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_CONNECTION, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_CONNECTION,
+						errorDesc));
 				LOGGER.error(e);
 			}
 		}
@@ -231,8 +228,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 			conn.commit();
 		} catch (SQLException e) {
-			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE,
-					errorDesc));
+			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE, errorDesc));
 			LOGGER.error(e);
 		} finally {
 
@@ -241,8 +237,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					rs.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_RESULTSET, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_RESULTSET,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -251,8 +247,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					st.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_STATEMENT, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_STATEMENT,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -261,8 +257,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_CONNECTION, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_CONNECTION,
+						errorDesc));
 				LOGGER.error(e);
 			}
 		}
@@ -286,25 +282,22 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 			rs = st.executeQuery("SELECT * FROM scripts");
 
 			while (rs.next()) {
-				SimpleDateFormat dateFormat = new SimpleDateFormat(
-						Labels.DATEFORMAT_DATETIME_FOR_INSERT);
+				SimpleDateFormat dateFormat = new SimpleDateFormat(Labels.DATEFORMAT_DATETIME_FOR_INSERT);
 				int scriptId = rs.getInt("scriptId");
 				String name = rs.getString("name");
 				LocalDateTime date = rs.getString("date").isEmpty() ? null
 						: dateToLocalDateTime(dateFormat.parse(rs.getString("date")));
 				String comment = rs.getString("comment");
 
-				LocalDateTime lastEdited = dateToLocalDateTime(
-						dateFormat.parse(rs.getString("lastEdited")));
-				LocalDateTime created = dateToLocalDateTime(
-						dateFormat.parse(rs.getString("created")));
+				LocalDateTime lastEdited = dateToLocalDateTime(dateFormat.parse(rs.getString("lastEdited")));
+				LocalDateTime created = dateToLocalDateTime(dateFormat.parse(rs.getString("created")));
 
 				Script script = new Script();
 				script.setName(name);
 				script.setScriptId(scriptId);
 				script.setDate(date);
 				script.setComment(comment);
-				script.setLastEdited(lastEdited);
+				script.updateLastEdited(lastEdited);
 				script.setCreated(created);
 
 				scripts.add(script);
@@ -312,8 +305,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 			conn.commit();
 		} catch (SQLException e) {
-			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE,
-					errorDesc));
+			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE, errorDesc));
 			LOGGER.error(e);
 		} catch (ParseException e) {
 			LOGGER.error("Failed to parse a date.");
@@ -325,8 +317,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					rs.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_RESULTSET, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_RESULTSET,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -335,8 +327,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					st.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_STATEMENT, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_STATEMENT,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -345,8 +337,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_CONNECTION, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_CONNECTION,
+						errorDesc));
 				LOGGER.error(e);
 			}
 		}
@@ -383,8 +375,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 			conn.commit();
 		} catch (SQLException e) {
-			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE,
-					errorDesc));
+			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE, errorDesc));
 			LOGGER.error(e);
 		} finally {
 
@@ -393,8 +384,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					rs.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_RESULTSET, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_RESULTSET,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -403,8 +394,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					st.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_STATEMENT, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_STATEMENT,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -413,8 +404,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_CONNECTION, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_CONNECTION,
+						errorDesc));
 				LOGGER.error(e);
 			}
 		}
@@ -431,18 +422,26 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 		PreparedStatement pst = null;
 		ResultSet rs = null;
 		Statement st = null;
+
+		LocalDateTime dateAndTimeInHungary = LocalDateTime.now(ZoneId.of("Europe/Budapest"));
+
 		try {
 
 			conn = DriverManager.getConnection(databaseConnectionURL);
-			pst = conn
-					.prepareStatement("INSERT INTO scripts(name, date, comment) VALUES (?, ?, ?)");
+			pst = conn.prepareStatement("INSERT INTO scripts(name, date, comment, lastEdited, created) "
+					+ "VALUES (?, ?, ?, ?, ?)");
 
 			int index = 1;
 			pst.setString(index++, script.getName());
-			pst.setString(index++, script.getDate() == null ? ""
-					: script.getDate().format(
-							DateTimeFormatter.ofPattern(Labels.DATEFORMAT_DATETIME_FOR_INSERT)));
+			pst.setString(index++,
+					script.getDate() == null ? ""
+							: script.getDate().format(
+									DateTimeFormatter.ofPattern(Labels.DATEFORMAT_DATETIME_FOR_INSERT)));
 			pst.setString(index++, script.getComment());
+			pst.setString(index++, dateAndTimeInHungary
+					.format(DateTimeFormatter.ofPattern(Labels.DATEFORMAT_DATETIME_FOR_INSERT)));
+			pst.setString(index++, dateAndTimeInHungary
+					.format(DateTimeFormatter.ofPattern(Labels.DATEFORMAT_DATETIME_FOR_INSERT)));
 
 			int rowsAffected = pst.executeUpdate();
 			if (rowsAffected == 1) {
@@ -451,16 +450,17 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 			st = conn.createStatement();
 			rs = st.executeQuery("SELECT last_insert_rowid() AS lastId");
-
 			int rowId = -1;
 			while (rs.next()) {
 				rowId = rs.getInt("lastId");
 			}
 			script.setScriptId(rowId);
 
+			script.updateLastEdited(dateAndTimeInHungary);
+			script.setCreated(dateAndTimeInHungary);
+
 		} catch (SQLException e) {
-			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE,
-					errorDesc));
+			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE, errorDesc));
 			LOGGER.error(e);
 		} finally {
 
@@ -469,8 +469,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					st.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_STATEMENT, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_STATEMENT,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -479,8 +479,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					rs.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_RESULTSET, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_RESULTSET,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -489,8 +489,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					rs.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_RESULTSET, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_RESULTSET,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -499,8 +499,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_STATEMENT, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_STATEMENT,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -509,8 +509,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_CONNECTION, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_CONNECTION,
+						errorDesc));
 				LOGGER.error(e);
 			}
 		}
@@ -537,8 +537,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				rvSucceeded = true;
 			}
 		} catch (SQLException e) {
-			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE,
-					errorDesc));
+			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE, errorDesc));
 			LOGGER.error(e);
 		} finally {
 
@@ -547,8 +546,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_STATEMENT, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_STATEMENT,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -557,8 +556,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_CONNECTION, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_CONNECTION,
+						errorDesc));
 				LOGGER.error(e);
 			}
 		}
@@ -597,18 +596,16 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				Program program = new Program();
 				program.setName(name);
 				program.setProgId(progId);
-				program.setDefaultTime(LocalDateTime.ofInstant(Instant.ofEpochMilli(defaultTime),
-						ZoneId.of("+0")));
-				program.setTime(
-						LocalDateTime.ofInstant(Instant.ofEpochMilli(time), ZoneId.of("+0")));
+				program.setDefaultTime(
+						LocalDateTime.ofInstant(Instant.ofEpochMilli(defaultTime), ZoneId.of("+0")));
+				program.setTime(LocalDateTime.ofInstant(Instant.ofEpochMilli(time), ZoneId.of("+0")));
 				program.setDefaultProgram(defaultProgram);
 				programs.add(program);
 			}
 
 			conn.commit();
 		} catch (SQLException e) {
-			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE,
-					errorDesc));
+			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE, errorDesc));
 			LOGGER.error(e);
 		} finally {
 
@@ -617,8 +614,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					rs.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_RESULTSET, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_RESULTSET,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -627,8 +624,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_STATEMENT, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_STATEMENT,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -637,8 +634,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_CONNECTION, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_CONNECTION,
+						errorDesc));
 				LOGGER.error(e);
 			}
 		}
@@ -677,8 +674,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				Program program = new Program();
 				program.setName(name);
 				program.setProgId(progId);
-				program.setDefaultTime(LocalDateTime.ofInstant(Instant.ofEpochMilli(defaultTime),
-						ZoneId.of("+0")));
+				program.setDefaultTime(
+						LocalDateTime.ofInstant(Instant.ofEpochMilli(defaultTime), ZoneId.of("+0")));
 				program.setDefaultProgram(defaultProgram);
 
 				programs.add(program);
@@ -686,8 +683,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 			conn.commit();
 		} catch (SQLException e) {
-			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE,
-					errorDesc));
+			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE, errorDesc));
 			LOGGER.error(e);
 		} finally {
 
@@ -696,8 +692,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					rs.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_RESULTSET, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_RESULTSET,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -706,8 +702,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_STATEMENT, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_STATEMENT,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -716,8 +712,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_CONNECTION, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_CONNECTION,
+						errorDesc));
 				LOGGER.error(e);
 			}
 		}
@@ -735,8 +731,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 		try {
 
 			conn = DriverManager.getConnection(databaseConnectionURL);
-			pst = conn.prepareStatement(
-					"INSERT INTO scriptProg(scriptId, progId, time) VALUES (?, ?, ?)");
+			pst = conn.prepareStatement("INSERT INTO scriptProg(scriptId, progId, time) VALUES (?, ?, ?)");
 
 			int index = 1;
 			pst.setInt(index++, script.getScriptId());
@@ -753,8 +748,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				rvSucceeded = true;
 			}
 		} catch (SQLException e) {
-			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE,
-					errorDesc));
+			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE, errorDesc));
 			LOGGER.error(e);
 		} finally {
 
@@ -763,8 +757,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_STATEMENT, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_STATEMENT,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -773,8 +767,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_CONNECTION, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_CONNECTION,
+						errorDesc));
 				LOGGER.error(e);
 			}
 		}
@@ -817,8 +811,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 			conn.commit();
 
 		} catch (SQLException e) {
-			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE,
-					errorDesc));
+			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE, errorDesc));
 			LOGGER.error(e);
 		} finally {
 
@@ -827,8 +820,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					rs.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_RESULTSET, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_RESULTSET,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -837,8 +830,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_STATEMENT, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_STATEMENT,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -847,8 +840,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_CONNECTION, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_CONNECTION,
+						errorDesc));
 				LOGGER.error(e);
 			}
 		}
@@ -874,8 +867,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				rvSucceeded = true;
 			}
 		} catch (SQLException e) {
-			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE,
-					errorDesc));
+			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE, errorDesc));
 			LOGGER.error(e);
 		} finally {
 
@@ -884,8 +876,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_STATEMENT, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_STATEMENT,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -894,8 +886,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_CONNECTION, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_CONNECTION,
+						errorDesc));
 				LOGGER.error(e);
 			}
 		}
@@ -934,8 +926,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				rvSucceeded = true;
 			}
 		} catch (SQLException e) {
-			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE,
-					errorDesc));
+			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE, errorDesc));
 			LOGGER.error(e);
 		} finally {
 
@@ -944,8 +935,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_STATEMENT, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_STATEMENT,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -954,8 +945,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_CONNECTION, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_CONNECTION,
+						errorDesc));
 				LOGGER.error(e);
 			}
 		}
@@ -995,8 +986,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				rvSucceeded = true;
 			}
 		} catch (SQLException e) {
-			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE,
-					errorDesc));
+			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE, errorDesc));
 			LOGGER.error(e);
 		} finally {
 
@@ -1005,8 +995,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_STATEMENT, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_STATEMENT,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -1015,8 +1005,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_CONNECTION, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_CONNECTION,
+						errorDesc));
 				LOGGER.error(e);
 			}
 		}
@@ -1043,8 +1033,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				rvSucceeded = true;
 			}
 		} catch (SQLException e) {
-			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE,
-					errorDesc));
+			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE, errorDesc));
 			LOGGER.error(e);
 		} finally {
 
@@ -1053,8 +1042,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_STATEMENT, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_STATEMENT,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -1063,8 +1052,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_CONNECTION, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_CONNECTION,
+						errorDesc));
 				LOGGER.error(e);
 			}
 		}
@@ -1098,8 +1087,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				rvSucceeded = true;
 			}
 		} catch (SQLException e) {
-			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE,
-					errorDesc));
+			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE, errorDesc));
 			LOGGER.error(e);
 		} finally {
 
@@ -1108,8 +1096,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_STATEMENT, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_STATEMENT,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -1118,8 +1106,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_CONNECTION, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_CONNECTION,
+						errorDesc));
 				LOGGER.error(e);
 			}
 		}
@@ -1168,8 +1156,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 			conn.commit();
 		} catch (SQLException e) {
-			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE,
-					errorDesc));
+			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE, errorDesc));
 			LOGGER.error(e);
 		} finally {
 
@@ -1178,8 +1165,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					rs.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_RESULTSET, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_RESULTSET,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -1188,8 +1175,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_STATEMENT, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_STATEMENT,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -1198,8 +1185,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_CONNECTION, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_CONNECTION,
+						errorDesc));
 				LOGGER.error(e);
 			}
 		}
@@ -1247,8 +1234,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 			conn.commit();
 		} catch (SQLException e) {
-			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE,
-					errorDesc));
+			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE, errorDesc));
 			LOGGER.error(e);
 		} finally {
 
@@ -1257,8 +1243,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					rs.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_RESULTSET, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_RESULTSET,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -1267,8 +1253,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_STATEMENT, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_STATEMENT,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -1277,8 +1263,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_CONNECTION, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_CONNECTION,
+						errorDesc));
 				LOGGER.error(e);
 			}
 		}
@@ -1298,8 +1284,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 		try {
 
 			conn = DriverManager.getConnection(databaseConnectionURL);
-			pst = conn.prepareStatement(
-					"INSERT INTO scriptAttr(scriptId, attrId, value) VALUES (?, ?, ?)");
+			pst = conn.prepareStatement("INSERT INTO scriptAttr(scriptId, attrId, value) VALUES (?, ?, ?)");
 
 			int index = 1;
 
@@ -1312,8 +1297,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				rvSucceeded = true;
 			}
 		} catch (SQLException e) {
-			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE,
-					errorDesc));
+			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE, errorDesc));
 			LOGGER.error(e);
 		} finally {
 
@@ -1322,8 +1306,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_STATEMENT, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_STATEMENT,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -1332,8 +1316,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_CONNECTION, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_CONNECTION,
+						errorDesc));
 				LOGGER.error(e);
 			}
 		}
@@ -1375,8 +1359,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 			conn.commit();
 		} catch (SQLException e) {
-			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE,
-					errorDesc));
+			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE, errorDesc));
 			LOGGER.error(e);
 		} finally {
 
@@ -1385,8 +1368,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					rs.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_RESULTSET, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_RESULTSET,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -1395,8 +1378,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_STATEMENT, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_STATEMENT,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -1405,8 +1388,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_CONNECTION, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_CONNECTION,
+						errorDesc));
 				LOGGER.error(e);
 			}
 		}
@@ -1424,8 +1407,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 		try {
 
 			conn = DriverManager.getConnection(databaseConnectionURL);
-			pst = conn.prepareStatement(
-					"INSERT INTO scriptService(scriptId, serviceId) VALUES (?, ?)");
+			pst = conn.prepareStatement("INSERT INTO scriptService(scriptId, serviceId) VALUES (?, ?)");
 
 			int index = 1;
 			pst.setInt(index++, script.getScriptId());
@@ -1436,8 +1418,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				rvSucceeded = true;
 			}
 		} catch (SQLException e) {
-			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE,
-					errorDesc));
+			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE, errorDesc));
 			LOGGER.error(e);
 		} finally {
 
@@ -1446,8 +1427,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_STATEMENT, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_STATEMENT,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -1456,8 +1437,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_CONNECTION, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_CONNECTION,
+						errorDesc));
 				LOGGER.error(e);
 			}
 		}
@@ -1500,8 +1481,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 			conn.commit();
 		} catch (SQLException e) {
-			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE,
-					errorDesc));
+			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE, errorDesc));
 			LOGGER.error(e);
 		} finally {
 
@@ -1510,8 +1490,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					rs.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_RESULTSET, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_RESULTSET,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -1520,8 +1500,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_STATEMENT, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_STATEMENT,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -1530,8 +1510,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_CONNECTION, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_CONNECTION,
+						errorDesc));
 				LOGGER.error(e);
 			}
 		}
@@ -1578,8 +1558,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 			conn.commit();
 		} catch (SQLException e) {
-			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE,
-					errorDesc));
+			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE, errorDesc));
 			LOGGER.error(e);
 		} finally {
 
@@ -1588,8 +1567,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					rs.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_RESULTSET, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_RESULTSET,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -1598,8 +1577,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_STATEMENT, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_STATEMENT,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -1608,8 +1587,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_CONNECTION, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_CONNECTION,
+						errorDesc));
 				LOGGER.error(e);
 			}
 		}
@@ -1628,8 +1607,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 		try {
 
 			conn = DriverManager.getConnection(databaseConnectionURL);
-			pst = conn.prepareStatement(
-					"INSERT INTO progAttr(progId, attrId, value) VALUES (?, ?, ?)");
+			pst = conn.prepareStatement("INSERT INTO progAttr(progId, attrId, value) VALUES (?, ?, ?)");
 
 			int index = 1;
 
@@ -1642,8 +1620,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				rvSucceeded = true;
 			}
 		} catch (SQLException e) {
-			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE,
-					errorDesc));
+			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE, errorDesc));
 			LOGGER.error(e);
 		} finally {
 
@@ -1652,8 +1629,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_STATEMENT, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_STATEMENT,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -1662,8 +1639,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_CONNECTION, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_CONNECTION,
+						errorDesc));
 				LOGGER.error(e);
 			}
 		}
@@ -1672,8 +1649,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 	}
 
 	@Override
-	public boolean setScriptAttributeValue(Script script, Attribute attribute,
-			String newAttrValue) {
+	public boolean setScriptAttributeValue(Script script, Attribute attribute, String newAttrValue) {
 		String errorDesc = "editing value of script attribute";
 		boolean rvSucceeded = false;
 		Connection conn = null;
@@ -1682,8 +1658,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 		try {
 
 			conn = DriverManager.getConnection(databaseConnectionURL);
-			pst = conn.prepareStatement(
-					"UPDATE scriptAttr SET value = ? WHERE scriptId = ? AND attrId = ?;");
+			pst = conn.prepareStatement("UPDATE scriptAttr SET value = ? WHERE scriptId = ? AND attrId = ?;");
 
 			int index = 1;
 			pst.setString(index++, newAttrValue);
@@ -1695,8 +1670,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				rvSucceeded = true;
 			}
 		} catch (SQLException e) {
-			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE,
-					errorDesc));
+			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE, errorDesc));
 			LOGGER.error(e);
 		} finally {
 
@@ -1705,8 +1679,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_STATEMENT, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_STATEMENT,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -1715,8 +1689,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_CONNECTION, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_CONNECTION,
+						errorDesc));
 				LOGGER.error(e);
 			}
 		}
@@ -1734,8 +1708,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 		try {
 
 			conn = DriverManager.getConnection(databaseConnectionURL);
-			pst = conn.prepareStatement(
-					"UPDATE scriptProg SET time = ? WHERE scriptId = ? AND progId = ?;");
+			pst = conn.prepareStatement("UPDATE scriptProg SET time = ? WHERE scriptId = ? AND progId = ?;");
 
 			int index = 1;
 
@@ -1753,8 +1726,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				rvSucceeded = true;
 			}
 		} catch (SQLException e) {
-			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE,
-					errorDesc));
+			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE, errorDesc));
 			LOGGER.error(e);
 		} finally {
 
@@ -1763,8 +1735,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_STATEMENT, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_STATEMENT,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -1773,8 +1745,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_CONNECTION, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_CONNECTION,
+						errorDesc));
 				LOGGER.error(e);
 			}
 		}
@@ -1805,8 +1777,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				rvSucceeded = true;
 			}
 		} catch (SQLException e) {
-			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE,
-					errorDesc));
+			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE, errorDesc));
 			LOGGER.error(e);
 		} finally {
 
@@ -1815,8 +1786,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_STATEMENT, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_STATEMENT,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -1825,8 +1796,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_CONNECTION, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_CONNECTION,
+						errorDesc));
 				LOGGER.error(e);
 			}
 		}
@@ -1861,8 +1832,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				rvSucceeded = true;
 			}
 		} catch (SQLException e) {
-			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE,
-					errorDesc));
+			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE, errorDesc));
 			LOGGER.error(e);
 		} finally {
 
@@ -1871,8 +1841,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_STATEMENT, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_STATEMENT,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -1881,8 +1851,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_CONNECTION, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_CONNECTION,
+						errorDesc));
 				LOGGER.error(e);
 			}
 		}
@@ -1905,9 +1875,10 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 			int index = 1;
 			pst.setString(index++, script.getName());
-			pst.setString(index++, script.getDate() == null ? ""
-					: script.getDate().format(
-							DateTimeFormatter.ofPattern(Labels.DATEFORMAT_DATETIME_FOR_INSERT)));
+			pst.setString(index++,
+					script.getDate() == null ? ""
+							: script.getDate().format(
+									DateTimeFormatter.ofPattern(Labels.DATEFORMAT_DATETIME_FOR_INSERT)));
 			pst.setString(index++, script.getComment());
 			pst.setInt(index++, script.getScriptId());
 
@@ -1916,8 +1887,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				rvSucceeded = true;
 			}
 		} catch (SQLException e) {
-			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE,
-					errorDesc));
+			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE, errorDesc));
 			LOGGER.error(e);
 		} finally {
 
@@ -1926,8 +1896,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_STATEMENT, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_STATEMENT,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -1936,8 +1906,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_CONNECTION, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_CONNECTION,
+						errorDesc));
 				LOGGER.error(e);
 			}
 		}
@@ -1968,8 +1938,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				rvSucceeded = true;
 			}
 		} catch (SQLException e) {
-			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE,
-					errorDesc));
+			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE, errorDesc));
 			LOGGER.error(e);
 		} finally {
 
@@ -1978,8 +1947,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_STATEMENT, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_STATEMENT,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -1988,8 +1957,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_CONNECTION, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_CONNECTION,
+						errorDesc));
 				LOGGER.error(e);
 			}
 		}
@@ -2037,8 +2006,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 			conn.commit();
 		} catch (SQLException e) {
-			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE,
-					errorDesc));
+			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE, errorDesc));
 			LOGGER.error(e);
 		} finally {
 
@@ -2047,8 +2015,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					rs.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_RESULTSET, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_RESULTSET,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -2057,8 +2025,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_STATEMENT, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_STATEMENT,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -2067,8 +2035,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_CONNECTION, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_CONNECTION,
+						errorDesc));
 				LOGGER.error(e);
 			}
 		}
@@ -2078,8 +2046,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 	}
 
 	@Override
-	public ObservableList<Attribute> getAttributesNotInScriptProgram(Script script,
-			Program program) {
+	public ObservableList<Attribute> getAttributesNotInScriptProgram(Script script, Program program) {
 		Connection conn = null;
 		PreparedStatement pst = null;
 		ResultSet rs = null;
@@ -2121,8 +2088,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 			conn.commit();
 		} catch (SQLException e) {
-			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE,
-					errorDesc));
+			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE, errorDesc));
 			LOGGER.error(e);
 		} finally {
 
@@ -2131,8 +2097,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					rs.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_RESULTSET, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_RESULTSET,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -2141,8 +2107,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_STATEMENT, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_STATEMENT,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -2151,8 +2117,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_CONNECTION, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_CONNECTION,
+						errorDesc));
 				LOGGER.error(e);
 			}
 		}
@@ -2161,8 +2127,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 	}
 
 	@Override
-	public boolean removeAttributeFromScriptProgram(Script script, Program program,
-			Attribute attribute) {
+	public boolean removeAttributeFromScriptProgram(Script script, Program program, Attribute attribute) {
 
 		String errorDesc = "removing attribute from script's program";
 		boolean rvSucceeded = false;
@@ -2186,8 +2151,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				rvSucceeded = true;
 			}
 		} catch (SQLException e) {
-			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE,
-					errorDesc));
+			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE, errorDesc));
 			LOGGER.error(e);
 		} finally {
 
@@ -2196,8 +2160,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_STATEMENT, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_STATEMENT,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -2206,8 +2170,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_CONNECTION, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_CONNECTION,
+						errorDesc));
 				LOGGER.error(e);
 			}
 		}
@@ -2216,8 +2180,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 	}
 
 	@Override
-	public boolean addAttributeToScriptProgram(Script script, Program program,
-			Attribute attribute) {
+	public boolean addAttributeToScriptProgram(Script script, Program program, Attribute attribute) {
 		String errorDesc = "adding attribute to script's program";
 		boolean rvSucceeded = false;
 		Connection conn = null;
@@ -2241,8 +2204,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				rvSucceeded = true;
 			}
 		} catch (SQLException e) {
-			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE,
-					errorDesc));
+			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE, errorDesc));
 			LOGGER.error(e);
 		} finally {
 
@@ -2251,8 +2213,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_STATEMENT, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_STATEMENT,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -2261,8 +2223,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_CONNECTION, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_CONNECTION,
+						errorDesc));
 				LOGGER.error(e);
 			}
 		}
@@ -2271,8 +2233,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 	}
 
 	@Override
-	public boolean setScriptProgramAttributeValue(Script script, Program program,
-			Attribute attribute, String newAttributeValue) {
+	public boolean setScriptProgramAttributeValue(Script script, Program program, Attribute attribute,
+			String newAttributeValue) {
 		String errorDesc = "editing value of script's program attribute";
 		boolean rvSucceeded = false;
 		Connection conn = null;
@@ -2295,8 +2257,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				rvSucceeded = true;
 			}
 		} catch (SQLException e) {
-			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE,
-					errorDesc));
+			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE, errorDesc));
 			LOGGER.error(e);
 		} finally {
 
@@ -2305,8 +2266,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_STATEMENT, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_STATEMENT,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -2315,8 +2276,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_CONNECTION, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_CONNECTION,
+						errorDesc));
 				LOGGER.error(e);
 			}
 		}
@@ -2343,8 +2304,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				rvSucceeded = true;
 			}
 		} catch (SQLException e) {
-			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE,
-					errorDesc));
+			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE, errorDesc));
 			LOGGER.error(e);
 		} finally {
 
@@ -2353,8 +2313,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_STATEMENT, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_STATEMENT,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -2363,8 +2323,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_CONNECTION, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_CONNECTION,
+						errorDesc));
 				LOGGER.error(e);
 			}
 		}
@@ -2393,8 +2353,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				rvSucceeded = true;
 			}
 		} catch (SQLException e) {
-			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE,
-					errorDesc));
+			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE, errorDesc));
 			LOGGER.error(e);
 		} finally {
 
@@ -2403,8 +2362,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_STATEMENT, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_STATEMENT,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -2413,8 +2372,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_CONNECTION, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_CONNECTION,
+						errorDesc));
 				LOGGER.error(e);
 			}
 		}
@@ -2441,8 +2400,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				rvSucceeded = true;
 			}
 		} catch (SQLException e) {
-			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE,
-					errorDesc));
+			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE, errorDesc));
 			LOGGER.error(e);
 		} finally {
 
@@ -2451,8 +2409,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_STATEMENT, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_STATEMENT,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -2461,8 +2419,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_CONNECTION, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_CONNECTION,
+						errorDesc));
 				LOGGER.error(e);
 			}
 		}
@@ -2495,8 +2453,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				Program program = new Program();
 				program.setName(name);
 				program.setProgId(progId);
-				program.setDefaultTime(LocalDateTime.ofInstant(Instant.ofEpochMilli(defaultTime),
-						ZoneId.of("+0")));
+				program.setDefaultTime(
+						LocalDateTime.ofInstant(Instant.ofEpochMilli(defaultTime), ZoneId.of("+0")));
 				program.setDefaultProgram(defaultProgram);
 
 				programs.add(program);
@@ -2504,8 +2462,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 			conn.commit();
 		} catch (SQLException e) {
-			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE,
-					errorDesc));
+			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE, errorDesc));
 			LOGGER.error(e);
 		} finally {
 
@@ -2514,8 +2471,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					rs.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_RESULTSET, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_RESULTSET,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -2524,8 +2481,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					st.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_STATEMENT, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_STATEMENT,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -2534,8 +2491,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_CONNECTION, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_CONNECTION,
+						errorDesc));
 				LOGGER.error(e);
 			}
 		}
@@ -2554,8 +2511,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 		try {
 
 			conn = DriverManager.getConnection(databaseConnectionURL);
-			pst = conn.prepareStatement(
-					"INSERT INTO serviceAttr(serviceId, attrId, value) VALUES (?, ?, ?)");
+			pst = conn.prepareStatement("INSERT INTO serviceAttr(serviceId, attrId, value) VALUES (?, ?, ?)");
 
 			int index = 1;
 
@@ -2568,8 +2524,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				rvSucceeded = true;
 			}
 		} catch (SQLException e) {
-			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE,
-					errorDesc));
+			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE, errorDesc));
 			LOGGER.error(e);
 		} finally {
 
@@ -2578,8 +2533,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_STATEMENT, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_STATEMENT,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -2588,8 +2543,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_CONNECTION, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_CONNECTION,
+						errorDesc));
 				LOGGER.error(e);
 			}
 		}
@@ -2608,8 +2563,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 		try {
 
 			conn = DriverManager.getConnection(databaseConnectionURL);
-			pst = conn
-					.prepareStatement("DELETE FROM serviceAttr WHERE serviceId = ? AND attrId = ?");
+			pst = conn.prepareStatement("DELETE FROM serviceAttr WHERE serviceId = ? AND attrId = ?");
 
 			int index = 1;
 
@@ -2621,8 +2575,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				rvSucceeded = true;
 			}
 		} catch (SQLException e) {
-			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE,
-					errorDesc));
+			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE, errorDesc));
 			LOGGER.error(e);
 		} finally {
 
@@ -2631,8 +2584,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_STATEMENT, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_STATEMENT,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -2641,8 +2594,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_CONNECTION, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_CONNECTION,
+						errorDesc));
 				LOGGER.error(e);
 			}
 		}
@@ -2690,8 +2643,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 			conn.commit();
 		} catch (SQLException e) {
-			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE,
-					errorDesc));
+			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE, errorDesc));
 			LOGGER.error(e);
 		} finally {
 
@@ -2700,8 +2652,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					rs.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_RESULTSET, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_RESULTSET,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -2710,8 +2662,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_STATEMENT, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_STATEMENT,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -2720,8 +2672,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_CONNECTION, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_CONNECTION,
+						errorDesc));
 				LOGGER.error(e);
 			}
 		}
@@ -2769,8 +2721,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 
 			conn.commit();
 		} catch (SQLException e) {
-			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE,
-					errorDesc));
+			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE, errorDesc));
 			LOGGER.error(e);
 		} finally {
 
@@ -2779,8 +2730,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					rs.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_RESULTSET, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_RESULTSET,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -2789,8 +2740,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_STATEMENT, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_STATEMENT,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -2799,8 +2750,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_CONNECTION, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_CONNECTION,
+						errorDesc));
 				LOGGER.error(e);
 			}
 		}
@@ -2809,8 +2760,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 	}
 
 	@Override
-	public boolean setServiceAttributeValue(Service service, Attribute attribute,
-			String newAttributeValue) {
+	public boolean setServiceAttributeValue(Service service, Attribute attribute, String newAttributeValue) {
 		String errorDesc = "editing value of service attribute";
 		boolean rvSucceeded = false;
 		Connection conn = null;
@@ -2819,8 +2769,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 		try {
 
 			conn = DriverManager.getConnection(databaseConnectionURL);
-			pst = conn.prepareStatement(
-					"UPDATE serviceAttr SET value = ? WHERE serviceId = ? AND attrId = ?;");
+			pst = conn
+					.prepareStatement("UPDATE serviceAttr SET value = ? WHERE serviceId = ? AND attrId = ?;");
 
 			int index = 1;
 			pst.setString(index++, newAttributeValue);
@@ -2832,8 +2782,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				rvSucceeded = true;
 			}
 		} catch (SQLException e) {
-			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE,
-					errorDesc));
+			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE, errorDesc));
 			LOGGER.error(e);
 		} finally {
 
@@ -2842,8 +2791,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_STATEMENT, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_STATEMENT,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -2852,8 +2801,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_CONNECTION, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_CONNECTION,
+						errorDesc));
 				LOGGER.error(e);
 			}
 		}
@@ -2862,8 +2811,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 	}
 
 	@Override
-	public boolean setProgramAttributeValue(Program program, Attribute attribute,
-			String newAttributeValue) {
+	public boolean setProgramAttributeValue(Program program, Attribute attribute, String newAttributeValue) {
 		String errorDesc = "editing value of program attribute";
 		boolean rvSucceeded = false;
 		Connection conn = null;
@@ -2872,8 +2820,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 		try {
 
 			conn = DriverManager.getConnection(databaseConnectionURL);
-			pst = conn.prepareStatement(
-					"UPDATE progAttr SET value = ? WHERE progId = ? AND attrId = ?;");
+			pst = conn.prepareStatement("UPDATE progAttr SET value = ? WHERE progId = ? AND attrId = ?;");
 
 			int index = 1;
 			pst.setString(index++, newAttributeValue);
@@ -2885,8 +2832,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				rvSucceeded = true;
 			}
 		} catch (SQLException e) {
-			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE,
-					errorDesc));
+			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE, errorDesc));
 			LOGGER.error(e);
 		} finally {
 
@@ -2895,8 +2841,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_STATEMENT, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_STATEMENT,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -2905,8 +2851,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_CONNECTION, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_CONNECTION,
+						errorDesc));
 				LOGGER.error(e);
 			}
 		}
@@ -2937,8 +2883,7 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 				rvSucceeded = true;
 			}
 		} catch (SQLException e) {
-			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE,
-					errorDesc));
+			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE, errorDesc));
 			LOGGER.error(e);
 		} finally {
 
@@ -2947,8 +2892,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					pst.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_STATEMENT, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_STATEMENT,
+						errorDesc));
 				LOGGER.error(e);
 			}
 
@@ -2957,8 +2902,58 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 					conn.close();
 				}
 			} catch (SQLException e) {
-				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING,
-						Labels.FAILED_TO_CLOSE_CONNECTION, errorDesc));
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_CONNECTION,
+						errorDesc));
+				LOGGER.error(e);
+			}
+		}
+
+		return rvSucceeded;
+	}
+
+	@Override
+	public boolean updateScriptLastEdited(Script script) {
+		String errorDesc = "editing script's last edited time to now";
+		boolean rvSucceeded = false;
+		Connection conn = null;
+		PreparedStatement pst = null;
+
+		try {
+
+			conn = DriverManager.getConnection(databaseConnectionURL);
+			pst = conn.prepareStatement("UPDATE scripts SET lastEdited = ? WHERE scriptId = ?;");
+
+			int index = 1;
+			pst.setString(index++, script.getLastEdited()
+					.format(DateTimeFormatter.ofPattern(Labels.DATEFORMAT_DATETIME_FOR_INSERT)));
+			pst.setInt(index++, script.getScriptId());
+
+			int rowsAffected = pst.executeUpdate();
+			if (rowsAffected == 1) {
+				rvSucceeded = true;
+			}
+		} catch (SQLException e) {
+			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE, errorDesc));
+			LOGGER.error(e);
+		} finally {
+
+			try {
+				if (pst != null) {
+					pst.close();
+				}
+			} catch (SQLException e) {
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_STATEMENT,
+						errorDesc));
+				LOGGER.error(e);
+			}
+
+			try {
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_CONNECTION,
+						errorDesc));
 				LOGGER.error(e);
 			}
 		}

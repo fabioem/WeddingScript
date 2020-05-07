@@ -1,6 +1,7 @@
 package hu.mandisco.weddingscript.controller;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
 import hu.mandisco.weddingscript.model.WeddingScriptDAO;
@@ -35,7 +36,7 @@ public class WeddingScriptController {
 		boolean succeed = dao.addScript(script);
 		List<Program> defaultPrograms = dao.getDefaultPrograms();
 		for (Program program : defaultPrograms) {
-			addProgramToScript(script, program);
+			dao.addProgramToScript(script, program);
 		}
 		return succeed;
 	}
@@ -46,6 +47,7 @@ public class WeddingScriptController {
 
 	public boolean addProgramToScript(Script script, Program program) {
 		program.setTime(program.getDefaultTime());
+		updateScriptLastEdited(script);
 		return dao.addProgramToScript(script, program);
 	}
 
@@ -102,6 +104,7 @@ public class WeddingScriptController {
 	}
 
 	public boolean addAttributeToScript(Script script, Attribute attribute) {
+		updateScriptLastEdited(script);
 		attribute.setValue(attribute.getDefaultValue());
 		return dao.addAttributeToScript(script, attribute);
 	}
@@ -111,6 +114,7 @@ public class WeddingScriptController {
 	}
 
 	public boolean addServiceToScript(Script script, Service service) {
+		updateScriptLastEdited(script);
 		List<Attribute> attributesOfService = dao.getAttributesOfService(service);
 		for (Attribute attribute : attributesOfService) {
 			dao.addAttributeToScript(script, attribute);
@@ -131,12 +135,13 @@ public class WeddingScriptController {
 		return dao.addAttributeToProgram(program, attribute);
 	}
 
-	public boolean setScriptAttributeValue(Script script, Attribute attribute,
-			String newAttrValue) {
+	public boolean setScriptAttributeValue(Script script, Attribute attribute, String newAttrValue) {
+		updateScriptLastEdited(script);
 		return dao.setScriptAttributeValue(script, attribute, newAttrValue);
 	}
 
 	public boolean setScriptProgramTime(Script script, Program program, LocalDateTime newTime) {
+		updateScriptLastEdited(script);
 		return dao.setScriptProgramTime(script, program, newTime);
 	}
 
@@ -149,10 +154,12 @@ public class WeddingScriptController {
 	}
 
 	public boolean setScript(Script script) {
+		updateScriptLastEdited(script);
 		return dao.setScript(script);
 	}
 
 	public boolean removeAttributeFromScript(Script script, Attribute attribute) {
+		updateScriptLastEdited(script);
 		return dao.removeAttributeFromScript(script, attribute);
 	}
 
@@ -160,23 +167,23 @@ public class WeddingScriptController {
 		return dao.getAttributesOfScriptProgram(script, program);
 	}
 
-	public ObservableList<Attribute> getScriptAttributesNotInProgram(Script script,
-			Program program) {
+	public ObservableList<Attribute> getScriptAttributesNotInProgram(Script script, Program program) {
 		return dao.getAttributesNotInScriptProgram(script, program);
 	}
 
-	public boolean removeAttributeFromScriptProgram(Script script, Program program,
-			Attribute attribute) {
+	public boolean removeAttributeFromScriptProgram(Script script, Program program, Attribute attribute) {
+		updateScriptLastEdited(script);
 		return dao.removeAttributeFromScriptProgram(script, program, attribute);
 	}
 
-	public boolean addAttributeToScriptProgram(Script script, Program program,
-			Attribute attribute) {
+	public boolean addAttributeToScriptProgram(Script script, Program program, Attribute attribute) {
+		updateScriptLastEdited(script);
 		return dao.addAttributeToScriptProgram(script, program, attribute);
 	}
 
-	public boolean setScriptProgramAttributeValue(Script script, Program program,
-			Attribute attribute, String newAttributeValue) {
+	public boolean setScriptProgramAttributeValue(Script script, Program program, Attribute attribute,
+			String newAttributeValue) {
+		updateScriptLastEdited(script);
 		return dao.setScriptProgramAttributeValue(script, program, attribute, newAttributeValue);
 	}
 
@@ -208,17 +215,21 @@ public class WeddingScriptController {
 		return dao.getAttributesOfService(service);
 	}
 
-	public boolean setServiceAttributeValue(Service service, Attribute attribute,
-			String newAttributeValue) {
+	public boolean setServiceAttributeValue(Service service, Attribute attribute, String newAttributeValue) {
 		return dao.setServiceAttributeValue(service, attribute, newAttributeValue);
 	}
 
-	public boolean setProgramAttributeValue(Program program, Attribute attribute,
-			String newAttributeValue) {
+	public boolean setProgramAttributeValue(Program program, Attribute attribute, String newAttributeValue) {
 		return dao.setProgramAttributeValue(program, attribute, newAttributeValue);
 	}
 
 	public boolean removeServiceFromScript(Script script, Service service) {
+		updateScriptLastEdited(script);
 		return dao.removeServiceFromScript(script, service);
+	}
+
+	public boolean updateScriptLastEdited(Script script) {
+		script.updateLastEdited(LocalDateTime.now(ZoneId.of("Europe/Budapest")));
+		return dao.updateScriptLastEdited(script);
 	}
 }

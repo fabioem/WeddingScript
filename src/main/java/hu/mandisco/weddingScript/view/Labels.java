@@ -10,7 +10,7 @@ public class Labels {
 	public static final String DATEFORMAT_DATE_FOR_INSERT = "yyyy-MM-dd";
 
 	// Error messages
-	public static final String LOGGER_FORMAT_STRING = "{0} {1}";
+	public static final String LOGGER_FORMAT_STRING = "%s %s";
 
 	public static final String FAILED_TO_EXECUTE = "Failed to execute";
 	public static final String FAILED_TO_CLOSE_RESULTSET = "Failed to close result set when";

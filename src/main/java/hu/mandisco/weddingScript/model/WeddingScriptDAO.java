@@ -109,4 +109,6 @@ public interface WeddingScriptDAO {
 
 	public boolean removeServiceFromScript(Script script, Service service);
 
+	public boolean updateScriptLastEdited(Script script);
+
 }

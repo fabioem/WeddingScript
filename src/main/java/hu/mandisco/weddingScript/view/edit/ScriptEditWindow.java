@@ -119,6 +119,7 @@ public class ScriptEditWindow {
 		 *
 		 */
 		TableView<Attribute> attributesTable = new TableView<>();
+		attributesTable.setEditable(true);
 		TableView<Attribute> antiAttributesTable = new TableView<>();
 
 		// Handling double clicks

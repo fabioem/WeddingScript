@@ -94,7 +94,7 @@ public class Script {
 		return lastEdited;
 	}
 
-	public void setLastEdited(LocalDateTime lastEdited) {
+	public void updateLastEdited(LocalDateTime lastEdited) {
 		this.lastEdited = lastEdited;
 	}
 
