@@ -2,8 +2,6 @@ package hu.mandisco.weddingscript.model.bean;
 
 import java.time.LocalDateTime;
 
-import javafx.collections.ObservableList;
-
 public class Script {
 	private int scriptId;
 	private String name;
@@ -11,9 +9,6 @@ public class Script {
 	private String comment;
 	private LocalDateTime lastEdited;
 	private LocalDateTime created;
-	ObservableList<Attribute> attributeList;
-	ObservableList<Program> programList;
-	ObservableList<Service> serviceList;
 
 	public Script() {
 		super();
@@ -24,38 +19,6 @@ public class Script {
 		this.name = name;
 		this.date = date;
 		this.comment = comment;
-	}
-
-	public ObservableList<Service> getServiceList() {
-		return serviceList;
-	}
-
-	public void setServiceList(ObservableList<Service> serviceList) {
-		this.serviceList = serviceList;
-	}
-
-	public ObservableList<Attribute> getAttributeList() {
-		return attributeList;
-	}
-
-	public void setAttributeList(ObservableList<Attribute> attributeList) {
-		this.attributeList = attributeList;
-	}
-
-	public ObservableList<Program> getProgramList() {
-		return programList;
-	}
-
-	public void setProgramList(ObservableList<Program> programList) {
-		this.programList = programList;
-	}
-
-	public ObservableList<Attribute> getAttributes() {
-		return attributeList;
-	}
-
-	public void setAttributes(ObservableList<Attribute> attributes) {
-		this.attributeList = attributes;
 	}
 
 	public int getScriptId() {

@@ -31,6 +31,8 @@ public class ProgramAttributesEditWindow {
 
 	private WeddingScriptController weddingScriptController = new WeddingScriptController();
 
+	// TODO: program attribute default value doesn't work properly
+
 	public void display(Program program) {
 		Stage window = new Stage();
 
@@ -72,8 +74,7 @@ public class ProgramAttributesEditWindow {
 						.setValue(t.getNewValue());
 				Attribute attribute = t.getRowValue();
 				String newAttributeValue = t.getNewValue();
-				weddingScriptController.setProgramAttributeValue(program, attribute,
-						newAttributeValue);
+				weddingScriptController.setProgramAttributeValue(program, attribute, newAttributeValue);
 			}
 		});
 
@@ -90,8 +91,7 @@ public class ProgramAttributesEditWindow {
 		programAntiAttributesTable.setEditable(true);
 
 		TableColumn<Attribute, String> programAttrAntiNameCol = new TableColumn<>("Név");
-		programAttrAntiNameCol
-				.setCellValueFactory(new PropertyValueFactory<Attribute, String>("name"));
+		programAttrAntiNameCol.setCellValueFactory(new PropertyValueFactory<Attribute, String>("name"));
 
 		TableColumn<Attribute, String> programAttrAntiValueCol = new TableColumn<>("Alap érték");
 		programAttrAntiValueCol
@@ -107,8 +107,7 @@ public class ProgramAttributesEditWindow {
 		// Sort by default time
 		ObservableList<Attribute> programAttrAntiData = FXCollections.observableArrayList();
 		SortedList<Attribute> sortedProgramAttrAntiData = new SortedList<>(programAttrAntiData);
-		sortedProgramAttrAntiData.comparatorProperty()
-				.bind(programAntiAttributesTable.comparatorProperty());
+		sortedProgramAttrAntiData.comparatorProperty().bind(programAntiAttributesTable.comparatorProperty());
 		programAntiAttributesTable.setItems(sortedProgramAttrAntiData);
 		programAntiAttributesTable.getSortOrder().add(programAttrAntiNameCol);
 		programAttrAntiData.addAll(antiAttributes);
@@ -119,12 +118,10 @@ public class ProgramAttributesEditWindow {
 		// Handling double clicks
 		ObservableList<Attribute> programAttributeData = FXCollections.observableArrayList();
 		SortedList<Attribute> sortedProgramAttributeData = new SortedList<>(programAttributeData);
-		sortedProgramAttributeData.comparatorProperty()
-				.bind(programAttributesTable.comparatorProperty());
+		sortedProgramAttributeData.comparatorProperty().bind(programAttributesTable.comparatorProperty());
 
 		ObservableList<Attribute> programAntiAttributeData = FXCollections.observableArrayList();
-		SortedList<Attribute> sortedProgramAntiAttributeData = new SortedList<>(
-				programAntiAttributeData);
+		SortedList<Attribute> sortedProgramAntiAttributeData = new SortedList<>(programAntiAttributeData);
 		sortedProgramAntiAttributeData.comparatorProperty()
 				.bind(programAntiAttributesTable.comparatorProperty());
 

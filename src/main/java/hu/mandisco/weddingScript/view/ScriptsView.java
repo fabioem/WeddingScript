@@ -1,12 +1,17 @@
 package hu.mandisco.weddingscript.view;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import hu.mandisco.weddingscript.controller.WeddingScriptController;
 import hu.mandisco.weddingscript.model.bean.Script;
 import hu.mandisco.weddingscript.view.create.ScriptCreateWindow;
 import hu.mandisco.weddingscript.view.edit.ScriptEditWindow;
+import hu.mandisco.weddingscript.view.pdf.ScriptPdf;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
@@ -19,6 +24,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 
 public class ScriptsView extends BorderPane {
+
+	private static final Logger LOGGER = LogManager.getLogger();
 
 	private ToolBar toolBar = new ToolBar();
 	private VBox topMenu = new VBox();
@@ -48,7 +55,20 @@ public class ScriptsView extends BorderPane {
 			}
 		});
 
-		toolBar.getItems().addAll(newButton, deleteButton);
+		Button pdfButton = new Button("PDF készítése");
+		pdfButton.setOnAction(e -> {
+			Script selectedItem = scriptTable.getSelectionModel().getSelectedItem();
+			if (selectedItem != null) {
+				try {
+					ScriptPdf.createPdf(selectedItem);
+				} catch (IOException e1) {
+					LOGGER.error("Failed to create a PDF file.");
+					LOGGER.error(e1);
+				}
+			}
+		});
+
+		toolBar.getItems().addAll(newButton, deleteButton, pdfButton);
 		topMenu.getChildren().add(toolBar);
 
 		scriptTable.setRowFactory(tv -> {
