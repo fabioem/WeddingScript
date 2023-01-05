@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 import javafx.collections.ObservableList;
 
-public class Program {
+public class Program implements Comparable<Program>{
 	private int progId;
 	private String name;
 	private LocalDateTime defaultTime;
@@ -58,6 +58,11 @@ public class Program {
 
 	public void setDefaultProgram(boolean defaultProgram) {
 		this.defaultProgram = defaultProgram;
+	}
+	
+	@Override
+	public int compareTo(Program p) {
+	    return getTime().compareTo(p.getTime());
 	}
 
 }

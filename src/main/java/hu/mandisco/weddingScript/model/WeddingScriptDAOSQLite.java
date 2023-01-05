@@ -2866,7 +2866,6 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 		}
 
 		return rvSucceeded;
-
 	}
 
 	@Override
@@ -2935,6 +2934,56 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 			pst.setString(index++, script.getLastEdited()
 					.format(DateTimeFormatter.ofPattern(Labels.DATEFORMAT_DATETIME_FOR_INSERT)));
 			pst.setInt(index++, script.getScriptId());
+
+			int rowsAffected = pst.executeUpdate();
+			if (rowsAffected == 1) {
+				rvSucceeded = true;
+			}
+		} catch (SQLException e) {
+			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE, errorDesc));
+			LOGGER.error(e);
+		} finally {
+
+			try {
+				if (pst != null) {
+					pst.close();
+				}
+			} catch (SQLException e) {
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_STATEMENT,
+						errorDesc));
+				LOGGER.error(e);
+			}
+
+			try {
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_CONNECTION,
+						errorDesc));
+				LOGGER.error(e);
+			}
+		}
+
+		return rvSucceeded;
+	}
+
+	@Override
+	public boolean removeProgramFromScript(Program program, Script script) {
+		String errorDesc = "removing program from script";
+		boolean rvSucceeded = false;
+		Connection conn = null;
+		PreparedStatement pst = null;
+
+		try {
+
+			conn = DriverManager.getConnection(databaseConnectionURL);
+			pst = conn.prepareStatement("DELETE FROM scriptProg WHERE scriptId = ? AND progId = ?");
+
+			int index = 1;
+
+			pst.setInt(index++, script.getScriptId());
+			pst.setInt(index++, program.getProgId());
 
 			int rowsAffected = pst.executeUpdate();
 			if (rowsAffected == 1) {

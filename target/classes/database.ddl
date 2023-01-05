@@ -95,21 +95,19 @@ CREATE TABLE serviceAttr(
 -- Insert demo values
 INSERT INTO programs VALUES(0, "Vacsora", 68400000, 1);
 INSERT INTO programs VALUES(1, "Nyitótánc", 75600000, 1);
-INSERT INTO programs VALUES(2, "Újasszony tánc", 86400000, 0);
+INSERT INTO programs VALUES(2, "Újasszony tánc", 86400000, 1);
 INSERT INTO programs VALUES(3, "Torta", 79200000, 1); -- 22:00
 INSERT INTO programs VALUES(4, "Vendégvárás", 64800000, 1); -- 18:00
 INSERT INTO programs VALUES(5, "Gyertyafénykeringő", 84600000, 1); -- 23:30
 INSERT INTO programs VALUES(6, "Ifjú pár érkezik", 66600000, 1); -- 18:30
 INSERT INTO scripts VALUES(0, "Judit és Dani", '2021-07-01 00:00:00.000', "kalocsai mintás stílus", (DATETIME('now', 'localtime')), (DATETIME('now', 'localtime')));
 INSERT INTO scripts VALUES(1, "Evelin és László", '2021-08-02 00:00:00.000', "rock lagzi", (DATETIME('now', 'localtime')), (DATETIME('now', 'localtime')));
-INSERT INTO services VALUES(0, "Alap");
-INSERT INTO services VALUES(1, "CM / Műsorvezetés");
-INSERT INTO services VALUES(2, "LED-es oldalfal világítás");
-INSERT INTO services VALUES(3, "Ceremónia hangosítás kis cs.");
-INSERT INTO services VALUES(4, "Ceremónia hangosítás nagy cs.");
-INSERT INTO services VALUES(5, "Felhőtánc");
-INSERT INTO services VALUES(6, "CM külső helyszínen");
-INSERT INTO services VALUES(7, "Extra hang- és fénytechnika");
+INSERT INTO services VALUES(0, "CM / Műsorvezetés");
+INSERT INTO services VALUES(1, "LED-es oldalfal világítás");
+INSERT INTO services VALUES(2, "Ceremónia hangosítás");
+INSERT INTO services VALUES(3, "Felhőtánc");
+INSERT INTO services VALUES(4, "CM külső helyszínen");
+INSERT INTO services VALUES(5, "Extra hang- és fénytechnika");
 --INSERT INTO attributeTypes VALUES(2, "Basic");
 INSERT INTO attributeTypes VALUES(0, "Script");
 INSERT INTO attributeTypes VALUES(1, "Program");

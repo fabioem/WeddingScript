@@ -13,9 +13,7 @@ import hu.mandisco.weddingscript.model.bean.Program;
 import hu.mandisco.weddingscript.model.bean.Script;
 import hu.mandisco.weddingscript.model.bean.Service;
 import hu.mandisco.weddingscript.view.Labels;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.SortedList;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -126,12 +124,6 @@ public class ScriptEditWindow {
 		ObservableList<Attribute> attributes = weddingScriptController.getAttributesOfScript(script);
 		ObservableList<Attribute> antiAttributes = weddingScriptController.getAttributesNotInScript(script);
 
-		SortedList<Attribute> sortedAttributeData = new SortedList<>(attributes);
-		sortedAttributeData.comparatorProperty().bind(attributesTable.comparatorProperty());
-
-		SortedList<Attribute> sortedAntiAttributeData = new SortedList<>(antiAttributes);
-		sortedAntiAttributeData.comparatorProperty().bind(antiAttributesTable.comparatorProperty());
-
 		attributesTable.setRowFactory(tv -> {
 			TableRow<Attribute> row = new TableRow<>();
 			row.setOnMouseClicked(event -> {
@@ -141,11 +133,11 @@ public class ScriptEditWindow {
 					attributes.remove(selectedAttribute);
 
 					weddingScriptController.removeAttributeFromScript(script, selectedAttribute);
-					attributesTable.setItems(sortedAttributeData);
+					attributesTable.setItems(attributes);
 
 					antiAttributes.add(selectedAttribute);
 
-					antiAttributesTable.setItems(sortedAntiAttributeData);
+					antiAttributesTable.setItems(antiAttributes);
 				}
 			});
 			return row;
@@ -160,8 +152,7 @@ public class ScriptEditWindow {
 		valueCol.setOnEditCommit(new EventHandler<CellEditEvent<Attribute, String>>() {
 			@Override
 			public void handle(CellEditEvent<Attribute, String> t) {
-				((Attribute) t.getTableView().getItems().get(t.getTablePosition().getRow()))
-						.setValue(t.getNewValue());
+				((Attribute) t.getTableView().getItems().get(t.getTablePosition().getRow())).setValue(t.getNewValue());
 				Attribute attribute = t.getRowValue();
 				String newAttrValue = t.getNewValue();
 				weddingScriptController.setScriptAttributeValue(script, attribute, newAttrValue);
@@ -193,23 +184,19 @@ public class ScriptEditWindow {
 					Attribute rowData = row.getItem();
 					antiAttributes.remove(rowData);
 
-					antiAttributesTable.setItems(sortedAntiAttributeData);
+					antiAttributesTable.setItems(antiAttributes);
 
 					weddingScriptController.addAttributeToScript(script, rowData);
 					attributes.add(rowData);
-					attributesTable.setItems(sortedAttributeData);
+					attributesTable.setItems(attributes);
 
 				}
 			});
 			return row;
 		});
 
-		// antiAttributesTable.getItems().addAll(antiAttributes);
-
-		// Sort by default time
-		antiAttributesTable.setItems(sortedAntiAttributeData);
+		// Sort by name
 		antiAttributesTable.getSortOrder().add(nameAntiCol);
-		attributesTable.setItems(sortedAttributeData);
 		attributesTable.getSortOrder().add(nameCol);
 
 		GridPane.setConstraints(attributesTable, 0, 0);
@@ -244,6 +231,8 @@ public class ScriptEditWindow {
 		TableColumn<Program, String> programNameCol = new TableColumn<>("Név");
 		programNameCol.setCellValueFactory(new PropertyValueFactory<Program, String>("name"));
 
+		programNameCol.setCellFactory(TextFieldTableCell.forTableColumn());
+
 		TableColumn<Program, LocalDateTime> programTimeCol = new TableColumn<>("Idő");
 		programTimeCol.setEditable(true);
 		programTimeCol.setCellValueFactory(new PropertyValueFactory<Program, LocalDateTime>("time"));
@@ -257,8 +246,7 @@ public class ScriptEditWindow {
 		programTimeCol.setOnEditCommit(new EventHandler<CellEditEvent<Program, LocalDateTime>>() {
 			@Override
 			public void handle(CellEditEvent<Program, LocalDateTime> t) {
-				((Program) t.getTableView().getItems().get(t.getTablePosition().getRow()))
-						.setTime(t.getNewValue());
+				((Program) t.getTableView().getItems().get(t.getTablePosition().getRow())).setTime(t.getNewValue());
 				Program program = t.getRowValue();
 				LocalDateTime newTime = t.getNewValue();
 				weddingScriptController.setScriptProgramTime(script, program, newTime);
@@ -268,16 +256,8 @@ public class ScriptEditWindow {
 		programsTable.getColumns().add(programNameCol);
 		programsTable.getColumns().add(programTimeCol);
 
-		List<Program> scriptPrograms = weddingScriptController.getScriptPrograms(script);
+		ObservableList<Program> scriptPrograms = weddingScriptController.getScriptPrograms(script);
 		programsTable.getItems().addAll(scriptPrograms);
-
-		// Sort by time
-		ObservableList<Program> programData = FXCollections.observableArrayList();
-		SortedList<Program> sortedProgramData = new SortedList<>(programData);
-		sortedProgramData.comparatorProperty().bind(programsTable.comparatorProperty());
-		programsTable.setItems(sortedProgramData);
-		programsTable.getSortOrder().add(programTimeCol);
-		programData.addAll(scriptPrograms);
 
 		programsTable.setEditable(true);
 
@@ -291,10 +271,8 @@ public class ScriptEditWindow {
 		TableColumn<Program, String> programAntiNameCol = new TableColumn<>("Név");
 		programAntiNameCol.setCellValueFactory(new PropertyValueFactory<Program, String>("name"));
 
-		TableColumn<Program, LocalDateTime> programAntiDefaultTimeCol = new TableColumn<>(
-				"Alapértelmezett időpont");
-		programAntiDefaultTimeCol
-				.setCellValueFactory(new PropertyValueFactory<Program, LocalDateTime>("defaultTime"));
+		TableColumn<Program, LocalDateTime> programAntiDefaultTimeCol = new TableColumn<>("Alapértelmezett időpont");
+		programAntiDefaultTimeCol.setCellValueFactory(new PropertyValueFactory<Program, LocalDateTime>("defaultTime"));
 		programAntiDefaultTimeCol.setCellFactory(column -> new TableCell<Program, LocalDateTime>() {
 			@Override
 			protected void updateItem(LocalDateTime item, boolean empty) {
@@ -320,17 +298,8 @@ public class ScriptEditWindow {
 				if (event.getClickCount() == 2 && (!row.isEmpty())) {
 					Program rowData = row.getItem();
 					antiPrograms.remove(rowData);
-
-					// Handle SortedList
-					ObservableList<Program> programAntiData = FXCollections.observableArrayList();
-					SortedList<Program> sortedProgramAntiData = new SortedList<>(programAntiData);
-					sortedProgramAntiData.comparatorProperty().bind(programAntiTable.comparatorProperty());
-					programAntiData.addAll(antiPrograms);
-					programAntiTable.setItems(sortedProgramAntiData);
-
 					weddingScriptController.addProgramToScript(script, rowData);
-					programData.setAll(weddingScriptController.getScriptPrograms(script));
-
+					scriptPrograms.add(rowData);
 				}
 			});
 			return row;
@@ -338,13 +307,6 @@ public class ScriptEditWindow {
 
 		programAntiTable.getItems().addAll(antiPrograms);
 
-		// Sort by default time
-		ObservableList<Program> antiData = FXCollections.observableArrayList();
-		SortedList<Program> sortedAntiData = new SortedList<>(antiData);
-		sortedAntiData.comparatorProperty().bind(programAntiTable.comparatorProperty());
-		programAntiTable.setItems(sortedAntiData);
-		programAntiTable.getSortOrder().add(programAntiDefaultTimeCol);
-		antiData.addAll(antiPrograms);
 		GridPane.setConstraints(programsTable, 0, 0);
 		GridPane.setHgrow(programsTable, Priority.ALWAYS);
 		GridPane.setConstraints(programAntiTable, 1, 0);
@@ -373,9 +335,6 @@ public class ScriptEditWindow {
 		ObservableList<Service> antiServices = weddingScriptController.getServicesNotInScript(script);
 		servicesAntiTable.setEditable(true);
 
-		SortedList<Service> sortedServicesData = new SortedList<>(services);
-		SortedList<Service> sortedAntiServicesData = new SortedList<>(antiServices);
-
 		servicesTable.setRowFactory(tv -> {
 			TableRow<Service> row = new TableRow<>();
 			row.setOnMouseClicked(event -> {
@@ -384,12 +343,11 @@ public class ScriptEditWindow {
 					services.remove(selectedService);
 
 					// Handle SortedList
-					sortedServicesData.comparatorProperty().bind(servicesTable.comparatorProperty());
-					servicesTable.setItems(sortedServicesData);
+					servicesTable.setItems(services);
 
 					weddingScriptController.removeServiceFromScript(script, selectedService);
 					antiServices.add(selectedService);
-					servicesAntiTable.setItems(sortedAntiServicesData);
+					servicesAntiTable.setItems(antiServices);
 
 				}
 			});
@@ -409,12 +367,11 @@ public class ScriptEditWindow {
 					antiServices.remove(rowData);
 
 					// Handle SortedList
-					sortedAntiServicesData.comparatorProperty().bind(servicesAntiTable.comparatorProperty());
-					servicesAntiTable.setItems(sortedAntiServicesData);
+					servicesAntiTable.setItems(antiServices);
 
 					weddingScriptController.addServiceToScript(script, rowData);
 					services.add(rowData);
-					servicesTable.setItems(sortedServicesData);
+					servicesTable.setItems(services);
 
 				}
 			});
@@ -422,12 +379,6 @@ public class ScriptEditWindow {
 		});
 
 		servicesAntiTable.getItems().addAll(antiServices);
-
-		ObservableList<Service> servicesAntiData = FXCollections.observableArrayList();
-		SortedList<Service> sortedServicesAntiData = new SortedList<>(servicesAntiData);
-		sortedServicesAntiData.comparatorProperty().bind(servicesAntiTable.comparatorProperty());
-		servicesAntiTable.setItems(sortedServicesAntiData);
-		servicesAntiData.addAll(antiServices);
 
 		GridPane.setConstraints(servicesTable, 0, 0);
 		GridPane.setHgrow(servicesTable, Priority.ALWAYS);
@@ -460,6 +411,7 @@ public class ScriptEditWindow {
 		/*
 		 * BUTTONS
 		 */
+
 		// Save
 		Button saveButton = new Button("Mentés");
 		GridPane.setConstraints(saveButton, 0, 0);
@@ -480,13 +432,26 @@ public class ScriptEditWindow {
 				scripts.set(scripts.indexOf(script), script);
 				window.close();
 			}
-
 		});
 
 		// Close
 		Button closeButton = new Button("Mégsem");
 		closeButton.setOnAction(e -> window.close());
 		GridPane.setConstraints(closeButton, 1, 0);
+
+		// Remove program from script
+		Button removeProgramFromScriptButton = new Button("Program törlése");
+		removeProgramFromScriptButton.setOnAction(e -> {
+			if (tabPane.getSelectionModel().getSelectedItem().equals(programsTab)) {
+				Program program = programsTable.getSelectionModel().getSelectedItem();
+				antiPrograms.add(program);
+				scriptPrograms.remove(program);
+				weddingScriptController.removeProgramFromScript(program, script);
+				programAntiTable.setItems(antiPrograms);
+				programsTable.setItems(scriptPrograms);
+			}
+
+		});
 
 		// ESC button
 		window.addEventHandler(KeyEvent.KEY_RELEASED, (KeyEvent event) -> {
@@ -503,7 +468,7 @@ public class ScriptEditWindow {
 		bottomGrid.setPadding(new Insets(10, 10, 10, 10));
 		bottomGrid.setVgap(8);
 		bottomGrid.setHgap(10);
-		bottomGrid.getChildren().addAll(saveButton, closeButton);
+		bottomGrid.getChildren().addAll(saveButton, closeButton, removeProgramFromScriptButton);
 
 		layout.setBottom(bottomGrid);
 

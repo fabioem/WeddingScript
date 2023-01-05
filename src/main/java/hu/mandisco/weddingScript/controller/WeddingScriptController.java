@@ -232,4 +232,9 @@ public class WeddingScriptController {
 		script.updateLastEdited(LocalDateTime.now(ZoneId.of("Europe/Budapest")));
 		return dao.updateScriptLastEdited(script);
 	}
+
+	public boolean removeProgramFromScript(Program program, Script script) {
+		return dao.removeProgramFromScript(program, script);
+	}
+
 }
