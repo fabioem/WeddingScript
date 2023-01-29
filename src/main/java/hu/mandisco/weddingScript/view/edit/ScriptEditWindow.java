@@ -124,6 +124,9 @@ public class ScriptEditWindow {
 		ObservableList<Attribute> attributes = weddingScriptController.getAttributesOfScript(script);
 		ObservableList<Attribute> antiAttributes = weddingScriptController.getAttributesNotInScript(script);
 
+		attributesTable.setItems(attributes);
+		antiAttributesTable.setItems(antiAttributes);
+
 		attributesTable.setRowFactory(tv -> {
 			TableRow<Attribute> row = new TableRow<>();
 			row.setOnMouseClicked(event -> {
@@ -300,6 +303,8 @@ public class ScriptEditWindow {
 					antiPrograms.remove(rowData);
 					weddingScriptController.addProgramToScript(script, rowData);
 					scriptPrograms.add(rowData);
+					programAntiTable.setItems(antiPrograms);
+					programsTable.setItems(scriptPrograms);
 				}
 			});
 			return row;
@@ -322,7 +327,8 @@ public class ScriptEditWindow {
 
 		TableColumn<Service, String> serviceNameCol = new TableColumn<>("Szolgáltatás");
 		serviceNameCol.setCellValueFactory(new PropertyValueFactory<Service, String>("name"));
-
+		//serviceNameCol.prefWidthProperty().bind(servicesTable.widthProperty().multiply(0.8));
+		
 		servicesTable.getColumns().add(serviceNameCol);
 
 		ObservableList<Service> services = weddingScriptController.getServicesOfScript(script);

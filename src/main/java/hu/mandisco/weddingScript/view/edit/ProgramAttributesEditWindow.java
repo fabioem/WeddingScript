@@ -101,7 +101,7 @@ public class ProgramAttributesEditWindow {
 		programAntiAttributesTable.getColumns().add(programAttrAntiValueCol);
 
 		List<Attribute> antiAttributes = weddingScriptController.getAttributesNotInProgram(program);
-
+		
 		programAntiAttributesTable.getItems().addAll(antiAttributes);
 
 		// Sort by default time

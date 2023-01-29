@@ -102,11 +102,11 @@ INSERT INTO programs VALUES(5, "Gyertyafénykeringő", 84600000, 1); -- 23:30
 INSERT INTO programs VALUES(6, "Ifjú pár érkezik", 66600000, 1); -- 18:30
 INSERT INTO scripts VALUES(0, "Judit és Dani", '2021-07-01 00:00:00.000', "kalocsai mintás stílus", (DATETIME('now', 'localtime')), (DATETIME('now', 'localtime')));
 INSERT INTO scripts VALUES(1, "Evelin és László", '2021-08-02 00:00:00.000', "rock lagzi", (DATETIME('now', 'localtime')), (DATETIME('now', 'localtime')));
-INSERT INTO services VALUES(0, "CM / Műsorvezetés");
+INSERT INTO services VALUES(0, "CeremóniaMester");
 INSERT INTO services VALUES(1, "LED-es oldalfal világítás");
 INSERT INTO services VALUES(2, "Ceremónia hangosítás");
 INSERT INTO services VALUES(3, "Felhőtánc");
-INSERT INTO services VALUES(4, "CM külső helyszínen");
+INSERT INTO services VALUES(4, "CeremóniaMester külső helyszínen");
 INSERT INTO services VALUES(5, "Extra hang- és fénytechnika");
 --INSERT INTO attributeTypes VALUES(2, "Basic");
 INSERT INTO attributeTypes VALUES(0, "Script");

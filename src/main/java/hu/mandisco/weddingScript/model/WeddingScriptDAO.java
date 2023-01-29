@@ -113,4 +113,6 @@ public interface WeddingScriptDAO {
 
 	public boolean removeProgramFromScript(Program program, Script script);
 
+	public List<Attribute> getDefaultScriptAttributes();
+
 }

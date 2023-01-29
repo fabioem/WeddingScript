@@ -34,9 +34,15 @@ public class WeddingScriptController {
 
 	public boolean addScript(Script script) {
 		boolean succeed = dao.addScript(script);
+		//Add mandatory programs
 		List<Program> defaultPrograms = dao.getDefaultPrograms();
 		for (Program program : defaultPrograms) {
 			dao.addProgramToScript(script, program);
+		}
+		//Add mandatory script attributes
+		List<Attribute> defaultScriptAttributes = dao.getDefaultScriptAttributes();
+		for (Attribute attribute : defaultScriptAttributes) {
+			dao.addAttributeToScript(script, attribute);
 		}
 		return succeed;
 	}

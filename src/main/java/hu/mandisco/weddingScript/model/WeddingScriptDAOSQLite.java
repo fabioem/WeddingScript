@@ -3018,4 +3018,79 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 		return rvSucceeded;
 	}
 
+	@Override
+	public List<Attribute> getDefaultScriptAttributes() {
+		String errorDesc = "listing default script attributes";
+		Connection conn = null;
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		ObservableList<Attribute> scriptAttrList = FXCollections.observableArrayList();
+
+		try {
+
+			conn = DriverManager.getConnection(databaseConnectionURL);
+			String sql = "SELECT * FROM attributes WHERE "
+					+ "attrTypeId = (SELECT attrTypeId FROM attributeTypes WHERE name = \"Script\") "
+					+ "AND mandatory = false";
+			pst = conn.prepareStatement(sql);
+
+			conn.setAutoCommit(false);
+			rs = pst.executeQuery();
+
+			while (rs.next()) {
+				int attrId = rs.getInt(Labels.DB_ATTRIBUTE_ATTRIBUTEID);
+				String name = rs.getString(Labels.DB_ATTRIBUTE_NAME);
+				String defValue = rs.getString(Labels.DB_ATTRIBUTE_DEFAULT_VALUE);
+				Boolean mandatory = rs.getInt(Labels.DB_ATTRIBUTE_MANDATORY) != 0;
+
+				Attribute attribute = new Attribute();
+				attribute.setName(name);
+				attribute.setAttrId(attrId);
+				attribute.setDefaultValue(defValue);
+				attribute.setMandatory(mandatory);
+
+				scriptAttrList.add(attribute);
+			}
+
+			conn.commit();
+		} catch (SQLException e) {
+			LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_EXECUTE, errorDesc));
+			LOGGER.error(e);
+		} finally {
+
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+			} catch (SQLException e) {
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_RESULTSET,
+						errorDesc));
+				LOGGER.error(e);
+			}
+
+			try {
+				if (pst != null) {
+					pst.close();
+				}
+			} catch (SQLException e) {
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_STATEMENT,
+						errorDesc));
+				LOGGER.error(e);
+			}
+
+			try {
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				LOGGER.error(String.format(Labels.LOGGER_FORMAT_STRING, Labels.FAILED_TO_CLOSE_CONNECTION,
+						errorDesc));
+				LOGGER.error(e);
+			}
+		}
+
+		return scriptAttrList;
+
+	}
+
 }
