@@ -31,8 +31,6 @@ public class ProgramAttributesEditWindow {
 
 	private WeddingScriptController weddingScriptController = new WeddingScriptController();
 
-	// TODO: program attribute default value doesn't work properly
-
 	public void display(Program program) {
 		Stage window = new Stage();
 

@@ -40,7 +40,6 @@ public class AttributesView extends BorderPane {
 		deleteButton.setOnAction(e -> {
 			Attribute selectedItem = attributeTable.getSelectionModel().getSelectedItem();
 			if (selectedItem != null) {
-				// TODO: kötelező értékei ottmaradnak a táblában
 				weddingScriptController.removeAttribute(selectedItem);
 				attributes.remove(selectedItem);
 			}
@@ -88,6 +87,8 @@ public class AttributesView extends BorderPane {
 					} else {
 						setText("nem");
 					}
+				} else {
+					setText(null);
 				}
 
 			}

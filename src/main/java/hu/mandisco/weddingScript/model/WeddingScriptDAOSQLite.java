@@ -798,7 +798,8 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 			conn = DriverManager.getConnection(databaseConnectionURL);
 			conn.setAutoCommit(false);
 			pst = conn.prepareStatement(
-					"SELECT * FROM attributes WHERE attributeId IN (SELECT attrId FROM progAttr WHERE progId = ?)");
+					"SELECT * FROM attributes, progAttr "
+					+ "WHERE attributeId = attrId AND progId = ?");
 
 			int index = 1;
 			pst.setInt(index++, program.getProgId());
@@ -808,10 +809,12 @@ public class WeddingScriptDAOSQLite implements WeddingScriptDAO {
 			while (rs.next()) {
 				int attrId = rs.getInt(Labels.DB_ATTRIBUTE_ATTRIBUTEID);
 				String name = rs.getString(Labels.DB_ATTRIBUTE_NAME);
-
+				String value = rs.getString(Labels.DB_ATTRIBUTE_VALUE);
+				
 				Attribute attribute = new Attribute();
 				attribute.setName(name);
 				attribute.setAttrId(attrId);
+				attribute.setValue(value);
 
 				attributes.add(attribute);
 			}
