@@ -8,6 +8,7 @@ public class Labels {
 	public static final String DATEFORMAT_DATE = "yyyy.MM.dd";
 	public static final String DATEFORMAT_DATETIME_FOR_INSERT = "yyyy-MM-dd HH:mm:ss";
 	public static final String DATEFORMAT_DATE_FOR_INSERT = "yyyy-MM-dd";
+	public static final String DATEFORMAT_TIME_FOR_PROGRAM = "D'. nap' HH:mm";
 
 	// Error messages
 	public static final String LOGGER_FORMAT_STRING = "%s %s";

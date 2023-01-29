@@ -2,10 +2,7 @@ package hu.mandisco.weddingscript.view.edit;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
-import java.time.temporal.ChronoField;
 import java.util.List;
-import java.util.Locale;
 
 import hu.mandisco.weddingscript.controller.WeddingScriptController;
 import hu.mandisco.weddingscript.model.bean.Attribute;
@@ -40,7 +37,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.converter.LocalDateTimeStringConverter;
 
 public class ScriptEditWindow {
 
@@ -240,15 +236,25 @@ public class ScriptEditWindow {
 		programTimeCol.setEditable(true);
 		programTimeCol.setCellValueFactory(new PropertyValueFactory<Program, LocalDateTime>("time"));
 
-		DateTimeFormatter parseFormatter = new DateTimeFormatterBuilder().appendPattern("D'. nap' HH:mm")
-				.parseDefaulting(ChronoField.YEAR, 1970).toFormatter(Locale.ENGLISH);
+		programTimeCol.setCellFactory(TextFieldTableCell.forTableColumn(new ProgramDateTimeStringConverter()));
 
-		programTimeCol.setCellFactory(
-				TextFieldTableCell.forTableColumn(new LocalDateTimeStringConverter(parseFormatter, null)));
+		programTimeCol.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Program, LocalDateTime>>() {
+
+			@Override
+			public void handle(CellEditEvent<Program, LocalDateTime> arg0) {
+				if (arg0.getNewValue().equals(null)) {
+					return;
+				}
+			}
+
+		});
 
 		programTimeCol.setOnEditCommit(new EventHandler<CellEditEvent<Program, LocalDateTime>>() {
 			@Override
 			public void handle(CellEditEvent<Program, LocalDateTime> t) {
+				if (t.getNewValue() == null) {
+					return;
+				}
 				((Program) t.getTableView().getItems().get(t.getTablePosition().getRow())).setTime(t.getNewValue());
 				Program program = t.getRowValue();
 				LocalDateTime newTime = t.getNewValue();
@@ -327,8 +333,7 @@ public class ScriptEditWindow {
 
 		TableColumn<Service, String> serviceNameCol = new TableColumn<>("Szolgáltatás");
 		serviceNameCol.setCellValueFactory(new PropertyValueFactory<Service, String>("name"));
-		//serviceNameCol.prefWidthProperty().bind(servicesTable.widthProperty().multiply(0.8));
-		
+
 		servicesTable.getColumns().add(serviceNameCol);
 
 		ObservableList<Service> services = weddingScriptController.getServicesOfScript(script);
