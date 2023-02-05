@@ -243,4 +243,8 @@ public class WeddingScriptController {
 		return dao.removeProgramFromScript(program, script);
 	}
 
+	public boolean serviceExistsByName(String text) {
+		return dao.serviceExistsByName(text);
+	}
+
 }

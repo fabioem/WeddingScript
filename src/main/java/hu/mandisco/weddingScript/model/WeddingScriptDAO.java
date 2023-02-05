@@ -115,4 +115,6 @@ public interface WeddingScriptDAO {
 
 	public List<Attribute> getDefaultScriptAttributes();
 
+	public boolean serviceExistsByName(String text);
+
 }

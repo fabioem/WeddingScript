@@ -130,6 +130,7 @@ public class ProgramCreateWindow {
 				alert.showAndWait();
 			} else {
 				weddingScriptController.addProgram(program);
+				//TODO programs.setAll(weddingScriptController.getPrograms());
 				programs.add(program);
 				window.close();
 			}

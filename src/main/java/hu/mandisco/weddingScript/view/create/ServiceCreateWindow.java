@@ -54,6 +54,10 @@ public class ServiceCreateWindow {
 				Alert alert = new Alert(AlertType.ERROR, "A név nem lehet üres!", ButtonType.OK);
 				alert.setHeaderText("Üres név");
 				alert.showAndWait();
+			} else if (weddingScriptController.serviceExistsByName(nameInput.getText())) {
+				Alert alert = new Alert(AlertType.ERROR, "Ilyen nevű szolgáltatás már van.", ButtonType.OK);
+				alert.setHeaderText("Léteő szolgáltatás");
+				alert.showAndWait();
 			} else {
 				weddingScriptController.addService(service);
 				serviceItems.add(service);

@@ -41,8 +41,7 @@ public class ScriptPdf {
 	public static void createPdf(Script script) throws IOException {
 		DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy.MM.dd.");
 		DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
-		String fileName = "results/"
-				+ (script.getDate() == null ? "" : script.getDate().format(dateFormatter) + " ")
+		String fileName = "results/" + (script.getDate() == null ? "" : script.getDate().format(dateFormatter) + " ")
 				+ script.getName() + ".pdf";
 
 		// Initialize PDF writer
@@ -58,6 +57,9 @@ public class ScriptPdf {
 		Rectangle pageSize = pdfDoc.getDefaultPageSize();
 		float width = pageSize.getWidth() - document.getLeftMargin() - document.getRightMargin();
 
+		// Font / Encoding
+		
+		    
 		// Header
 		addCenteredParagraph(document, width, "Név: " + script.getName() + " - " + script.getComment());
 		if (script.getDate() != null) {
@@ -67,8 +69,8 @@ public class ScriptPdf {
 		// Services
 		document.add(new Paragraph("Szolgáltatások:"));
 		List<Service> scriptServices = weddingScriptController.getServicesOfScript(script);
-		com.itextpdf.layout.element.List servicesList = new com.itextpdf.layout.element.List()
-				.setSymbolIndent(12).setListSymbol("\u2022");
+		com.itextpdf.layout.element.List servicesList = new com.itextpdf.layout.element.List().setSymbolIndent(12)
+				.setListSymbol("\u2022");
 
 		for (Service service : scriptServices) {
 			servicesList.add(new ListItem(service.getName()));
@@ -90,12 +92,11 @@ public class ScriptPdf {
 		for (Program program : scriptPrograms) {
 			table.addCell(new Cell().add(new Paragraph(program.getTime().format(timeFormatter))));
 			table.addCell(new Cell().add(new Paragraph(program.getName())));
-			List<Attribute> scriptProgramAttributes = weddingScriptController
-					.getScriptProgramAttributes(script, program);
+			List<Attribute> scriptProgramAttributes = weddingScriptController.getScriptProgramAttributes(script,
+					program);
 			for (Attribute attribute : scriptProgramAttributes) {
 				table.addCell(new Cell().add(new Paragraph()));
-				table.addCell(
-						new Cell().add(new Paragraph(attribute.getName() + ": " + attribute.getValue())));
+				table.addCell(new Cell().add(new Paragraph(attribute.getName() + ": " + attribute.getValue())));
 			}
 		}
 		document.add(table);

@@ -1,22 +1,22 @@
 package hu.mandisco.weddingscript.view;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 import hu.mandisco.weddingscript.controller.WeddingScriptController;
 import hu.mandisco.weddingscript.model.bean.Program;
 import hu.mandisco.weddingscript.view.create.ProgramCreateWindow;
 import hu.mandisco.weddingscript.view.edit.ProgramAttributesEditWindow;
+import hu.mandisco.weddingscript.view.edit.ProgramDateTimeStringConverter;
 import hu.mandisco.weddingscript.view.edit.ProgramEditWindow;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
 import javafx.scene.control.Button;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.ToolBar;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 
@@ -92,8 +92,10 @@ public class ProgramsView extends BorderPane {
 
 		TableColumn<Program, LocalDateTime> defaultTimeCol = new TableColumn<>("Idő");
 		defaultTimeCol.setCellValueFactory(new PropertyValueFactory<Program, LocalDateTime>("defaultTime"));
+		defaultTimeCol.setCellFactory(TextFieldTableCell.forTableColumn(new ProgramDateTimeStringConverter()));
+		defaultTimeCol.setSortType(TableColumn.SortType.ASCENDING);
+		/*
 		defaultTimeCol.setCellFactory(column ->
-
 		new TableCell<Program, LocalDateTime>() {
 			@Override
 			protected void updateItem(LocalDateTime item, boolean empty) {
@@ -105,13 +107,16 @@ public class ProgramsView extends BorderPane {
 				}
 			}
 		});
-
+		*/
+		
 		programTable.getColumns().add(nameCol);
 		programTable.getColumns().add(defaultTimeCol);
 
-		// Sort by time
 		programTable.setItems(sortedData);
+		
+		// TODO: Sort by time
 		programTable.getSortOrder().add(defaultTimeCol);
+		programTable.sort();
 
 		this.setTop(topMenu);
 
