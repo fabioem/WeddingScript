@@ -8,12 +8,14 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.itextpdf.io.font.constants.StandardFonts;
+import com.itextpdf.io.font.PdfEncodings;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.geom.Rectangle;
 import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfVersion;
 import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.kernel.pdf.WriterProperties;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.ListItem;
@@ -45,7 +47,8 @@ public class ScriptPdf {
 				+ script.getName() + ".pdf";
 
 		// Initialize PDF writer
-		PdfWriter writer = new PdfWriter(fileName);
+		//PdfWriter writer = new PdfWriter(fileName);
+		PdfWriter writer = new PdfWriter(fileName, new WriterProperties().setPdfVersion(PdfVersion.PDF_1_7));
 
 		// Initialize PDF document
 		PdfDocument pdfDoc = new PdfDocument(writer);
@@ -53,13 +56,13 @@ public class ScriptPdf {
 		// Initialize document
 		Document document = new Document(pdfDoc);
 
+		// Setting up the font
+        PdfFont font = PdfFontFactory.createFont("C:/Windows/Fonts/arial.ttf", PdfEncodings.CP1250, true);
+		
 		// Initialize needed variables
 		Rectangle pageSize = pdfDoc.getDefaultPageSize();
 		float width = pageSize.getWidth() - document.getLeftMargin() - document.getRightMargin();
 
-		// Font / Encoding
-		
-		    
 		// Header
 		addCenteredParagraph(document, width, "Név: " + script.getName() + " - " + script.getComment());
 		if (script.getDate() != null) {
@@ -70,7 +73,7 @@ public class ScriptPdf {
 		document.add(new Paragraph("Szolgáltatások:"));
 		List<Service> scriptServices = weddingScriptController.getServicesOfScript(script);
 		com.itextpdf.layout.element.List servicesList = new com.itextpdf.layout.element.List().setSymbolIndent(12)
-				.setListSymbol("\u2022");
+				.setListSymbol("\u2022").setFont(font);
 
 		for (Service service : scriptServices) {
 			servicesList.add(new ListItem(service.getName()));
@@ -82,6 +85,7 @@ public class ScriptPdf {
 		List<Attribute> scriptAttributes = weddingScriptController.getScriptAttributes(script);
 		for (Attribute attribute : scriptAttributes) {
 			Paragraph p = new Paragraph(attribute.getName() + ": " + attribute.getValue());
+			p.setFont(font);
 			document.add(p);
 		}
 
@@ -91,7 +95,7 @@ public class ScriptPdf {
 		Table table = new Table(UnitValue.createPercentArray(new float[] { 1, 6 })).useAllAvailableWidth();
 		for (Program program : scriptPrograms) {
 			table.addCell(new Cell().add(new Paragraph(program.getTime().format(timeFormatter))));
-			table.addCell(new Cell().add(new Paragraph(program.getName())));
+			table.addCell(new Cell().add(new Paragraph(program.getName()).setFont(font)));
 			List<Attribute> scriptProgramAttributes = weddingScriptController.getScriptProgramAttributes(script,
 					program);
 			for (Attribute attribute : scriptProgramAttributes) {
@@ -110,11 +114,11 @@ public class ScriptPdf {
 	}
 
 	private static void addCenteredParagraph(Document document, float width, String text) {
-		PdfFont timesNewRomanBold = null;
+		PdfFont arialFont = null;
 		try {
-			timesNewRomanBold = PdfFontFactory.createFont(StandardFonts.TIMES_BOLD);
+			arialFont = PdfFontFactory.createFont("C:/Windows/Fonts/arial.ttf", PdfEncodings.CP1250, true);
 		} catch (IOException e) {
-			LOGGER.error("Failed to create Times New Roman Bold font.");
+			LOGGER.error("Failed to create Arial font.");
 			LOGGER.error(e);
 		}
 
@@ -127,8 +131,8 @@ public class ScriptPdf {
 		tabStops.add(new TabStop(width, TabAlignment.LEFT));
 
 		Paragraph p = new Paragraph().addTabStops(tabStops).setFontSize(14);
-		if (timesNewRomanBold != null) {
-			p.setFont(timesNewRomanBold);
+		if (arialFont != null) {
+			p.setFont(arialFont);
 		}
 		p.add(new Tab()).add(text).add(new Tab());
 		document.add(p);
